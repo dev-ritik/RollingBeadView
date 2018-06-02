@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         immutableBitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),
                 R.drawable.five);
         changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
-        bead1 = new RollingBead(changedBitmap, immutableBitmap, 350, 5, 10, 1);
+        bead1 = new RollingBead(changedBitmap, immutableBitmap, 350,350, 40, 50, 1);
 
     }
 
@@ -94,10 +94,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... urls) {
             if (generateCycle) {
-                secondBitmap = bead.generateBump(changedBitmap, immutableBitmap, bead.getUpdatedcenterCircle_X(), 350, 30, 30);
+                secondBitmap = bead.generateBump(changedBitmap, immutableBitmap, bead.getUpdatedcenterCircle_X());
                 generateCycle = false;
             } else {
-                secondBitmap = bead.dissolveBitmap(changedBitmap, immutableBitmap, bead.getPreviouscenterCircle_X(), 350, 30, 30);
+                secondBitmap = bead.dissolveBitmap(changedBitmap, immutableBitmap, bead.getPreviouscenterCircle_X());
                 generateCycle = true;
             }
             return null;
@@ -124,11 +124,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void test1(View v) {
         Log.i("point ma127", "test1");
-        changedReturnedBitmap = bead1.generateBump(changedBitmap, immutableBitmap, bead1.getUpdatedcenterCircle_X(), 350, 70, 30);
+        changedReturnedBitmap = bead1.generateBump(changedBitmap, immutableBitmap, bead1.getUpdatedcenterCircle_X());
         Log.i("point ma127", "test1");
         imageView.setImageBitmap(changedReturnedBitmap);
         Log.i("point ma127", "test1");
-        imageView.setImageBitmap(bead1.dissolveBitmap(changedReturnedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X(), 350, 70, 30));
+        imageView.setImageBitmap(bead1.dissolveBitmap(changedReturnedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X()));
         Log.i("point ma127", "test1");
 
     }
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test3(View v) {
-        imageView.setImageBitmap(bead1.dissolveBitmap(changedReturnedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X(), 350, 70, 30));
+        imageView.setImageBitmap(bead1.dissolveBitmap(changedReturnedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X()));
     }
 
     public void test4(View v) {
