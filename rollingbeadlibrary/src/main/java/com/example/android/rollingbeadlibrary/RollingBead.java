@@ -1,39 +1,53 @@
 package com.example.android.rollingbeadlibrary;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 public class RollingBead {
 
-    Bitmap icon;
-    Bitmap iconStored;
-    private int centerCirlce_X = 0;
-    private boolean asd = false;
-    int movementInX = 15;
-    int radius = 35;
-    int numberOfTimes = 1;
-//    int numberOfTimes = radius / movementInX;
+    private Bitmap changedBitmap;
+    private Bitmap immutableBitmap;
+    private int centerCircle_X = 0;
+    private boolean generateCycle = false;
+    private int movementInX = 15;
+    private int radius = 35;
+    private int numberOfTimes = 1;
+//   private int numberOfTimes = radius / movementInX;
 
-    public int getCenterCirlce_X() {
-        return centerCirlce_X;
+    public int getcenterCircle_X() {
+        return centerCircle_X;
     }
 
-    public int getUpdatedCenterCirlce_X() {
-        centerCirlce_X = (movementInX + centerCirlce_X) % icon.getWidth();
-        return centerCirlce_X;
+    public int getUpdatedcenterCircle_X() {
+//        Log.i("point rb22", "getUpdatedcenterCircle_X initial  " + centerCircle_X);
+        centerCircle_X = (movementInX + centerCircle_X) % immutableBitmap.getWidth();
+//        Log.i("point rb24", "getUpdatedcenterCircle_X final  " + centerCircle_X);
+
+        return centerCircle_X;
     }
 
-    public int getPreviousCenterCirlce_X() {
-        if (centerCirlce_X > movementInX * numberOfTimes)
-            return (centerCirlce_X - movementInX * numberOfTimes);
+    public int getPreviouscenterCircle_X() {
+//        Log.i("point rb30", "getPreviouscenterCircle_X initial  " + centerCircle_X);
+        if (centerCircle_X > movementInX * numberOfTimes)
+            return (centerCircle_X - movementInX * numberOfTimes);
         else
-            return icon.getWidth() + centerCirlce_X - movementInX * numberOfTimes;
+            return immutableBitmap.getWidth() + centerCircle_X - movementInX * numberOfTimes;
     }
 
-    public void setCenterCirlce_X(int centerCirlce_X) {
-        this.centerCirlce_X = centerCirlce_X;
+    public void setcenterCircle_X(int centerCircle_X) {
+        this.centerCircle_X = centerCircle_X;
     }
 
     public RollingBead() {
+    }
+
+    public RollingBead(Bitmap changedBitmap, Bitmap immutableBitmap, int centerCircle_X, int movementInX, int radius, int numberOfTimes) {
+        this.changedBitmap = changedBitmap;
+        this.immutableBitmap = immutableBitmap;
+        this.centerCircle_X = centerCircle_X;
+        this.movementInX = movementInX;
+        this.radius = radius;
+        this.numberOfTimes = numberOfTimes;
     }
 
     private Bitmap convert(Bitmap toChangeBitmap, Bitmap originalBitmap, int lens_center_x, int lens_center_y, int lens_radius) {
@@ -69,7 +83,7 @@ public class RollingBead {
                 }
             }
         }
-        for (int dx = -(int) lens_radius; dx <= 0; ++dx) {
+        for (int dx = -lens_radius; dx <= 0; ++dx) {
             //L.H.S
             if (lens_center_x + dx < 0) {
                 dx = -lens_center_x;
@@ -123,12 +137,12 @@ public class RollingBead {
         return outputBitmap;
     }
 
-    private Bitmap dissolveBitmap(Bitmap toChangeBitmap, Bitmap flavouringBitmap, int lens_center_x, int lens_center_y, int lens_radius, int movementInX) {
+    public Bitmap dissolveBitmap(Bitmap toChangeBitmap, Bitmap flavouringBitmap, int lens_center_x, int lens_center_y, int lens_radius, int movementInX) {
         Bitmap outputBitmap = toChangeBitmap;
 //        Log.i("point ma239", "lens_center_x  " + lens_center_x + "  lens_center_y  " + lens_center_y + "  movementInX  " + movementInX);
 //        Log.i("point ma156", "icon.getWidth(  " + icon.getWidth() + "  getCenterCirlce_X()  " + getCenterCirlce_X());
         for (int dx = -movementInX; dx <= 0; ++dx) {
-            if (dx == 0 && lens_center_x == icon.getWidth()) {
+            if (dx == 0 && lens_center_x == immutableBitmap.getWidth()) {
                 break;
             } else if (dx + lens_center_x < 0) {
                 break;
@@ -165,7 +179,7 @@ public class RollingBead {
         return outputBitmap;
     }
 
-    private Bitmap generateBump(Bitmap toChangeBitmap, Bitmap originalBitmap, int lens_center_x, int lens_center_y, int lens_radius, int movementInX) {
+    public Bitmap generateBump(Bitmap toChangeBitmap, Bitmap originalBitmap, int lens_center_x, int lens_center_y, int lens_radius, int movementInX) {
         Bitmap outputBitmap = toChangeBitmap;
 //        Log.i("point ma263", "lens_center_x  " + lens_center_x + "  lens_center_y  " + lens_center_y + "  movementInX  " + movementInX);
         double lens_factor = 1.0;
