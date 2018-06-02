@@ -1,5 +1,6 @@
 package com.example.android.rollingbeadview;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.rollingbeadlibrary.Render;
 import com.example.android.rollingbeadlibrary.RollingBead;
 
 import java.util.Timer;
@@ -39,87 +41,87 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void timer() {
-        Log.i("point ma247", "timer started");
+//    private void timer() {
+//        Log.i("point ma247", "timer started");
+//
+//        Timer updateWordTimer = new Timer();
+//        updateWordTimer.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+////                        Log.i("point ma255", "run started");
+////                        animateInHorizontal(icon);
+//
+////                        if (asd) {
+////                            convert(icon, iconStored,getUpdatedCenterCirlce_X(), 400, 90);
+////                            asd = false;
+////                        } else {
+////                            mixBitmap(icon, iconStored, getCenterCirlce_X(), 400, 90);
+////                            asd = true;
+////                        }
+////                        imageView.setImageBitmap(icon);
+//
+//                        ExecuteAsync task = new ExecuteAsync(bead1);
+//                        task.execute(new String[]{null});
+//                    }
+//                });
+//            }
+//        }, 5, 160);
+//    }
 
-        Timer updateWordTimer = new Timer();
-        updateWordTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-//                        Log.i("point ma255", "run started");
-//                        animateInHorizontal(icon);
-
-//                        if (asd) {
-//                            convert(icon, iconStored,getUpdatedCenterCirlce_X(), 400, 90);
-//                            asd = false;
-//                        } else {
-//                            mixBitmap(icon, iconStored, getCenterCirlce_X(), 400, 90);
-//                            asd = true;
-//                        }
-//                        imageView.setImageBitmap(icon);
-
-                        ExecuteAsync task = new ExecuteAsync(bead1);
-                        task.execute(new String[]{null});
-                    }
-                });
-            }
-        }, 5, 160);
-    }
-
-    private class ExecuteAsync extends AsyncTask<String, String, String> {
-        Bitmap firstBitmap;
-        Bitmap secondBitmap;
-        long millisUntilFinished;
-        RollingBead bead;
-
-        public ExecuteAsync(RollingBead bead) {
-            this.bead = bead;
-        }
-
-        public ExecuteAsync() {
-        }
-
-        public ExecuteAsync(Bitmap firstBitmap) {
-            this.firstBitmap = firstBitmap;
-        }
-
-        public ExecuteAsync(Bitmap firstBitmap, Bitmap secondBitmap) {
-            this.firstBitmap = firstBitmap;
-            this.secondBitmap = secondBitmap;
-        }
-
-        @Override
-        protected String doInBackground(String... urls) {
-            if (generateCycle) {
-                secondBitmap = bead.generateBump(changedBitmap, immutableBitmap, bead.getUpdatedcenterCircle_X());
-                generateCycle = false;
-            } else {
-                secondBitmap = bead.dissolveBitmap(changedBitmap, immutableBitmap, bead.getPreviouscenterCircle_X());
-                generateCycle = true;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            imageView.setImageBitmap(secondBitmap);
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-            imageView.setImageBitmap(secondBitmap);
-
-        }
-    }
+//    private class ExecuteAsync extends AsyncTask<String, String, String> {
+//        Bitmap firstBitmap;
+//        Bitmap secondBitmap;
+//        long millisUntilFinished;
+//        RollingBead bead;
+//
+//        public ExecuteAsync(RollingBead bead) {
+//            this.bead = bead;
+//        }
+//
+//        public ExecuteAsync() {
+//        }
+//
+//        public ExecuteAsync(Bitmap firstBitmap) {
+//            this.firstBitmap = firstBitmap;
+//        }
+//
+//        public ExecuteAsync(Bitmap firstBitmap, Bitmap secondBitmap) {
+//            this.firstBitmap = firstBitmap;
+//            this.secondBitmap = secondBitmap;
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... urls) {
+//            if (generateCycle) {
+//                secondBitmap = bead.generateBump(changedBitmap, immutableBitmap, bead.getUpdatedcenterCircle_X());
+//                generateCycle = false;
+//            } else {
+//                secondBitmap = bead.dissolveBitmap(changedBitmap, immutableBitmap, bead.getPreviouscenterCircle_X());
+//                generateCycle = true;
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String result) {
+//            imageView.setImageBitmap(secondBitmap);
+//        }
+//
+//        @Override
+//        protected void onProgressUpdate(String... values) {
+//            super.onProgressUpdate(values);
+//            imageView.setImageBitmap(secondBitmap);
+//
+//        }
+//    }
 
 
     public void test1(View v) {
@@ -147,7 +149,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test4(View v) {
-        timer();
+
+        Render render=new Render(this,immutableBitmap,changedBitmap,bead1,imageView);
+             render.timer();
 
     }
 
