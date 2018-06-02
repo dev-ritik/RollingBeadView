@@ -1,1 +1,1 @@
-include ':app', ':rotatingtextlibrary'
+include ':app', ':rollingbeadlibrary'

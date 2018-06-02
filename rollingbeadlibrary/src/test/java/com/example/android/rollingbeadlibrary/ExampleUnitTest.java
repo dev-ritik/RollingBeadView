@@ -1,4 +1,4 @@
-package com.example.android.rotatingtextlibrary;
+package com.example.android.rollingbeadlibrary;
 
 import org.junit.Test;
 

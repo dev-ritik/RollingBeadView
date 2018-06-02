@@ -1,4 +1,4 @@
-package com.example.android.rotatingtextlibrary;
+package com.example.android.rollingbeadlibrary;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.android.rotatingtextlibrary.test", appContext.getPackageName());
+        assertEquals("com.example.android.rollingbeadlibrary.test", appContext.getPackageName());
     }
 }
