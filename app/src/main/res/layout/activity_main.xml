@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/ic_launcher"
     tools:context=".MainActivity">
 
     <ImageView
@@ -15,13 +14,19 @@
         android:layout_marginLeft="40dp"
         android:paddingLeft="50dp" />
 
-    <!--<TextView-->
-        <!--android:id="@+id/text"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Hello World!"-->
-        <!--android:textSize="50sp"-->
-        <!--android:typeface="serif" />-->
+    <com.example.android.rollingbeadlibrary.RollingBeadImageView
+        android:id="@+id/mimage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/five"
+        app:center_X="150"
+        app:center_Y="200"
+        app:radius="50"
+        app:movement_In_X="20"
+        app:number_Of_Times="1"
+        app:repetition_Times="500"
+        />
 
     <Button
         android:id="@+id/test1"

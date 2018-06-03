@@ -17,17 +17,25 @@ public class Render {
     Bitmap changedBitmap;
     Bitmap changedReturnedBitmap;
     RollingBead bead1;
+    RollingBeadImageView image;
 
     public Render(Activity context) {
         this.context = context;
     }
 
-    public Render(Activity context, Bitmap immutableBitmap, Bitmap changedBitmap, RollingBead bead1,ImageView imageView) {
+    public Render(Activity context, Bitmap immutableBitmap, Bitmap changedBitmap, RollingBead bead1, ImageView imageView) {
         this.context = context;
         this.immutableBitmap = immutableBitmap;
         this.changedBitmap = changedBitmap;
         this.bead1 = bead1;
-        this.imageView=imageView;
+        this.imageView = imageView;
+    }
+    public Render(Activity context, Bitmap immutableBitmap, Bitmap changedBitmap, RollingBead bead1,RollingBeadImageView image) {
+        this.context = context;
+        this.immutableBitmap = immutableBitmap;
+        this.changedBitmap = changedBitmap;
+        this.bead1 = bead1;
+        this.image=image;
     }
 
     public void timer() {
@@ -37,21 +45,19 @@ public class Render {
         updateWordTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                ((Activity)context).runOnUiThread(new Runnable() {
+                ((Activity) context).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        Log.i("point ma255", "run started");
+                        Log.i("point ma255", "run started");
 //                        animateInHorizontal(icon);
-
-//                        if (asd) {
-//                            convert(icon, iconStored,getUpdatedCenterCirlce_X(), 400, 90);
-//                            asd = false;
+//                        if (generateCycle) {
+//                            changedBitmap = bead1.generateBump(changedBitmap, immutableBitmap, bead1.getUpdatedcenterCircle_X());
+//                            generateCycle = false;
 //                        } else {
-//                            mixBitmap(icon, iconStored, getCenterCirlce_X(), 400, 90);
-//                            asd = true;
+//                            changedBitmap = bead1.dissolveBitmap(changedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X());
+//                            generateCycle = true;
 //                        }
-//                        imageView.setImageBitmap(icon);
-
+//                        imageView.setImageBitmap(changedBitmap);
                         ExecuteAsync task = new ExecuteAsync(bead1);
                         task.execute(new String[]{null});
                     }
@@ -101,13 +107,16 @@ public class Render {
 
         @Override
         protected void onPostExecute(String result) {
-            imageView.setImageBitmap(secondBitmap);
+//            imageView.setImageBitmap(secondBitmap);
+            image.invalidate();
         }
 
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-            imageView.setImageBitmap(secondBitmap);
+//            imageView.setImageBitmap(secondBitmap);
+//            RollingBeadImageView.invalidate();
+            image.invalidate();
 
         }
     }

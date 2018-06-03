@@ -3,6 +3,9 @@ package com.example.android.rollingbeadview;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.android.rollingbeadlibrary.Render;
 import com.example.android.rollingbeadlibrary.RollingBead;
+import com.example.android.rollingbeadlibrary.RollingBeadImageView;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     Bitmap changedBitmap;
     Bitmap changedReturnedBitmap;
     RollingBead bead1;
+    RollingBeadImageView mimage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +41,56 @@ public class MainActivity extends AppCompatActivity {
 
         immutableBitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),
                 R.drawable.five);
+//        Log.i("point ma39", "immutableBitmap  " + immutableBitmap.isMutable());
         changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
-        bead1 = new RollingBead(changedBitmap, immutableBitmap, 350,350, 40, 50, 1);
+        mimage=(RollingBeadImageView)findViewById(R.id.mimage);
+
+//        Log.i("point ma41", "changedBitmap  " + changedBitmap.isMutable());
+//        Drawable d = new BitmapDrawable(getResources(), changedBitmap);
+//
+//        Log.i("point ma42", "((BitmapDrawable) drawable).getBitmap()  " + ((BitmapDrawable) d).getBitmap().isMutable());
+
+//
+//        ColorDrawable cd = new ColorDrawable(0xFFFF6666);
+//        Bitmap bitmap = Bitmap.createBitmap(2, 2, Bitmap.Config.ARGB_8888);
+//        Log.i("point ma41", "ColorDrawable  " + bitmap.isMutable());
+//        Log.i("point ma54", bitmap.getWidth() + "  " + bitmap.getHeight());
+//        Log.i("point ma54", ((BitmapDrawable) d).getBitmap().getWidth() + "  " + ((BitmapDrawable) d).getBitmap().getHeight());
+//        Log.i("point ma56", changedBitmap.getWidth() + "  " + changedBitmap.getHeight());
+
+        bead1 = new RollingBead(changedBitmap, immutableBitmap, 350, 350, 40, 50, 1);
 
     }
+
+
+    //    private Bitmap getBitmapFromDrawable(Drawable drawable) {
+//        if (drawable == null) {
+//            return null;
+//        }
+//
+//        if (drawable instanceof BitmapDrawable) {
+//            return ((BitmapDrawable) drawable).getBitmap();
+//        }
+//
+////        try {
+////            Bitmap bitmap;
+////
+////            if (drawable instanceof ColorDrawable) {
+////                bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION, BITMAP_CONFIG);
+////            } else {
+////                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);
+////            }
+//
+////            Canvas canvas = new Canvas(bitmap);
+////            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+////            drawable.draw(canvas);
+////            return bitmap;
+////        } catch (Exception e) {
+////            e.printStackTrace();
+////            return null;
+////        }
+//    }
+
 
 //    private void timer() {
 //        Log.i("point ma247", "timer started");
@@ -125,33 +176,32 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void test1(View v) {
-        Log.i("point ma127", "test1");
-        changedReturnedBitmap = bead1.generateBump(changedBitmap, immutableBitmap, bead1.getUpdatedcenterCircle_X());
-        Log.i("point ma127", "test1");
-        imageView.setImageBitmap(changedReturnedBitmap);
-        Log.i("point ma127", "test1");
-        imageView.setImageBitmap(bead1.dissolveBitmap(changedReturnedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X()));
-        Log.i("point ma127", "test1");
+//        Log.i("point ma127", "test1");
+//        changedReturnedBitmap = bead1.generateBump(changedBitmap, immutableBitmap, bead1.getUpdatedcenterCircle_X());
+//        Log.i("point ma127", "test1");
+//        imageView.setImageBitmap(changedReturnedBitmap);
+//        Log.i("point ma127", "test1");
+//        imageView.setImageBitmap(bead1.dissolveBitmap(changedReturnedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X()));
+//        Log.i("point ma127", "test1");
 
+        mimage.calculateBounds();
     }
 
     public void test2(View v) {
 
-//        convert(changedBitmap, immutableBitmap, 50, 400, 90);
-        imageView.setImageBitmap(immutableBitmap);
-        Log.i("point ma310", "test2");
+        imageView.setImageBitmap(bead1.generateBump(changedBitmap, immutableBitmap, bead1.getUpdatedcenterCircle_X()));
 
 //        imageView.setImageBitmap(icon);
     }
 
     public void test3(View v) {
-        imageView.setImageBitmap(bead1.dissolveBitmap(changedReturnedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X()));
+        imageView.setImageBitmap(bead1.dissolveBitmap(changedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X()));
     }
 
     public void test4(View v) {
 
-        Render render=new Render(this,immutableBitmap,changedBitmap,bead1,imageView);
-             render.timer();
+        Render render = new Render(this, immutableBitmap, changedBitmap, bead1, imageView);
+        render.timer();
 
     }
 
