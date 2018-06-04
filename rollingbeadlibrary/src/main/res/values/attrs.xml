@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="center_X" format="integer" />
-    <attr name="center_Y" format="integer" />
-    <attr name="movement_In_X" format="integer" />
-    <attr name="radius" format="integer" />
-    <attr name="number_Of_Times" format="integer" />
-    <attr name="repetition_Times" format="integer" />
+    <!--<attr name="center_X" format="integer" />-->
+    <!--<attr name="center_Y" format="integer" />-->
+    <!--<attr name="movement_In_X" format="integer" />-->
+    <!--<attr name="radius" format="integer" />-->
+    <!--<attr name="number_Of_Times" format="integer" />-->
+    <!--<attr name="repetition_Times" format="integer" />-->
 
     <declare-styleable name="RollingBeadImageView">
-        <attr name="center_X" />
-        <attr name="center_Y" />
-        <attr name="movement_In_X" />
-        <attr name="radius" />
-        <attr name="number_Of_Times" />
-        <attr name="repetition_Times" />
+        <attr name="center_X" format="integer" />
+        <attr name="center_Y" format="integer" />
+        <attr name="movement_In_X" format="integer" />
+        <attr name="radius" format="integer" />
+        <attr name="number_Of_Times" format="integer" />
+        <attr name="repetition_Times" format="integer" />
+        <attr name="orientation" format="boolean"/>
     </declare-styleable>
 
 </resources>

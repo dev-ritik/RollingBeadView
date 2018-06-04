@@ -28,14 +28,15 @@
         app:radius="50"
         app:movement_In_X="30"
         app:number_Of_Times="1"
-        app:repetition_Times="150"
+        app:repetition_Times="200"
+        app:orientation="false"
         />
 
     <Button
         android:id="@+id/test1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="5dp"
         android:onClick="test1"
         android:text="test1" />
 
@@ -43,7 +44,7 @@
         android:id="@+id/test2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/test1"
         android:onClick="test2"
         android:text="test2" />
@@ -52,7 +53,7 @@
         android:id="@+id/test3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/test2"
         android:onClick="test3"
         android:text="test3" />
@@ -60,7 +61,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/test3"
         android:onClick="test4"
         android:text="test4" />

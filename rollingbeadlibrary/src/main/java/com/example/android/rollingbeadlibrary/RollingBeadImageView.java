@@ -40,6 +40,7 @@ public class RollingBeadImageView extends ImageView {
     RollingBead bead1;
     private boolean mReady;
     private boolean mSetupPending;
+    private boolean orientationHorizontal;
     ExecuteAsync task;
 
     Timer moveBeadTimer;
@@ -90,6 +91,8 @@ public class RollingBeadImageView extends ImageView {
                 radius = a.getInt(attr, 1);
             } else if (attr == R.styleable.RollingBeadImageView_repetition_Times) {
                 repetitionTime = a.getInt(attr, 200);
+            }else if (attr == R.styleable.RollingBeadImageView_orientation) {
+                orientationHorizontal = a.getBoolean(attr, true);
             }
         }
         Log.i("point rbi94", "centerCircle_Y  " + centerCircle_Y);
@@ -236,7 +239,7 @@ public class RollingBeadImageView extends ImageView {
         }
         mDrawableRect.set(calculateBounds());
 
-        bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movementInX, radius, numberOfTimes);
+        bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movementInX, radius, numberOfTimes,orientationHorizontal);
         Log.i("point rbi206", "setup");
 
 //        Render render = new Render(this, immutableBitmap, changedBitmap, bead1, imageView);
@@ -249,9 +252,6 @@ public class RollingBeadImageView extends ImageView {
     }
 
     public RectF calculateBounds() {
-        int availableWidth = getWidth() - getPaddingLeft() - getPaddingRight();
-        int availableHeight = getHeight() - getPaddingTop() - getPaddingBottom();
-
 //        Log.i("point rbi224", "getPaddingBottom()" + getPaddingBottom());
 //        Log.i("point rbi225", "end" + getPaddingEnd());
 //        Log.i("point rbi226", "left" + getPaddingLeft());
@@ -306,10 +306,10 @@ public class RollingBeadImageView extends ImageView {
         @Override
         protected String doInBackground(String... urls) {
             if (generateCycle) {
-                bead.generateBump(changedBitmap, immutableBitmap, bead.getUpdatedcenterCircle_X());
+                bead.generateBump(changedBitmap, immutableBitmap);
                 generateCycle = false;
             } else {
-                bead.dissolveBitmap(changedBitmap, immutableBitmap, bead.getPreviouscenterCircle_X());
+                bead.dissolveBitmap(changedBitmap, immutableBitmap);
                 generateCycle = true;
             }
             return null;
