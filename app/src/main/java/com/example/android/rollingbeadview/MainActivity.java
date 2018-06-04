@@ -184,13 +184,13 @@ public class MainActivity extends AppCompatActivity {
 //        imageView.setImageBitmap(bead1.dissolveBitmap(changedReturnedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X()));
 //        Log.i("point ma127", "test1");
 
-        mimage.calculateBounds();
+        mimage.stopRender();
     }
 
     public void test2(View v) {
 
-        imageView.setImageBitmap(bead1.generateBump(changedBitmap, immutableBitmap, bead1.getUpdatedcenterCircle_X()));
-
+//        imageView.setImageBitmap(bead1.generateBump(changedBitmap, immutableBitmap, bead1.getUpdatedcenterCircle_X()));
+        mimage.resumeRender();
 //        imageView.setImageBitmap(icon);
     }
 

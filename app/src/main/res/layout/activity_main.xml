@@ -19,13 +19,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:src="@drawable/five"
-        app:center_X="150"
-        app:center_Y="200"
-        app:radius="50"
-        app:movement_In_X="20"
+        android:src="@drawable/four"
+        app:center_X="750"
+        app:center_Y="400"
+        app:radius="70"
+        app:movement_In_X="30"
         app:number_Of_Times="1"
-        app:repetition_Times="500"
+        app:repetition_Times="200"
         />
 
     <Button

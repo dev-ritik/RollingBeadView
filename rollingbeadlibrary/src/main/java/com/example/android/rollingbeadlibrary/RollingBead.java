@@ -143,7 +143,7 @@ public class RollingBead {
     public Bitmap dissolveBitmap(Bitmap toChangeBitmap, Bitmap flavouringBitmap, int lens_center_x) {
 //        Bitmap outputBitmap = toChangeBitmap;
 //        Log.i("point ma239", "lens_center_x  " + lens_center_x + "  lens_center_y  " + lens_center_y + "  movementInX  " + movementInX);
-//        Log.i("point ma156", "icon.getWidth(  " + icon.getWidth() + "  getCenterCirlce_X()  " + getCenterCirlce_X());
+//        Log.i("point ma156", "icon.getWidth(  " + width + "  getCenterCirlce_X()  " + centerCircle_X+"  height  "+height);
         for (int dx = -movementInX; dx <= 0; ++dx) {
             if (dx == 0 && lens_center_x >= width) {
                 break;
