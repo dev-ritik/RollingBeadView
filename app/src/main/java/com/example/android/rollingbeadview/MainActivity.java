@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test3(View v) {
-        imageView.setImageBitmap(bead1.dissolveBitmap(changedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X()));
+//        imageView.setImageBitmap(bead1.dissolveBitmap(changedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X()));
     }
 
     public void test4(View v) {

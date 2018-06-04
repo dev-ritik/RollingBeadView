@@ -91,10 +91,10 @@ public class Render {
         @Override
         protected String doInBackground(String... urls) {
             if (generateCycle) {
-                secondBitmap = bead.generateBump(changedBitmap, immutableBitmap, bead.getUpdatedcenterCircle_X());
+//                secondBitmap = bead.generateBump(changedBitmap, immutableBitmap, bead.getUpdatedcenterCircle_X());
                 generateCycle = false;
             } else {
-                secondBitmap = bead.dissolveBitmap(changedBitmap, immutableBitmap, bead.getPreviouscenterCircle_X());
+//                secondBitmap = bead.dissolveBitmap(changedBitmap, immutableBitmap, bead.getPreviouscenterCircle_X());
                 generateCycle = true;
             }
             return null;
@@ -114,10 +114,6 @@ public class Render {
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-//            imageView.setImageBitmap(secondBitmap);
-//            RollingBeadImageView.invalidate();
-            image.invalidate();
-
         }
     }
 

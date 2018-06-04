@@ -140,7 +140,7 @@ public class RollingBead {
         return outputBitmap;
     }
 
-    public Bitmap dissolveBitmap(Bitmap toChangeBitmap, Bitmap flavouringBitmap, int lens_center_x) {
+    public void dissolveBitmap(Bitmap toChangeBitmap, Bitmap flavouringBitmap, int lens_center_x) {
 //        Bitmap outputBitmap = toChangeBitmap;
 //        Log.i("point ma239", "lens_center_x  " + lens_center_x + "  lens_center_y  " + lens_center_y + "  movementInX  " + movementInX);
 //        Log.i("point ma156", "icon.getWidth(  " + width + "  getCenterCirlce_X()  " + centerCircle_X+"  height  "+height);
@@ -178,10 +178,10 @@ public class RollingBead {
 //                outputBitmap.setPixel(dx + lens_center_x, dy + lens_center_y, flavouringBitmap.getPixel(dx + lens_center_x, dy + lens_center_y));
 //            }
 //        }
-        return toChangeBitmap;
+//        return toChangeBitmap;
     }
 
-    public Bitmap generateBump(Bitmap toChangeBitmap, Bitmap originalBitmap, int lens_center_x) {
+    public void generateBump(Bitmap toChangeBitmap, Bitmap originalBitmap, int lens_center_x) {
         int terminalY;
 
         double distance;
@@ -246,7 +246,7 @@ public class RollingBead {
                 }
             }
         }
-        return toChangeBitmap;
+//        return toChangeBitmap;
     }
 
 }

@@ -19,13 +19,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_margin="15dp"
+        android:paddingTop="150dp"
+        android:paddingBottom="40dp"
         android:src="@drawable/four"
         app:center_X="750"
         app:center_Y="400"
-        app:radius="70"
+        app:radius="50"
         app:movement_In_X="30"
         app:number_Of_Times="1"
-        app:repetition_Times="200"
+        app:repetition_Times="150"
         />
 
     <Button
