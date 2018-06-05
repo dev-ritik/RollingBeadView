@@ -62,16 +62,20 @@ public class RollingBead {
         this.centerCircle_X = centerCircle_X;
     }
 
-    public RollingBead(Bitmap changedBitmap, Bitmap immutableBitmap, int centerCircle_X, int centerCircle_Y, int movementInX, int radius, int numberOfTimes, boolean orientationHorizontal,boolean direction_Positive) {
+    public RollingBead(Bitmap changedBitmap, Bitmap immutableBitmap, int centerCircle_X, int centerCircle_Y, int movementInX, int radius, int numberOfTimes, boolean orientationHorizontal, boolean direction_Positive) {
         this.changedBitmap = changedBitmap;
         this.immutableBitmap = immutableBitmap;
         this.centerCircle_X = centerCircle_X;
         this.movementInX = movementInX;
         this.radius = radius;
-        this.numberOfTimes = numberOfTimes;
+        if (direction_Positive)
+            this.numberOfTimes = numberOfTimes;
+        else
+            this.numberOfTimes = numberOfTimes + 1;
+
         this.centerCircle_Y = centerCircle_Y;
         this.orientationHorizontal = orientationHorizontal;
-        this.directionPositive=direction_Positive;
+        this.directionPositive = direction_Positive;
         if (orientationHorizontal) {
             height = immutableBitmap.getHeight();
             width = immutableBitmap.getWidth();
@@ -79,6 +83,10 @@ public class RollingBead {
             width = immutableBitmap.getHeight();
             height = immutableBitmap.getWidth();
         }
+
+        if (height <= centerCircle_X || width <= centerCircle_Y || centerCircle_X < 0 || centerCircle_Y < 0)
+            throw new IllegalArgumentException("center exceeds bitmap size!!");
+
     }
 
     private Bitmap convert(Bitmap toChangeBitmap, Bitmap originalBitmap, int lens_center_x, int lens_center_y, int lens_radius) {
@@ -171,13 +179,16 @@ public class RollingBead {
     public void dissolveBitmap(Bitmap toChangeBitmap, Bitmap flavouringBitmap) {
         int lens_center_x = getPreviouscenterCircle_X();
 //        Bitmap outputBitmap = toChangeBitmap;
-//        Log.i("point rb174", "lens_center_x  " + lens_center_x + "  lens_center_y  " + centerCircle_Y + "  movementInX  " + movementInX);
+        Log.i("point rb174", "lens_center_x  " + lens_center_x + "  lens_center_y  " + centerCircle_Y + "  movementInX  " + movementInX);
 //        Log.i("point rb156", "icon.getWidth(  " + width + "  getCenterCirlce_X()  " + centerCircle_X+"  height  "+height);
         for (int dx = -movementInX; dx < 0; ++dx) {
-            if (lens_center_x >= width) {
-                break;
+            if (dx + lens_center_x >= width) {
+                lens_center_x -= width;
+                if (lens_center_x + dx >= width) break;
+
             } else if (dx + lens_center_x < 0) {
-                break;
+//                Log.i("point rb180","dx  "+dx+"  break");
+                lens_center_x += width;
             }
             for (int dy = -radius; dy <= radius; ++dy) {
                 if (centerCircle_Y + dy < 0) {
@@ -227,17 +238,25 @@ public class RollingBead {
         if (directionPositive) {
             terminalRight = radius;
             terminalLeft = -movementInX;
-        }else {
-            terminalRight=movementInX;
-            terminalLeft=-radius;
+        } else {
+            terminalRight = movementInX;
+            terminalLeft = -radius;
         }
-//        Log.i("point rb234", "lens_center_x  " + centerCircle_X + "  lens_center_y  " + centerCircle_Y + "  movementInX  " + movementInX);
+        Log.i("point rb234", "lens_center_x  " + centerCircle_X + "  lens_center_y  " + centerCircle_Y + "  movementInX  " + movementInX);
         double lens_factor = 1.0;
         for (int dx = terminalRight; dx >= 0; --dx) {
             //R.H.S
-            if (lens_center_x + dx >= width) {
-                dx = width - lens_center_x;
-                continue;
+//            if (lens_center_x + dx >= width) {
+//                dx = width - lens_center_x;
+//                continue;
+//            }
+            if (dx + lens_center_x >= width) {
+                lens_center_x -= width;
+                if (lens_center_x + dx >= width) break;
+
+            } else if (dx + lens_center_x < 0) {
+//                Log.i("point rb180","dx  "+dx+"  break");
+                lens_center_x += width;
             }
             terminalY = (int) Math.sqrt((radius * radius) - (dx * dx));
             for (int dy = -terminalY; dy <= terminalY; ++dy) {

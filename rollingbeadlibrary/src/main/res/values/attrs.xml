@@ -8,8 +8,14 @@
         <attr name="radius" format="integer" />
         <attr name="number_Of_Times" format="integer" />
         <attr name="repetition_Times" format="integer" />
-        <attr name="orientation_Horizontal" format="boolean"/>
-        <attr name="direction_Positive" format="boolean"/>
+        <attr name="orientation">
+            <enum name="horizontal" value="1" />
+            <enum name="vertical" value="-1" />
+        </attr>
+        <attr name="direction">
+            <enum name="positive" value="1" />
+            <enum name="negative" value="-1" />
+        </attr>
     </declare-styleable>
 
 </resources>

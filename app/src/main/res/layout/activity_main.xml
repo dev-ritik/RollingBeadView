@@ -23,14 +23,14 @@
         android:paddingTop="150dp"
         android:paddingBottom="40dp"
         android:src="@drawable/four"
-        app:center_X="750"
+        app:center_X="550"
         app:center_Y="400"
-        app:radius="100"
+        app:radius="80"
         app:movement_In_X="40"
-        app:number_Of_Times="2"
-        app:repetition_Times="200"
-        app:orientation_Horizontal="false"
-        app:direction_Positive="false"
+        app:number_Of_Times="1"
+        app:repetition_Times="250"
+        app:orientation="vertical"
+        app:direction="positive"
         />
 
     <Button

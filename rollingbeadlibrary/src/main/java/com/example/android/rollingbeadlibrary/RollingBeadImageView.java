@@ -71,30 +71,40 @@ public class RollingBeadImageView extends ImageView {
     final void initBaseXMLAttrs(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RollingBeadImageView);
         final int N = a.getIndexCount();
-        Log.i("point rbi66", "attrs  " + N);
+//        Log.i("point rbi66", "attrs  " + attrs);
         for (int i = 0; i < N; ++i) {
             int attr = a.getIndex(i);
             if (attr == R.styleable.RollingBeadImageView_center_X) {
                 centerCircle_X = a.getInt(attr, 0);
             } else if (attr == R.styleable.RollingBeadImageView_center_Y) {
-                centerCircle_Y = a.getInt(attr, 350);
+                centerCircle_Y = a.getInt(attr, 0);
             } else if (attr == R.styleable.RollingBeadImageView_movement_In_X) {
                 movementInX = a.getInt(attr, 20);
             } else if (attr == R.styleable.RollingBeadImageView_radius) {
                 radius = a.getInt(attr, 40);
+                if (radius >150)
+                    throw new IllegalArgumentException(String.format("radius %s not supported.", radius));
             } else if (attr == R.styleable.RollingBeadImageView_number_Of_Times) {
                 numberOfTimes = a.getInt(attr, 1);
+                if (numberOfTimes < 1)
+                    throw new IllegalArgumentException(String.format("number_Of_Times %s not supported.", numberOfTimes));
             } else if (attr == R.styleable.RollingBeadImageView_repetition_Times) {
                 repetitionTime = a.getInt(attr, 200);
-            }else if (attr == R.styleable.RollingBeadImageView_orientation_Horizontal) {
-                orientationHorizontal = a.getBoolean(attr, true);
-            }else if (attr == R.styleable.RollingBeadImageView_direction_Positive) {
-                direction_Positive = a.getBoolean(attr, true);
+                if (repetitionTime < 70)
+                    throw new IllegalArgumentException(String.format("repetition_Times %s may result in repetitive Garbage Collection.", repetitionTime));
+            } else if (attr == R.styleable.RollingBeadImageView_orientation) {
+                orientationHorizontal = (a.getInt(attr, 1) == 1);
+            } else if (attr == R.styleable.RollingBeadImageView_direction) {
+                direction_Positive = (a.getInt(attr, 1)==1);
             }
         }
         Log.i("point rbi94", "centerCircle_Y  " + centerCircle_Y);
 
         a.recycle();
+    }
+
+    private void throwException() {
+
     }
 
     public void init() {
@@ -236,7 +246,7 @@ public class RollingBeadImageView extends ImageView {
         }
         mDrawableRect.set(calculateBounds());
 
-        bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movementInX, radius, numberOfTimes,orientationHorizontal,direction_Positive);
+        bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movementInX, radius, numberOfTimes, orientationHorizontal, direction_Positive);
         Log.i("point rbi206", "setup");
 
 //        Render render = new Render(this, immutableBitmap, changedBitmap, bead1, imageView);
@@ -258,7 +268,7 @@ public class RollingBeadImageView extends ImageView {
 //        Log.i("point rbi233", "getTop" + getTop());
 //        Log.i("point rbi234", "getLeft" + getLeft());
 //        Log.i("point rbi235", "getRight" + getRight());
-        return new RectF(getPaddingLeft(), getPaddingTop(), getRight()-getPaddingRight(), getBottom()-getPaddingBottom());
+        return new RectF(getPaddingLeft(), getPaddingTop(), getRight() - getPaddingRight(), getBottom() - getPaddingBottom());
     }
 
     public void timer() {
@@ -274,7 +284,7 @@ public class RollingBeadImageView extends ImageView {
     }
 
     private class ExecuteAsync extends AsyncTask<String, String, String> {
-//        Bitmap firstBitmap;
+        //        Bitmap firstBitmap;
 //        Bitmap secondBitmap;
         RollingBead bead;
 
