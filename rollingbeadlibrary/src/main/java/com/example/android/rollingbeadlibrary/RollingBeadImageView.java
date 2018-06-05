@@ -26,7 +26,7 @@ public class RollingBeadImageView extends ImageView {
     private int centerCircle_X = 0;
     private int centerCircle_Y = 350;
     private boolean generateCycle = true;
-    private int movementInX = 15;
+    private int movement = 15;
     private int radius = 35;
     private int numberOfTimes = 1;
     private int repetitionTime = 1;
@@ -35,6 +35,9 @@ public class RollingBeadImageView extends ImageView {
     private boolean mSetupPending;
     private boolean orientationHorizontal;
     private boolean direction_Positive;
+    private boolean asyncTaskRunning = false;
+    private boolean stopTaskPending = false;
+
 
     ExecuteAsync task;
 
@@ -78,11 +81,11 @@ public class RollingBeadImageView extends ImageView {
                 centerCircle_X = a.getInt(attr, 0);
             } else if (attr == R.styleable.RollingBeadImageView_center_Y) {
                 centerCircle_Y = a.getInt(attr, 0);
-            } else if (attr == R.styleable.RollingBeadImageView_movement_In_X) {
-                movementInX = a.getInt(attr, 20);
+            } else if (attr == R.styleable.RollingBeadImageView_movement) {
+                movement = a.getInt(attr, 20);
             } else if (attr == R.styleable.RollingBeadImageView_radius) {
                 radius = a.getInt(attr, 40);
-                if (radius >150)
+                if (radius > 150)
                     throw new IllegalArgumentException(String.format("radius %s not supported.", radius));
             } else if (attr == R.styleable.RollingBeadImageView_number_Of_Times) {
                 numberOfTimes = a.getInt(attr, 1);
@@ -95,16 +98,12 @@ public class RollingBeadImageView extends ImageView {
             } else if (attr == R.styleable.RollingBeadImageView_orientation) {
                 orientationHorizontal = (a.getInt(attr, 1) == 1);
             } else if (attr == R.styleable.RollingBeadImageView_direction) {
-                direction_Positive = (a.getInt(attr, 1)==1);
+                direction_Positive = (a.getInt(attr, 1) == 1);
             }
         }
         Log.i("point rbi94", "centerCircle_Y  " + centerCircle_Y);
 
         a.recycle();
-    }
-
-    private void throwException() {
-
     }
 
     public void init() {
@@ -246,7 +245,7 @@ public class RollingBeadImageView extends ImageView {
         }
         mDrawableRect.set(calculateBounds());
 
-        bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movementInX, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
         Log.i("point rbi206", "setup");
 
 //        Render render = new Render(this, immutableBitmap, changedBitmap, bead1, imageView);
@@ -272,15 +271,17 @@ public class RollingBeadImageView extends ImageView {
     }
 
     public void timer() {
-        moveBeadTimer = new Timer();
-        moveBeadTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
+        if (moveBeadTimer == null) {
+            moveBeadTimer = new Timer();
+            moveBeadTimer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
 //                Log.i("point ma255", "run started");
-                task = new ExecuteAsync(bead1);
-                task.execute(new String[]{null});
-            }
-        }, 5, repetitionTime);
+                    task = new ExecuteAsync(bead1);
+                    task.execute(new String[]{null});
+                }
+            }, 5, repetitionTime);
+        }
     }
 
     private class ExecuteAsync extends AsyncTask<String, String, String> {
@@ -310,12 +311,17 @@ public class RollingBeadImageView extends ImageView {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            asyncTaskRunning = true;
         }
 
         @Override
         protected void onPostExecute(String result) {
-//            imageView.setImageBitmap(secondBitmap);
             invalidate();
+            asyncTaskRunning = false;
+            if (stopTaskPending) {
+                stopRender();
+                stopTaskPending = false;
+            }
         }
 
         @Override
@@ -347,10 +353,21 @@ public class RollingBeadImageView extends ImageView {
     }
 
     public void stopRender() {
+        Log.i("point rbi354", "stopRender" +
+                " start");
+
         if (moveBeadTimer != null) {
             moveBeadTimer.cancel();
             moveBeadTimer.purge();
             moveBeadTimer = null;
+        }
+
+        if (!asyncTaskRunning) {
+            stopTaskPending = false;
+            bead1.dissolveAll(changedBitmap, immutableBitmap);
+            invalidate();
+        } else {
+            stopTaskPending = true;
         }
     }
 

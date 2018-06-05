@@ -1,12 +1,7 @@
 package com.example.android.rollingbeadview;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,9 +12,6 @@ import android.widget.TextView;
 import com.example.android.rollingbeadlibrary.Render;
 import com.example.android.rollingbeadlibrary.RollingBead;
 import com.example.android.rollingbeadlibrary.RollingBeadImageView;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     //    TextView text;
@@ -58,122 +50,8 @@ public class MainActivity extends AppCompatActivity {
 //        Log.i("point ma54", ((BitmapDrawable) d).getBitmap().getWidth() + "  " + ((BitmapDrawable) d).getBitmap().getHeight());
 //        Log.i("point ma56", changedBitmap.getWidth() + "  " + changedBitmap.getHeight());
 
-        bead1 = new RollingBead(changedBitmap, immutableBitmap, 350, 350, 40, 50, 1,true,true);
 
     }
-
-
-    //    private Bitmap getBitmapFromDrawable(Drawable drawable) {
-//        if (drawable == null) {
-//            return null;
-//        }
-//
-//        if (drawable instanceof BitmapDrawable) {
-//            return ((BitmapDrawable) drawable).getBitmap();
-//        }
-//
-////        try {
-////            Bitmap bitmap;
-////
-////            if (drawable instanceof ColorDrawable) {
-////                bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION, BITMAP_CONFIG);
-////            } else {
-////                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);
-////            }
-//
-////            Canvas canvas = new Canvas(bitmap);
-////            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-////            drawable.draw(canvas);
-////            return bitmap;
-////        } catch (Exception e) {
-////            e.printStackTrace();
-////            return null;
-////        }
-//    }
-
-
-//    private void timer() {
-//        Log.i("point ma247", "timer started");
-//
-//        Timer updateWordTimer = new Timer();
-//        updateWordTimer.scheduleAtFixedRate(new TimerTask() {
-//            @Override
-//            public void run() {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-////                        Log.i("point ma255", "run started");
-////                        animateInHorizontal(icon);
-//
-////                        if (asd) {
-////                            convert(icon, iconStored,getUpdatedCenterCirlce_X(), 400, 90);
-////                            asd = false;
-////                        } else {
-////                            mixBitmap(icon, iconStored, getCenterCirlce_X(), 400, 90);
-////                            asd = true;
-////                        }
-////                        imageView.setImageBitmap(icon);
-//
-//                        ExecuteAsync task = new ExecuteAsync(bead1);
-//                        task.execute(new String[]{null});
-//                    }
-//                });
-//            }
-//        }, 5, 160);
-//    }
-
-//    private class ExecuteAsync extends AsyncTask<String, String, String> {
-//        Bitmap firstBitmap;
-//        Bitmap secondBitmap;
-//        long millisUntilFinished;
-//        RollingBead bead;
-//
-//        public ExecuteAsync(RollingBead bead) {
-//            this.bead = bead;
-//        }
-//
-//        public ExecuteAsync() {
-//        }
-//
-//        public ExecuteAsync(Bitmap firstBitmap) {
-//            this.firstBitmap = firstBitmap;
-//        }
-//
-//        public ExecuteAsync(Bitmap firstBitmap, Bitmap secondBitmap) {
-//            this.firstBitmap = firstBitmap;
-//            this.secondBitmap = secondBitmap;
-//        }
-//
-//        @Override
-//        protected String doInBackground(String... urls) {
-//            if (generateCycle) {
-//                secondBitmap = bead.generateBump(changedBitmap, immutableBitmap, bead.getUpdatedcenterCircle_X());
-//                generateCycle = false;
-//            } else {
-//                secondBitmap = bead.dissolveBitmap(changedBitmap, immutableBitmap, bead.getPreviouscenterCircle_X());
-//                generateCycle = true;
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String result) {
-//            imageView.setImageBitmap(secondBitmap);
-//        }
-//
-//        @Override
-//        protected void onProgressUpdate(String... values) {
-//            super.onProgressUpdate(values);
-//            imageView.setImageBitmap(secondBitmap);
-//
-//        }
-//    }
-
 
     public void test1(View v) {
 //        Log.i("point ma127", "test1");
@@ -195,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test3(View v) {
-//        imageView.setImageBitmap(bead1.dissolveBitmap(changedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X()));
+        bead1 = new RollingBead(changedBitmap, immutableBitmap, 350, 350, 40, 50, 1,true,true);
     }
 
     public void test4(View v) {

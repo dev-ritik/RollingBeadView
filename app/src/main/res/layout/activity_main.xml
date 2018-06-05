@@ -20,18 +20,17 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_margin="15dp"
-        android:paddingTop="150dp"
         android:paddingBottom="40dp"
+        android:paddingTop="150dp"
         android:src="@drawable/four"
-        app:center_X="550"
-        app:center_Y="400"
-        app:radius="80"
-        app:movement_In_X="40"
+        app:center_X="400"
+        app:center_Y="350"
+        app:direction="negative"
+        app:movement="30"
         app:number_Of_Times="1"
-        app:repetition_Times="250"
-        app:orientation="vertical"
-        app:direction="positive"
-        />
+        app:orientation="horizontal"
+        app:radius="60"
+        app:repetition_Times="450" />
 
     <Button
         android:id="@+id/test1"
