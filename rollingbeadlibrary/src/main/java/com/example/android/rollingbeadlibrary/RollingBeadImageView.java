@@ -4,17 +4,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Looper;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -35,12 +30,12 @@ public class RollingBeadImageView extends ImageView {
     private int radius = 35;
     private int numberOfTimes = 1;
     private int repetitionTime = 1;
-    private int height;
-    private int width;
     RollingBead bead1;
     private boolean mReady;
     private boolean mSetupPending;
     private boolean orientationHorizontal;
+    private boolean direction_Positive;
+
     ExecuteAsync task;
 
     Timer moveBeadTimer;
@@ -88,11 +83,13 @@ public class RollingBeadImageView extends ImageView {
             } else if (attr == R.styleable.RollingBeadImageView_radius) {
                 radius = a.getInt(attr, 40);
             } else if (attr == R.styleable.RollingBeadImageView_number_Of_Times) {
-                radius = a.getInt(attr, 1);
+                numberOfTimes = a.getInt(attr, 1);
             } else if (attr == R.styleable.RollingBeadImageView_repetition_Times) {
                 repetitionTime = a.getInt(attr, 200);
-            }else if (attr == R.styleable.RollingBeadImageView_orientation) {
+            }else if (attr == R.styleable.RollingBeadImageView_orientation_Horizontal) {
                 orientationHorizontal = a.getBoolean(attr, true);
+            }else if (attr == R.styleable.RollingBeadImageView_direction_Positive) {
+                direction_Positive = a.getBoolean(attr, true);
             }
         }
         Log.i("point rbi94", "centerCircle_Y  " + centerCircle_Y);
@@ -239,16 +236,13 @@ public class RollingBeadImageView extends ImageView {
         }
         mDrawableRect.set(calculateBounds());
 
-        bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movementInX, radius, numberOfTimes,orientationHorizontal);
+        bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movementInX, radius, numberOfTimes,orientationHorizontal,direction_Positive);
         Log.i("point rbi206", "setup");
 
 //        Render render = new Render(this, immutableBitmap, changedBitmap, bead1, imageView);
 //        render.timer();
         timer();
 //        invalidate();
-
-//        changedBitmap = bead1.generateBump(changedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X());
-
     }
 
     public RectF calculateBounds() {
@@ -264,8 +258,6 @@ public class RollingBeadImageView extends ImageView {
 //        Log.i("point rbi233", "getTop" + getTop());
 //        Log.i("point rbi234", "getLeft" + getLeft());
 //        Log.i("point rbi235", "getRight" + getRight());
-//        return new RectF(1, 2, 300, 300);
-//        return new RectF(left, top, left + sideLength, top + sideLength);
         return new RectF(getPaddingLeft(), getPaddingTop(), getRight()-getPaddingRight(), getBottom()-getPaddingBottom());
     }
 
@@ -275,7 +267,6 @@ public class RollingBeadImageView extends ImageView {
             @Override
             public void run() {
 //                Log.i("point ma255", "run started");
-//                ExecuteAsync task = new ExecuteAsync(bead1);
                 task = new ExecuteAsync(bead1);
                 task.execute(new String[]{null});
             }
@@ -293,15 +284,6 @@ public class RollingBeadImageView extends ImageView {
 
         public ExecuteAsync() {
         }
-
-//        public ExecuteAsync(Bitmap firstBitmap) {
-//            this.firstBitmap = firstBitmap;
-//        }
-
-//        public ExecuteAsync(Bitmap firstBitmap, Bitmap secondBitmap) {
-//            this.firstBitmap = firstBitmap;
-//            this.secondBitmap = secondBitmap;
-//        }
 
         @Override
         protected String doInBackground(String... urls) {

@@ -25,11 +25,12 @@
         android:src="@drawable/four"
         app:center_X="750"
         app:center_Y="400"
-        app:radius="50"
-        app:movement_In_X="30"
-        app:number_Of_Times="1"
+        app:radius="100"
+        app:movement_In_X="40"
+        app:number_Of_Times="2"
         app:repetition_Times="200"
-        app:orientation="false"
+        app:orientation_Horizontal="false"
+        app:direction_Positive="false"
         />
 
     <Button

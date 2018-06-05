@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--<attr name="center_X" format="integer" />-->
-    <!--<attr name="center_Y" format="integer" />-->
-    <!--<attr name="movement_In_X" format="integer" />-->
-    <!--<attr name="radius" format="integer" />-->
-    <!--<attr name="number_Of_Times" format="integer" />-->
-    <!--<attr name="repetition_Times" format="integer" />-->
-
     <declare-styleable name="RollingBeadImageView">
         <attr name="center_X" format="integer" />
         <attr name="center_Y" format="integer" />
@@ -15,7 +8,8 @@
         <attr name="radius" format="integer" />
         <attr name="number_Of_Times" format="integer" />
         <attr name="repetition_Times" format="integer" />
-        <attr name="orientation" format="boolean"/>
+        <attr name="orientation_Horizontal" format="boolean"/>
+        <attr name="direction_Positive" format="boolean"/>
     </declare-styleable>
 
 </resources>

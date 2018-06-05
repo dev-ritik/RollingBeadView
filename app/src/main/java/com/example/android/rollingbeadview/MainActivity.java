@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 //        Log.i("point ma54", ((BitmapDrawable) d).getBitmap().getWidth() + "  " + ((BitmapDrawable) d).getBitmap().getHeight());
 //        Log.i("point ma56", changedBitmap.getWidth() + "  " + changedBitmap.getHeight());
 
-        bead1 = new RollingBead(changedBitmap, immutableBitmap, 350, 350, 40, 50, 1,true);
+        bead1 = new RollingBead(changedBitmap, immutableBitmap, 350, 350, 40, 50, 1,true,true);
 
     }
 
