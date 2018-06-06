@@ -22,15 +22,15 @@
         android:layout_margin="15dp"
         android:paddingBottom="40dp"
         android:paddingTop="150dp"
-        android:src="@drawable/four"
+        android:src="@drawable/three"
         app:center_X="400"
         app:center_Y="350"
         app:direction="negative"
         app:movement="30"
         app:number_Of_Times="1"
-        app:orientation="horizontal"
+        app:orientation="vertical"
         app:radius="60"
-        app:repetition_Times="450" />
+        app:repetition_Times="250" />
 
     <Button
         android:id="@+id/test1"

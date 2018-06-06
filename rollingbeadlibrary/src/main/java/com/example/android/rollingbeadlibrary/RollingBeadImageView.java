@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class RollingBeadImageView extends ImageView {
+public class RollingBeadImageView extends ImageView implements TimerInterface.TimerInterfaceListener {
     private Context context;
     private Bitmap changedBitmap;
     private Bitmap immutableBitmap;
@@ -37,7 +37,6 @@ public class RollingBeadImageView extends ImageView {
     private boolean direction_Positive;
     private boolean asyncTaskRunning = false;
     private boolean stopTaskPending = false;
-
 
     ExecuteAsync task;
 
@@ -119,6 +118,70 @@ public class RollingBeadImageView extends ImageView {
             setup();
             mSetupPending = false;
         }
+    }
+
+    public int getCenterCircle_X() {
+        return centerCircle_X;
+    }
+
+    public void setCenterCircle_X(int centerCircle_X) {
+        this.centerCircle_X = centerCircle_X;
+    }
+
+    public int getCenterCircle_Y() {
+        return centerCircle_Y;
+    }
+
+    public void setCenterCircle_Y(int centerCircle_Y) {
+        this.centerCircle_Y = centerCircle_Y;
+    }
+
+    public int getMovement() {
+        return movement;
+    }
+
+    public void setMovement(int movement) {
+        this.movement = movement;
+    }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    public int getNumberOfTimes() {
+        return numberOfTimes;
+    }
+
+    public void setNumberOfTimes(int numberOfTimes) {
+        this.numberOfTimes = numberOfTimes;
+    }
+
+    public int getRepetitionTime() {
+        return repetitionTime;
+    }
+
+    public void setRepetitionTime(int repetitionTime) {
+        this.repetitionTime = repetitionTime;
+    }
+
+    public boolean isOrientationHorizontal() {
+        return orientationHorizontal;
+    }
+
+    public void setOrientationHorizontal(boolean orientationHorizontal) {
+        this.orientationHorizontal = orientationHorizontal;
+    }
+
+    public boolean isDirection_Positive() {
+        return direction_Positive;
+    }
+
+    public void setDirection_Positive(boolean direction_Positive) {
+        this.direction_Positive = direction_Positive;
     }
 
     @Override
@@ -312,16 +375,14 @@ public class RollingBeadImageView extends ImageView {
         protected void onPreExecute() {
             super.onPreExecute();
             asyncTaskRunning = true;
+            time.setAsyncValue(true);
         }
 
         @Override
         protected void onPostExecute(String result) {
             invalidate();
             asyncTaskRunning = false;
-            if (stopTaskPending) {
-                stopRender();
-                stopTaskPending = false;
-            }
+            time.setAsyncValue(false);
         }
 
         @Override
@@ -353,8 +414,7 @@ public class RollingBeadImageView extends ImageView {
     }
 
     public void stopRender() {
-        Log.i("point rbi354", "stopRender" +
-                " start");
+        Log.i("point rbi354", "stopRender" + " start");
 
         if (moveBeadTimer != null) {
             moveBeadTimer.cancel();
@@ -362,17 +422,67 @@ public class RollingBeadImageView extends ImageView {
             moveBeadTimer = null;
         }
 
-        if (!asyncTaskRunning) {
-            stopTaskPending = false;
+        stopTaskPending = true;
+        time.setStopValue(true);
+        Log.i("point rbi442", time.getAsyncValue() + "async value");
+        if (!time.getAsyncValue()) {
+            Log.i("point rbi444", "if above method");
             bead1.dissolveAll(changedBitmap, immutableBitmap);
             invalidate();
+            stopTaskPending = false;
+            time.setStopValue(false);
         } else {
-            stopTaskPending = true;
+            time.setmAsyncListener(new TimerInterface.AsyncListener() {
+                @Override
+                public void onAsyncValueChanged(boolean newValue) {
+                    if (!newValue) {
+                        Log.i("point rbi453", "if stop method");
+                        bead1.dissolveAll(changedBitmap, immutableBitmap);
+                        invalidate();
+                        stopTaskPending = false;
+                        time.setStopValue(false);
+                        time.setmAsyncListener(null);
+                    }
+                }
+            });
         }
     }
 
     public void resumeRender() {
         if (moveBeadTimer == null)
             timer();
+    }
+
+    @Override
+    public void onStopValueChanged(boolean newValue) {
+        Log.i("point rbi468", "onValueChanged listener");
+
+    }
+
+    private TimerInterface time = new TimerInterface(false);
+
+    public void changeBead() {
+
+        Log.i("point rbi500", "changeBead method");
+        stopRender();
+        Log.i("point rbi502", "inside changeBead method" + " stop " + time.getStopValue() + " async " + time.getAsyncValue());
+        if (!time.getStopValue() && !time.getAsyncValue()) {
+            Log.i("point rbi504", "if changeBead method");
+            bead1 = new RollingBead(changedBitmap, immutableBitmap, 50, 50, movement, 100, numberOfTimes, orientationHorizontal, !direction_Positive);
+            resumeRender();
+
+        } else {
+            time.setmStopListener(new TimerInterface.TimerInterfaceListener() {
+                @Override
+                public void onStopValueChanged(boolean newValue) {
+                    Log.i("point rbi490", "inside onvalue method");
+                    bead1 = new RollingBead(changedBitmap, immutableBitmap, 50, 50, movement, 100, numberOfTimes, !orientationHorizontal, !direction_Positive);
+                    resumeRender();
+                    time.setmStopListener(null);
+                }
+            });
+
+
+        }
     }
 }

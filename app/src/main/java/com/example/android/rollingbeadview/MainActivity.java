@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,10 +15,8 @@ import com.example.android.rollingbeadlibrary.RollingBeadImageView;
 public class MainActivity extends AppCompatActivity {
     //    TextView text;
     ImageView imageView;
-    private boolean generateCycle = false;
     Bitmap immutableBitmap;
     Bitmap changedBitmap;
-    Bitmap changedReturnedBitmap;
     RollingBead bead1;
     RollingBeadImageView mimage;
 
@@ -35,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 R.drawable.five);
 //        Log.i("point ma39", "immutableBitmap  " + immutableBitmap.isMutable());
         changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
-        mimage=(RollingBeadImageView)findViewById(R.id.mimage);
+        mimage = (RollingBeadImageView) findViewById(R.id.mimage);
 
 //        Log.i("point ma41", "changedBitmap  " + changedBitmap.isMutable());
 //        Drawable d = new BitmapDrawable(getResources(), changedBitmap);
@@ -73,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test3(View v) {
-        bead1 = new RollingBead(changedBitmap, immutableBitmap, 350, 350, 40, 50, 1,true,true);
+        mimage.changeBead();
     }
 
     public void test4(View v) {
