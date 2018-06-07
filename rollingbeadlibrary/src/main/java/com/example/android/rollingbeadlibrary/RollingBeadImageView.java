@@ -35,8 +35,7 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
     private boolean mSetupPending;
     private boolean orientationHorizontal;
     private boolean direction_Positive;
-    private boolean asyncTaskRunning = false;
-    private boolean stopTaskPending = false;
+    private TimerInterface time = new TimerInterface(false);
 
     ExecuteAsync task;
 
@@ -84,12 +83,8 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
                 movement = a.getInt(attr, 20);
             } else if (attr == R.styleable.RollingBeadImageView_radius) {
                 radius = a.getInt(attr, 40);
-                if (radius > 150)
-                    throw new IllegalArgumentException(String.format("radius %s not supported.", radius));
             } else if (attr == R.styleable.RollingBeadImageView_number_Of_Times) {
                 numberOfTimes = a.getInt(attr, 1);
-                if (numberOfTimes < 1)
-                    throw new IllegalArgumentException(String.format("number_Of_Times %s not supported.", numberOfTimes));
             } else if (attr == R.styleable.RollingBeadImageView_repetition_Times) {
                 repetitionTime = a.getInt(attr, 200);
                 if (repetitionTime < 70)
@@ -100,8 +95,6 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
                 direction_Positive = (a.getInt(attr, 1) == 1);
             }
         }
-        Log.i("point rbi94", "centerCircle_Y  " + centerCircle_Y);
-
         a.recycle();
     }
 
@@ -126,6 +119,10 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
 
     public void setCenterCircle_X(int centerCircle_X) {
         this.centerCircle_X = centerCircle_X;
+        if (orientationHorizontal)
+            changeBead(centerCircle_X, bead1.constantCoordinate, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        else
+            changeBead(centerCircle_X, bead1.getcenterCircle_X(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
     }
 
     public int getCenterCircle_Y() {
@@ -134,6 +131,10 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
 
     public void setCenterCircle_Y(int centerCircle_Y) {
         this.centerCircle_Y = centerCircle_Y;
+        if (orientationHorizontal)
+            changeBead(bead1.getcenterCircle_X(), centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        else
+            changeBead(bead1.constantCoordinate, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
     }
 
     public int getMovement() {
@@ -142,6 +143,10 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
 
     public void setMovement(int movement) {
         this.movement = movement;
+        if (orientationHorizontal)
+            changeBead(bead1.getcenterCircle_X(), centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        else
+            changeBead(centerCircle_Y, bead1.getcenterCircle_X(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
     }
 
     public int getRadius() {
@@ -150,6 +155,10 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
 
     public void setRadius(int radius) {
         this.radius = radius;
+        if (orientationHorizontal)
+            changeBead(bead1.getcenterCircle_X(), centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        else
+            changeBead(centerCircle_Y, bead1.getcenterCircle_X(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
     }
 
     public int getNumberOfTimes() {
@@ -157,6 +166,10 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
     }
 
     public void setNumberOfTimes(int numberOfTimes) {
+        if (orientationHorizontal)
+            changeBead(bead1.getcenterCircle_X(), bead1.constantCoordinate, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        else
+            changeBead(bead1.constantCoordinate, bead1.getcenterCircle_X(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
         this.numberOfTimes = numberOfTimes;
     }
 
@@ -166,6 +179,8 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
 
     public void setRepetitionTime(int repetitionTime) {
         this.repetitionTime = repetitionTime;
+        stopRender();
+        resumeRender();
     }
 
     public boolean isOrientationHorizontal() {
@@ -173,6 +188,10 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
     }
 
     public void setOrientationHorizontal(boolean orientationHorizontal) {
+        if (this.orientationHorizontal)
+            changeBead(bead1.getcenterCircle_X(), bead1.constantCoordinate, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        else
+            changeBead(bead1.constantCoordinate, bead1.getcenterCircle_X(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
         this.orientationHorizontal = orientationHorizontal;
     }
 
@@ -182,6 +201,10 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
 
     public void setDirection_Positive(boolean direction_Positive) {
         this.direction_Positive = direction_Positive;
+        if (orientationHorizontal)
+            changeBead(bead1.getcenterCircle_X(), bead1.constantCoordinate, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        else
+            changeBead(bead1.constantCoordinate, bead1.getcenterCircle_X(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
     }
 
     @Override
@@ -374,14 +397,12 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            asyncTaskRunning = true;
             time.setAsyncValue(true);
         }
 
         @Override
         protected void onPostExecute(String result) {
             invalidate();
-            asyncTaskRunning = false;
             time.setAsyncValue(false);
         }
 
@@ -390,7 +411,6 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
             super.onProgressUpdate(values);
         }
     }
-
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -413,23 +433,25 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
 //        super.draw(canvas);
     }
 
-    public void stopRender() {
-        Log.i("point rbi354", "stopRender" + " start");
-
+    public void pauseRenderer() {
         if (moveBeadTimer != null) {
             moveBeadTimer.cancel();
             moveBeadTimer.purge();
             moveBeadTimer = null;
         }
+    }
 
-        stopTaskPending = true;
+    public void stopRender() {
+        Log.i("point rbi354", "stopRender" + " start");
+
+        pauseRenderer();
+
         time.setStopValue(true);
         Log.i("point rbi442", time.getAsyncValue() + "async value");
         if (!time.getAsyncValue()) {
             Log.i("point rbi444", "if above method");
             bead1.dissolveAll(changedBitmap, immutableBitmap);
             invalidate();
-            stopTaskPending = false;
             time.setStopValue(false);
         } else {
             time.setmAsyncListener(new TimerInterface.AsyncListener() {
@@ -439,7 +461,6 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
                         Log.i("point rbi453", "if stop method");
                         bead1.dissolveAll(changedBitmap, immutableBitmap);
                         invalidate();
-                        stopTaskPending = false;
                         time.setStopValue(false);
                         time.setmAsyncListener(null);
                     }
@@ -459,16 +480,14 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
 
     }
 
-    private TimerInterface time = new TimerInterface(false);
-
-    public void changeBead() {
+    public void changeBead(final int centerCircle_X, final int centerCircle_Y, final int movement, final int radius, final int numberOfTimes, final boolean orientationHorizontal, final boolean direction_Positive) {
 
         Log.i("point rbi500", "changeBead method");
         stopRender();
         Log.i("point rbi502", "inside changeBead method" + " stop " + time.getStopValue() + " async " + time.getAsyncValue());
         if (!time.getStopValue() && !time.getAsyncValue()) {
             Log.i("point rbi504", "if changeBead method");
-            bead1 = new RollingBead(changedBitmap, immutableBitmap, 50, 50, movement, 100, numberOfTimes, orientationHorizontal, !direction_Positive);
+            bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
             resumeRender();
 
         } else {
@@ -476,7 +495,7 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
                 @Override
                 public void onStopValueChanged(boolean newValue) {
                     Log.i("point rbi490", "inside onvalue method");
-                    bead1 = new RollingBead(changedBitmap, immutableBitmap, 50, 50, movement, 100, numberOfTimes, !orientationHorizontal, !direction_Positive);
+                    bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
                     resumeRender();
                     time.setmStopListener(null);
                 }

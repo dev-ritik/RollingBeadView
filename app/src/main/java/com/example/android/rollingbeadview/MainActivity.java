@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.android.rollingbeadlibrary.Render;
 import com.example.android.rollingbeadlibrary.RollingBead;
@@ -51,33 +50,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test1(View v) {
-//        Log.i("point ma127", "test1");
-//        changedReturnedBitmap = bead1.generateBump(changedBitmap, immutableBitmap, bead1.getUpdatedcenterCircle_X());
-//        Log.i("point ma127", "test1");
-//        imageView.setImageBitmap(changedReturnedBitmap);
-//        Log.i("point ma127", "test1");
-//        imageView.setImageBitmap(bead1.dissolveBitmap(changedReturnedBitmap, immutableBitmap, bead1.getPreviouscenterCircle_X()));
-//        Log.i("point ma127", "test1");
-
-        mimage.stopRender();
+        mimage.setRepetitionTime(150);
+//        mimage.stopRender();
     }
 
     public void test2(View v) {
 
-//        imageView.setImageBitmap(bead1.generateBump(changedBitmap, immutableBitmap, bead1.getUpdatedcenterCircle_X()));
-        mimage.resumeRender();
-//        imageView.setImageBitmap(icon);
+//        mimage.resumeRender();
+        mimage.setCenterCircle_X(10);
     }
 
     public void test3(View v) {
-        mimage.changeBead();
+        mimage.setDirection_Positive(false);
     }
 
     public void test4(View v) {
 
-        Render render = new Render(this, immutableBitmap, changedBitmap, bead1, imageView);
-        render.timer();
-
+//        Render render = new Render(this, immutableBitmap, changedBitmap, bead1, imageView);
+//        render.timer();
+        mimage.setOrientationHorizontal(false);
     }
 
 }
