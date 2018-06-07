@@ -264,7 +264,7 @@ public class RollingBead {
             terminalRight = movement;
             terminalLeft = -radius;
         }
-        Log.i("point rb234", "centerCircle_X  " + centerCircle_X + "  constantCoordinate  " + constantCoordinate + "  movement  " + movement);
+//        Log.i("point rb234", "centerCircle_X  " + centerCircle_X + "  constantCoordinate  " + constantCoordinate + "  movement  " + movement);
         double lens_factor = 1.0;
         for (int dx = terminalRight; dx >= 0; --dx) {
             //R.H.S
@@ -336,7 +336,7 @@ public class RollingBead {
                 }
             }
         }
-        Log.i("point rb356", "generateBitmap ends");
+//        Log.i("point rb356", "generateBitmap ends");
     }
 
 

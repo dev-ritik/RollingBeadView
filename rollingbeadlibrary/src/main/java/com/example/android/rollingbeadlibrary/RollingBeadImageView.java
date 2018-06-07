@@ -20,6 +20,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class RollingBeadImageView extends ImageView implements TimerInterface.TimerInterfaceListener {
+    private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
+    private final RectF mDrawableRect = new RectF();
+    RollingBead bead1;
+    ExecuteAsync task;
+    Timer moveBeadTimer;
     private Context context;
     private Bitmap changedBitmap;
     private Bitmap immutableBitmap;
@@ -30,40 +35,29 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
     private int radius = 35;
     private int numberOfTimes = 1;
     private int repetitionTime = 1;
-    RollingBead bead1;
     private boolean mReady;
     private boolean mSetupPending;
     private boolean orientationHorizontal;
     private boolean direction_Positive;
     private TimerInterface time = new TimerInterface(false);
 
-    ExecuteAsync task;
-
-    Timer moveBeadTimer;
-
-    private final RectF mDrawableRect = new RectF();
-
-
-    private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
-
     public RollingBeadImageView(Context context) {
         super(context);
-//        Log.i("point rbi50", "RollingBeadImageView  ");
+        Log.i("point rbi50", "RollingBeadImageView  ");
+        init();
     }
 
     public RollingBeadImageView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-//        Log.i("point rbi54", "RollingBeadImageView  ");
-        this.context = context;
-        this.initBaseXMLAttrs(context, attrs);
-        init();
+//        super(context, attrs);
+        this(context, attrs, 0);
+        Log.i("point rbi54", "RollingBeadImageView  ");
 
     }
 
     public RollingBeadImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
-//        Log.i("point rbi59", "RollingBeadImageView  ");
+        Log.i("point rbi59", "RollingBeadImageView  ");
 
         this.initBaseXMLAttrs(context, attrs);
         init();
@@ -72,7 +66,6 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
     final void initBaseXMLAttrs(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RollingBeadImageView);
         final int N = a.getIndexCount();
-//        Log.i("point rbi66", "attrs  " + attrs);
         for (int i = 0; i < N; ++i) {
             int attr = a.getIndex(i);
             if (attr == R.styleable.RollingBeadImageView_center_X) {
@@ -98,16 +91,11 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
         a.recycle();
     }
 
-    public void init() {
-//        super.setScaleType(SCALE_TYPE);
+    void init() {
+        Log.i("point rbi103", " init");
         mReady = true;
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            setOutlineProvider(new OutlineProvider());
-//        }
-//
+
         if (mSetupPending) {
-            Log.i("point rbi109", "init");
             setup();
             mSetupPending = false;
         }
@@ -178,6 +166,8 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
     }
 
     public void setRepetitionTime(int repetitionTime) {
+        if (repetitionTime < 70)
+            throw new IllegalArgumentException(String.format("repetition_Times %s may result in repetitive Garbage Collection.", repetitionTime));
         this.repetitionTime = repetitionTime;
         stopRender();
         resumeRender();
@@ -210,6 +200,8 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
     @Override
     public void setImageBitmap(Bitmap bm) {
         super.setImageBitmap(bm);
+        Log.i("point rbi214", " setImageBitmap");
+
         initializeBitmap();
     }
 
@@ -231,29 +223,27 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
         initializeBitmap();
     }
 
-//    @Override
-//    public ScaleType getScaleType() {
-//        return SCALE_TYPE;
-//    }
-
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        Log.i("point rbi147", "onSizeChanged");
+//        Log.i("point rbi147", "onSizeChanged" + w + "w" + h + " h" + oldw + "oldw" + oldh);
+//        if (w != oldw || h != oldh) {
+//            if (moveBeadTimer != null) {
+//                stopRender();
+//            }
+//        }
         setup();
     }
 
     @Override
     public void setPadding(int left, int top, int right, int bottom) {
         super.setPadding(left, top, right, bottom);
-        Log.i("point rbi154", "setPadding");
         setup();
     }
 
     @Override
     public void setPaddingRelative(int start, int top, int end, int bottom) {
         super.setPaddingRelative(start, top, end, bottom);
-        Log.i("point rbi161", "setPaddingRelative");
         setup();
     }
 
@@ -309,7 +299,7 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
     }
 
     private void setup() {
-        Log.i("point rbi186", "setup");
+        Log.i("point rbi319", "setup");
 
         if (!mReady) {
             mSetupPending = true;
@@ -325,39 +315,38 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
             invalidate();
             return;
         }
-        if (calculateBounds().width() == 0) {
-            invalidate();
+        if (getWidth() == 0 || getHeight() == 0) {
             return;
         }
+
         mDrawableRect.set(calculateBounds());
 
         bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
         Log.i("point rbi206", "setup");
 
-//        Render render = new Render(this, immutableBitmap, changedBitmap, bead1, imageView);
-//        render.timer();
         timer();
-//        invalidate();
     }
 
-    public RectF calculateBounds() {
-//        Log.i("point rbi224", "getPaddingBottom()" + getPaddingBottom());
-//        Log.i("point rbi225", "end" + getPaddingEnd());
-//        Log.i("point rbi226", "left" + getPaddingLeft());
-//        Log.i("point rbi227", "right  " + getPaddingRight());
-//        Log.i("point rbi228", "start" + getPaddingStart());
-//        Log.i("point rbi229", "top" + getPaddingTop());
-//        Log.i("point rbi230", "bottom" + getBottom());
-//        Log.i("point rbi231", "width" + getWidth());
-//        Log.i("point rbi232", "height" + getHeight());
-//        Log.i("point rbi233", "getTop" + getTop());
-//        Log.i("point rbi234", "getLeft" + getLeft());
-//        Log.i("point rbi235", "getRight" + getRight());
-        return new RectF(getPaddingLeft(), getPaddingTop(), getRight() - getPaddingRight(), getBottom() - getPaddingBottom());
+    private RectF calculateBounds() {
+        Log.i("point rbi224", "getPaddingBottom()" + getPaddingBottom());
+        Log.i("point rbi225", "end" + getPaddingEnd());
+        Log.i("point rbi226", "left" + getPaddingLeft());
+        Log.i("point rbi227", "right  " + getPaddingRight());
+        Log.i("point rbi228", "start" + getPaddingStart());
+        Log.i("point rbi229", "top" + getPaddingTop());
+        Log.i("point rbi230", "bottom" + getBottom());
+        Log.i("point rbi231", "width" + getWidth());
+        Log.i("point rbi232", "height" + getHeight());
+        Log.i("point rbi233", "getTop" + getTop());
+        Log.i("point rbi234", "getLeft" + getLeft());
+        Log.i("point rbi235", "getRight" + getRight());
+        return new RectF(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
     }
 
-    public void timer() {
+    void timer() {
+
         if (moveBeadTimer == null) {
+//            Log.i("point rbi369", "timer null");
             moveBeadTimer = new Timer();
             moveBeadTimer.scheduleAtFixedRate(new TimerTask() {
                 @Override
@@ -367,12 +356,105 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
                     task.execute(new String[]{null});
                 }
             }, 5, repetitionTime);
+        } else
+            Log.i("point rbi379", "timer not null");
+
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+//        Log.i("point rbi183", "ondraw");
+        if (changedBitmap == null) {
+            Log.i("point rbi189", "ondraw problem");
+            return;
+        }
+        if (immutableBitmap == null) {
+            Log.i("point rbi193", "ondraw problem");
+            return;
+        }
+//        Log.i("point rbi367", mDrawableRect.height() + "  height  " + mDrawableRect.width() + "  width");
+//        Log.i("point rbi368", immutableBitmap.getWidth() + "  immutableBitmap.width  "+immutableBitmap.getHeight());
+//        Log.i("point rbi368", changedBitmap.getWidth() + "  changedBitmap.width  "+changedBitmap.getHeight());
+
+        canvas.drawBitmap(changedBitmap, null, mDrawableRect, null);
+//        Log.i("point rbi349", "ondraw completed");
+
+//        super.draw(canvas);
+    }
+
+    public void pauseRenderer() {
+        if (moveBeadTimer != null) {
+            moveBeadTimer.cancel();
+            moveBeadTimer.purge();
+            moveBeadTimer = null;
+        }
+    }
+
+    public void stopRender() {
+//        Log.i("point rbi354", "stopRender" + " start");
+
+        pauseRenderer();
+
+        time.setStopValue(true);
+        Log.i("point rbi442", time.getAsyncValue() + "async value");
+        if (!time.getAsyncValue()) {
+//            Log.i("point rbi444", "if above method");
+            bead1.dissolveAll(changedBitmap, immutableBitmap);
+            invalidate();
+            time.setStopValue(false);
+        } else {
+            time.setmAsyncListener(new TimerInterface.AsyncListener() {
+                @Override
+                public void onAsyncValueChanged(boolean newValue) {
+                    if (!newValue) {
+//                        Log.i("point rbi453", "if stop method");
+                        bead1.dissolveAll(changedBitmap, immutableBitmap);
+                        invalidate();
+                        time.setStopValue(false);
+                        time.setmAsyncListener(null);
+                    }
+                }
+            });
+        }
+    }
+
+    public void resumeRender() {
+        if (moveBeadTimer == null)
+            timer();
+    }
+
+    @Override
+    public void onStopValueChanged(boolean newValue) {
+//        Log.i("point rbi468", "onValueChanged listener");
+
+    }
+
+    void changeBead(final int centerCircle_X, final int centerCircle_Y, final int movement, final int radius, final int numberOfTimes, final boolean orientationHorizontal, final boolean direction_Positive) {
+
+//        Log.i("point rbi500", "changeBead method");
+        stopRender();
+//        Log.i("point rbi502", "inside changeBead method" + " stop " + time.getStopValue() + " async " + time.getAsyncValue());
+        if (!time.getStopValue() && !time.getAsyncValue()) {
+//            Log.i("point rbi504", "if changeBead method");
+            bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+            resumeRender();
+
+        } else {
+            time.setmStopListener(new TimerInterface.TimerInterfaceListener() {
+                @Override
+                public void onStopValueChanged(boolean newValue) {
+//                    Log.i("point rbi490", "inside onvalue method");
+                    bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+                    resumeRender();
+                    time.setmStopListener(null);
+                }
+            });
+
+
         }
     }
 
     private class ExecuteAsync extends AsyncTask<String, String, String> {
-        //        Bitmap firstBitmap;
-//        Bitmap secondBitmap;
         RollingBead bead;
 
         public ExecuteAsync(RollingBead bead) {
@@ -409,99 +491,6 @@ public class RollingBeadImageView extends ImageView implements TimerInterface.Ti
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-        }
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-//        Log.i("point rbi183", "ondraw");
-        if (changedBitmap == null) {
-            Log.i("point rbi189", "ondraw problem");
-            return;
-        }
-        if (immutableBitmap == null) {
-            Log.i("point rbi193", "ondraw problem");
-            return;
-        }
-//        Log.i("point rbi367", mDrawableRect.height() + "  height  " + mDrawableRect.width() + "  width");
-//        Log.i("point rbi368", immutableBitmap.getWidth() + "  immutableBitmap.width  "+immutableBitmap.getHeight());
-//        Log.i("point rbi368", changedBitmap.getWidth() + "  changedBitmap.width  "+changedBitmap.getHeight());
-
-        canvas.drawBitmap(changedBitmap, null, mDrawableRect, null);
-//        Log.i("point rbi349", "ondraw completed");
-
-//        super.draw(canvas);
-    }
-
-    public void pauseRenderer() {
-        if (moveBeadTimer != null) {
-            moveBeadTimer.cancel();
-            moveBeadTimer.purge();
-            moveBeadTimer = null;
-        }
-    }
-
-    public void stopRender() {
-        Log.i("point rbi354", "stopRender" + " start");
-
-        pauseRenderer();
-
-        time.setStopValue(true);
-        Log.i("point rbi442", time.getAsyncValue() + "async value");
-        if (!time.getAsyncValue()) {
-            Log.i("point rbi444", "if above method");
-            bead1.dissolveAll(changedBitmap, immutableBitmap);
-            invalidate();
-            time.setStopValue(false);
-        } else {
-            time.setmAsyncListener(new TimerInterface.AsyncListener() {
-                @Override
-                public void onAsyncValueChanged(boolean newValue) {
-                    if (!newValue) {
-                        Log.i("point rbi453", "if stop method");
-                        bead1.dissolveAll(changedBitmap, immutableBitmap);
-                        invalidate();
-                        time.setStopValue(false);
-                        time.setmAsyncListener(null);
-                    }
-                }
-            });
-        }
-    }
-
-    public void resumeRender() {
-        if (moveBeadTimer == null)
-            timer();
-    }
-
-    @Override
-    public void onStopValueChanged(boolean newValue) {
-        Log.i("point rbi468", "onValueChanged listener");
-
-    }
-
-    public void changeBead(final int centerCircle_X, final int centerCircle_Y, final int movement, final int radius, final int numberOfTimes, final boolean orientationHorizontal, final boolean direction_Positive) {
-
-        Log.i("point rbi500", "changeBead method");
-        stopRender();
-        Log.i("point rbi502", "inside changeBead method" + " stop " + time.getStopValue() + " async " + time.getAsyncValue());
-        if (!time.getStopValue() && !time.getAsyncValue()) {
-            Log.i("point rbi504", "if changeBead method");
-            bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
-            resumeRender();
-
-        } else {
-            time.setmStopListener(new TimerInterface.TimerInterfaceListener() {
-                @Override
-                public void onStopValueChanged(boolean newValue) {
-                    Log.i("point rbi490", "inside onvalue method");
-                    bead1 = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
-                    resumeRender();
-                    time.setmStopListener(null);
-                }
-            });
-
-
         }
     }
 }
