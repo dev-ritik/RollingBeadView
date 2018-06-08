@@ -1,11 +1,12 @@
 package com.example.android.rollingbeadlibrary;
 
+// this class handles callbacks for stop and async methods (required when stopping renderer and/or changing bead)
 public class MyInterface {
     /**
      * The current value.
      */
-    boolean mStopValue;
-    boolean mAsyncValue;
+    private boolean mStopValue;
+    private boolean mAsyncValue;
 
     private StopListener mStopListener;
     private AsyncListener mAsyncListener;
@@ -72,7 +73,7 @@ public class MyInterface {
 
     public interface StopListener {
         /**
-         * Called when the value of the boolean changes.
+         * Called when the value of the mStopValue changes.
          *
          * @param newValue The new value.
          */
@@ -81,7 +82,7 @@ public class MyInterface {
 
     public interface AsyncListener {
         /**
-         * Called when the value of the boolean changes.
+         * Called when the value of the mAsyncValue changes.
          *
          * @param newValue The new value.
          */

@@ -19,8 +19,9 @@ import android.widget.ImageView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+// Custom class that handles overall functions of bead movement
+
 public class RollingBeadImageView extends ImageView {
-    private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
     private final RectF mDrawableRect = new RectF();
     private RollingBead bead;
     ExecuteAsync task;
@@ -36,6 +37,8 @@ public class RollingBeadImageView extends ImageView {
     private boolean mReady, mSetupPending;
     private boolean orientationHorizontal, direction_Positive;
     private MyInterface time = new MyInterface(false);
+
+    // toggles between generating and moving cycles in bead movement
     private boolean generateCycle = true;
 
     public RollingBeadImageView(Context context) {
@@ -122,6 +125,7 @@ public class RollingBeadImageView extends ImageView {
         return repetitionTime;
     }
 
+    // stops renderer and restarts it with new time period
     public void setRepetitionTime(int repetitionTime) {
         if (repetitionTime < 70)
             throw new IllegalArgumentException(String.format("repetition_Times %s may result in repetitive Garbage Collection.", repetitionTime));
@@ -213,6 +217,7 @@ public class RollingBeadImageView extends ImageView {
         setup();
     }
 
+    // get bitmap from drawable given by user
     private void getBitmapFromDrawable(Drawable drawable) {
         if (drawable == null) {
             invalidate();
@@ -239,7 +244,7 @@ public class RollingBeadImageView extends ImageView {
             if (drawable instanceof ColorDrawable) {
                 invalidate();
             } else {
-                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);
+                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
                 if (bitmap.isMutable()) {
 //                    Log.i("point rbi186", "bitmap  ");
                     changedBitmap = bitmap;
@@ -279,7 +284,8 @@ public class RollingBeadImageView extends ImageView {
                 numberOfTimes = a.getInt(attr, 1);
             } else if (attr == R.styleable.RollingBeadImageView_repetition_Times) {
                 repetitionTime = a.getInt(attr, 200);
-                if (repetitionTime < 70)
+                // can't do such fast calculations
+                if (repetitionTime < 60)
                     throw new IllegalArgumentException(String.format("repetition_Times %s may result in repetitive Garbage Collection.", repetitionTime));
             } else if (attr == R.styleable.RollingBeadImageView_orientation) {
                 orientationHorizontal = (a.getInt(attr, 1) == 1);
@@ -327,6 +333,7 @@ public class RollingBeadImageView extends ImageView {
         timer();
     }
 
+    //returns view bounds
     private RectF calculateBounds() {
 //        Log.i("point rbi224", "getPaddingBottom()" + getPaddingBottom());
 //        Log.i("point rbi225", "end" + getPaddingEnd());
@@ -343,10 +350,9 @@ public class RollingBeadImageView extends ImageView {
         return new RectF(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
     }
 
+    // periodically calls async method to run the bead
     void timer() {
-
         if (moveBeadTimer == null) {
-//            Log.i("point rbi369", "timer null");
             moveBeadTimer = new Timer();
             moveBeadTimer.scheduleAtFixedRate(new TimerTask() {
                 @Override
@@ -357,11 +363,9 @@ public class RollingBeadImageView extends ImageView {
                 }
             }, 5, repetitionTime);
         }
-//        else
-//            Log.i("point rbi379", "timer not null");
-
     }
 
+    // asynctask to reduce load on main thread
     private class ExecuteAsync extends AsyncTask<String, String, String> {
         RollingBead bead;
 
@@ -369,11 +373,9 @@ public class RollingBeadImageView extends ImageView {
             this.bead = bead;
         }
 
-        public ExecuteAsync() {
-        }
-
         @Override
         protected String doInBackground(String... urls) {
+            //alternative generate and dissolve cycles
             if (generateCycle) {
                 bead.generateMovingBead(changedBitmap, immutableBitmap);
                 generateCycle = false;
@@ -417,6 +419,8 @@ public class RollingBeadImageView extends ImageView {
         canvas.drawBitmap(changedBitmap, null, mDrawableRect, null);
     }
 
+    // method called before changing bead
+    // stops new bead at the right time based on interface callbacks
     void changeBead(final int centerCircle_X, final int centerCircle_Y, final int movement, final int radius, final int numberOfTimes, final boolean orientationHorizontal, final boolean direction_Positive) {
 
 //        Log.i("point rbi500", "changeBead method");
@@ -442,6 +446,7 @@ public class RollingBeadImageView extends ImageView {
         }
     }
 
+    // just stops motion of bead to a stand still
     public void pauseRenderer() {
         if (moveBeadTimer != null) {
             moveBeadTimer.cancel();
@@ -450,6 +455,7 @@ public class RollingBeadImageView extends ImageView {
         }
     }
 
+    // completely stops renderer making dissolving all recent changes on bitmap
     public void stopRender() {
 //        Log.i("point rbi354", "stopRender" + " start");
 
@@ -478,6 +484,7 @@ public class RollingBeadImageView extends ImageView {
         }
     }
 
+    // generates new bead from the same spot as left
     public void resumeRender() {
         if (moveBeadTimer == null)
             timer();
