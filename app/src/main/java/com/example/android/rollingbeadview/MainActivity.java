@@ -50,13 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test1(View v) {
-        mimage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("point ma57", "onclick");
-
-            }
-        });
+    mimage.setRadius(100);
     }
 
     public void test2(View v) {

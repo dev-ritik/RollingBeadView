@@ -17,14 +17,7 @@
 
     <com.example.android.rollingbeadlibrary.RollingBeadImageView
         android:id="@+id/mimage"
-        app:center_X="400"
-        app:center_Y="350"
-        app:direction="positive"
-        app:movement="30"
-        app:number_Of_Times="1"
-        app:orientation="horizontal"
-        app:radius="60"
-        app:repetition_Times="150"
+
         android:layout_width="wrap_content"
         android:scaleType="fitEnd"
         android:layout_height="wrap_content"
