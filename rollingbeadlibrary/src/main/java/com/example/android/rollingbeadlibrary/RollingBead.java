@@ -1,22 +1,19 @@
 package com.example.android.rollingbeadlibrary;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 public class RollingBead {
 
-    private Bitmap changedBitmap;
-    private Bitmap immutableBitmap;
+    private Bitmap changedBitmap, immutableBitmap;
     private int movingCoordinate = 0;
     private int constantCoordinate = 0;
-    private int movement;
-    private int radius;
-    private int numberOfTimes;
-    private final int height;
-    private final int width;
+    private int movement, radius, numberOfTimes, height, width;
     //   private int numberOfTimes = radius / movementInX;
-    private boolean orientationHorizontal;
-    private boolean directionPositive;
+    private boolean orientationHorizontal, directionPositive;
 
+    public RollingBead() {
+    }
 
     public int getUpdatedMovingCoordinate() {
 //        Log.i("point rb22", "getUpdatedMovingCoordinate initial  " + movingCoordinate);
@@ -100,95 +97,167 @@ public class RollingBead {
 //        Log.i("point rb67", "height  " + height + "  width  " + width);
 
         if (width <= centerCircle_X || height <= centerCircle_Y || centerCircle_X < 0 || centerCircle_Y < 0)
-            throw new IllegalArgumentException("center exceeds bitmap size!!");
+            throw new IllegalArgumentException("Co-ordinates out of range");
 
     }
 
-    public Bitmap generateBead(Bitmap toChangeBitmap, Bitmap originalBitmap, int lens_center_x, int centerCircle_Y, int radius, double lens_factor,boolean shouldCircle) {
-        Bitmap outputBitmap = toChangeBitmap;
-//        Log.i("point rb86", "width  " + toChangeBitmap.getWidth() + "  height  " + toChangeBitmap.getHeight());
-//        Log.i("point rb87", "lens_center_x  " + lens_center_x + "  centerCircle_Y  " + centerCircle_Y);
-//        double lens_factor = 1.0;
+    public Bitmap generateBead(Bitmap toChangeBitmap, Bitmap originalBitmap, int centerCircle_X, int centerCircle_Y, int radius, double lens_factor, boolean roundX, boolean roundY) {
+        int width = toChangeBitmap.getWidth();
+        int height = toChangeBitmap.getHeight();
+
+        if (width <= centerCircle_X || height <= centerCircle_Y || centerCircle_X < 0 || centerCircle_Y < 0)
+            throw new IllegalArgumentException("Co-ordinates out of range");
+
+        int terminalY;
+        double distance, distortion;
+
+        int sx, sy;
+
         for (int dx = radius; dx >= 0; --dx) {
             //R.H.S
-            if (lens_center_x + dx > toChangeBitmap.getWidth()) {
-                dx = toChangeBitmap.getWidth() - lens_center_x;
-                continue;
-            }
-            int terminalY = (int) Math.sqrt((radius * radius) - (dx * dx));
-            for (int dy = -terminalY; dy <= terminalY; ++dy) {
-                if (centerCircle_Y + dy < 0) {
-                    dy = -centerCircle_Y;
-                    continue;
-                } else if (centerCircle_Y + dy >= toChangeBitmap.getHeight()) {
-                    break;
+            if (roundX) {
+                if (centerCircle_X + dx >= width) {
+                    centerCircle_X -= width;
+                    if (centerCircle_X + dx >= width) break;
+                } else if (dx + centerCircle_X < 0) {
+                    centerCircle_X += width;
                 }
-                double distance = Math.sqrt((dx * dx) + (dy * dy));
-                double relativeRadius = distance / radius;
-                double distortion = Math.pow(relativeRadius, lens_factor);//radius^lens_factor  *  distance
+            } else {
+                if (centerCircle_X + dx > width) {
+                    dx = toChangeBitmap.getWidth() - centerCircle_X;
+                    continue;
+                }
+            }
+            terminalY = (int) Math.sqrt((radius * radius) - (dx * dx));
+            for (int dy = -terminalY; dy <= terminalY; ++dy) {
+                if (roundY) {
+                    if (centerCircle_Y + dy >= height) {
+                        centerCircle_Y -= height;
+                        if (centerCircle_Y + dy >= height) break;
+                    } else if (dy + centerCircle_Y < 0) {
+                        centerCircle_Y += height;
+                    }
 
-                int sx = (int) (distortion * dx + lens_center_x);
-                int sy = (int) (distortion * dy + centerCircle_Y);
-                if ((sx >= 0) && (sy >= 0) && (sx < toChangeBitmap.getWidth()) && (sy < toChangeBitmap.getHeight())) {
-                    outputBitmap.setPixel(dx + lens_center_x, dy + centerCircle_Y, originalBitmap.getPixel(sx, sy));
+                } else {
+                    if (centerCircle_Y + dy < 0) {
+                        dy = -centerCircle_Y;
+                        continue;
+                    } else if (centerCircle_Y + dy >= height) {
+                        break;
+                    }
+                }
+                distance = Math.sqrt((dx * dx) + (dy * dy));
+                distortion = Math.pow((distance / radius), lens_factor);//radius^lens_factor  *  distance
+
+                sx = (int) (distortion * dx + centerCircle_X);
+                sy = (int) (distortion * dy + centerCircle_Y);
+                if ((sx >= 0) && (sy >= 0) && (sx < width) && (sy < height)) {
+                    toChangeBitmap.setPixel(dx + centerCircle_X, dy + centerCircle_Y, originalBitmap.getPixel(sx, sy));
 
                 }
             }
         }
+
         for (int dx = -radius; dx <= 0; ++dx) {
             //L.H.S
-            if (lens_center_x + dx < 0) {
-                dx = -lens_center_x;
-                continue;
+            if (roundX) {
+                if (centerCircle_X + dx >= width) {
+                    centerCircle_X -= width;
+                    if (centerCircle_X + dx >= width) break;
+                } else if (dx + centerCircle_X < 0) {
+                    centerCircle_X += width;
+                }
+            } else {
+                if (centerCircle_X + dx < 0) {
+                    dx = -centerCircle_X;
+                    continue;
+                }
             }
+            terminalY = (int) Math.sqrt((radius * radius) - (dx * dx));
+            for (int dy = -terminalY; dy <= terminalY; ++dy) {
+                if (roundY) {
+                    if (centerCircle_Y + dy >= height) {
+                        centerCircle_Y -= height;
+                        if (centerCircle_Y + dy >= height) break;
+                    } else if (dy + centerCircle_Y < 0) {
+                        centerCircle_Y += height;
+                    }
+
+                } else {
+                    if (centerCircle_Y + dy < 0) {
+                        dy = -centerCircle_Y;
+                        continue;
+                    } else if (centerCircle_Y + dy >= height) {
+                        break;
+                    }
+                }
+
+                distance = Math.sqrt((dx * dx) + (dy * dy));
+                distortion = Math.pow((distance / radius), lens_factor);//radius ^ lens_factor  *  distance
+
+                sx = (int) (distortion * dx + centerCircle_X);
+                sy = (int) (distortion * dy + centerCircle_Y);
+
+                if ((sx >= 0) && (sy >= 0) && (sx < width) && (sy < height)) {
+                    toChangeBitmap.setPixel(dx + centerCircle_X, dy + centerCircle_Y, originalBitmap.getPixel(sx, sy));
+                }
+            }
+        }
+        return toChangeBitmap;
+    }
+
+    public Bitmap mixCircleBitmap(Bitmap toChangeBitmap, Bitmap flavouringBitmap, int centerCircle_X, int centerCircle_Y, int radius, double lens_factor, boolean roundX, boolean roundY) {
+
+        int width = toChangeBitmap.getWidth();
+        int height = toChangeBitmap.getHeight();
+
+        if (width <= centerCircle_X || height <= centerCircle_Y || centerCircle_X < 0 || centerCircle_Y < 0)
+            throw new IllegalArgumentException("Co-ordinates out of range");
+
+        for (int dx = radius; dx >= -radius; --dx) {
+            if (roundX) {
+                if (centerCircle_X + dx >= width) {
+                    centerCircle_X -= width;
+                    if (centerCircle_X + dx >= width) break;
+                } else if (dx + centerCircle_X < 0) {
+                    centerCircle_X += width;
+                }
+            } else {
+                if (dx + centerCircle_X >= width) {
+                    dx = width - centerCircle_X;
+                    continue;
+                } else if (dx + centerCircle_X < 0) {
+                    break;
+                }
+            }
+
             int terminalY = (int) Math.sqrt((radius * radius) - (dx * dx));
             for (int dy = -terminalY; dy <= terminalY; ++dy) {
-                if (centerCircle_Y + dy < 0) {
-                    dy = -centerCircle_Y;
-                    continue;
-                } else if (centerCircle_Y + dy >= toChangeBitmap.getHeight()) {
-                    break;
+                if (roundY) {
+                    if (centerCircle_Y + dy >= height) {
+                        centerCircle_Y -= height;
+                        if (centerCircle_Y + dy >= height) break;
+                    } else if (dy + centerCircle_Y < 0) {
+                        centerCircle_Y += height;
+                    }
+
+                } else {
+                    if (centerCircle_Y + dy < 0) {
+                        dy = -centerCircle_Y;
+                        continue;
+                    } else if (centerCircle_Y + dy >= height) {
+                        break;
+                    }
                 }
-                double distance = Math.sqrt((dx * dx) + (dy * dy));
-
-                double relativeradius = distance / radius;
-                double distortion = Math.pow(relativeradius, lens_factor);//radius^lens_factor  *  distance
-
-                int sx = (int) (distortion * dx + lens_center_x);
-                int sy = (int) (distortion * dy + centerCircle_Y);
-
-                if ((sx >= 0) && (sy >= 0) && (sx < toChangeBitmap.getWidth()) && (sy < toChangeBitmap.getHeight())) {
-                    outputBitmap.setPixel(dx + (int) lens_center_x, dy + (int) centerCircle_Y, originalBitmap.getPixel(sx, sy));
-                }
+                toChangeBitmap.setPixel(dx + centerCircle_X, dy + centerCircle_Y, flavouringBitmap.getPixel(dx + centerCircle_X, dy + centerCircle_Y));
             }
+
         }
-        return outputBitmap;
+        return toChangeBitmap;
     }
 
-    private Bitmap mixBitmapCircle(Bitmap toChangeBitmap, Bitmap flavouringBitmap, int lens_center_x, int lens_center_y, int lens_radius) {
-        Bitmap outputBitmap = toChangeBitmap;
-        for (int dx = lens_radius; dx >= -lens_radius; --dx) {
-            if (dx + lens_center_x >= width) {
-                dx = width - lens_center_x;
-                continue;
-            } else if (dx + lens_center_x < 0) {
-                break;
-            }
-            int terminalY = (int) Math.sqrt((lens_radius * lens_radius) - (dx * dx));
-            for (int dy = -terminalY; dy <= terminalY; ++dy) {
-                if (lens_center_y + dy < 0) {
-                    dy = -lens_center_y;
-                    continue;
-                } else if (lens_center_y + dy >= height) {
-                    break;
-                }
-                outputBitmap.setPixel(dx + lens_center_x, dy + lens_center_y, flavouringBitmap.getPixel(dx + lens_center_x, dy + lens_center_y));
-            }
-        }
-        return outputBitmap;
-    }
-
-    private void mixBitmapRectangle(Bitmap toChangeBitmap, Bitmap flavouringBitmap, int initialX, int finalX, int constantCoordinate) {
+    void mixRectangleBitmap(Bitmap toChangeBitmap, Bitmap flavouringBitmap, int initialX,
+                            int finalX, int constantCoordinate) {
 //        Log.i("point rb159", "  constantCoordinate  " + constantCoordinate + "  initialX  " + initialX + "  finalX  " + finalX + "  width  " + width);
 
         //taking finalX>initialX
@@ -224,7 +293,7 @@ public class RollingBead {
 
     }
 
-    public void dissolveBitmap(Bitmap toChangeBitmap, Bitmap flavouringBitmap) {
+    void dissolveMovingBead(Bitmap toChangeBitmap, Bitmap flavouringBitmap) {
         int centerCircle_X = getPreviousMovingCoordinate();
 //        Log.i("point rb174", "centerCircle_X  " + centerCircle_X + "  constantCoordinate  " + constantCoordinate + "  movement  " + movement);
 //        Log.i("point rb156", "icon.getWidth(  " + width + "  getCenterCirlce_X()  " + centerCircle_X+"  height  "+height);
@@ -251,7 +320,7 @@ public class RollingBead {
         }
     }
 
-    public void generateMovingBead(Bitmap toChangeBitmap, Bitmap originalBitmap) {
+    void generateMovingBead(Bitmap toChangeBitmap, Bitmap originalBitmap) {
 
         int centerCircle_X = getUpdatedMovingCoordinate();
         int terminalY;
@@ -344,9 +413,9 @@ public class RollingBead {
     protected void dissolveAll(Bitmap toChangeBitmap, Bitmap flavouringBitmap) {
 //        Log.i("point rbi363", "dissolve all start");
         if (directionPositive)
-            mixBitmapRectangle(toChangeBitmap, flavouringBitmap, getPreviousMovingCoordinate() - movement, getPreviousMovingCoordinate() + (numberOfTimes) * movement + radius, constantCoordinate);
+            mixRectangleBitmap(toChangeBitmap, flavouringBitmap, getPreviousMovingCoordinate() - movement, getPreviousMovingCoordinate() + (numberOfTimes) * movement + radius, constantCoordinate);
         else
-            mixBitmapRectangle(toChangeBitmap, flavouringBitmap, getPreviousMovingCoordinate() - (numberOfTimes) * movement - radius, getPreviousMovingCoordinate(), constantCoordinate);
+            mixRectangleBitmap(toChangeBitmap, flavouringBitmap, getPreviousMovingCoordinate() - (numberOfTimes) * movement - radius, getPreviousMovingCoordinate(), constantCoordinate);
     }
 
 }

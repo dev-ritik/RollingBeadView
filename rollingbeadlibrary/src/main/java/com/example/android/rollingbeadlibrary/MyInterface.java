@@ -1,13 +1,13 @@
 package com.example.android.rollingbeadlibrary;
 
-public class TimerInterface {
+public class MyInterface {
     /**
      * The current value.
      */
     boolean mStopValue;
     boolean mAsyncValue;
 
-    private TimerInterfaceListener mStopListener;
+    private StopListener mStopListener;
     private AsyncListener mAsyncListener;
 
     /**
@@ -15,12 +15,12 @@ public class TimerInterface {
      *
      * @param initialValue The initial value.
      */
-    public TimerInterface(boolean initialValue) {
+    public MyInterface(boolean initialValue) {
         mStopValue = initialValue;
 
     }
 
-    public TimerInterface(boolean mStopValue, boolean mAsyncValue) {
+    public MyInterface(boolean mStopValue, boolean mAsyncValue) {
         this.mStopValue = mStopValue;
         this.mAsyncValue = mAsyncValue;
     }
@@ -30,7 +30,7 @@ public class TimerInterface {
      * value changes.
      */
 
-    public void setmStopListener(TimerInterfaceListener mStopListener) {
+    public void setmStopListener(StopListener mStopListener) {
         this.mStopListener = mStopListener;
     }
 
@@ -70,7 +70,7 @@ public class TimerInterface {
         return mAsyncValue;
     }
 
-    public interface TimerInterfaceListener {
+    public interface StopListener {
         /**
          * Called when the value of the boolean changes.
          *

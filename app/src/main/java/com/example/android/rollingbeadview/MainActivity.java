@@ -8,16 +8,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.android.rollingbeadlibrary.RollingBead;
 import com.example.android.rollingbeadlibrary.RollingBeadImageView;
 
 public class MainActivity extends AppCompatActivity {
     //    TextView text;
     ImageView imageView;
-    Bitmap immutableBitmap;
-    Bitmap changedBitmap;
-    RollingBead bead1;
+    Bitmap immutableBitmap, changedBitmap;
     RollingBeadImageView mimage;
+    Bitmap im, cb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
         changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
         mimage = (RollingBeadImageView) findViewById(R.id.mimage);
 
+
+        im = BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                R.drawable.three);
+        cb = im.copy(Bitmap.Config.ARGB_8888, true);
 //        Log.i("point ma41", "changedBitmap  " + changedBitmap.isMutable());
 //        Drawable d = new BitmapDrawable(getResources(), changedBitmap);
 //
@@ -49,24 +51,29 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     public void test1(View v) {
-    mimage.setRadius(100);
+//        RollingBead rb = new RollingBead();
+//
+//        imageView.setImageBitmap(rb.generateBead(cb, im, 0, 0, 200, 2.0, true, true));
+        mimage.setOrientationHorizontal(true);
+        //TODO:  test all feature
     }
 
     public void test2(View v) {
-
-        mimage.setAlpha(0.5f);
+//        RollingBead rb = new RollingBead();
+//
+//        imageView.setImageBitmap(rb.generateBead(cb, im, 0, 0, 200, 2.0, true, false));
+        mimage.stopRender();
     }
 
     public void test3(View v) {
-        mimage.setImageAlpha(20);
+        Log.i("point ma71", mimage.getOriginalCenterCircle_Y() + "");
     }
 
     public void test4(View v) {
 
-//        Render render = new Render(this, immutableBitmap, changedBitmap, bead1, imageView);
-//        render.timer();
-        mimage.setLeft(50);
+        Log.i("point ma79", mimage.getCurrentCenterCircle_Y() + "");
     }
 
 }
