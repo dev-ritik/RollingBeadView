@@ -11,22 +11,20 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerVertical="true"
-    android:scaleType="fitEnd"
-    android:src="@drawable/three" />
-
-
+    android:src="@drawable/colors" />
+<!---->
+<!---->
     <!--<com.example.android.rollingbeadlibrary.RollingBeadImageView-->
         <!--android:id="@+id/mimage"-->
         <!--app:center_X="400"-->
-        <!--app:center_Y="350"-->
+        <!--app:center_Y="603"-->
         <!--app:direction="positive"-->
-        <!--app:movement="30"-->
+        <!--app:movement="80"-->
         <!--app:number_Of_Times="1"-->
-        <!--app:orientation="vertical"-->
-        <!--app:radius="60"-->
-        <!--app:repetition_Times="150"-->
+        <!--app:orientation="horizontal"-->
+        <!--app:radius="99"-->
+        <!--app:repetition_Times="100"-->
         <!--android:layout_width="wrap_content"-->
-        <!--android:scaleType="fitEnd"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:layout_centerVertical="true"-->
         <!--android:src="@drawable/four" />-->
@@ -37,8 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:onClick="test1"
-        android:text="test1" />
-
+        android:text="make bead" />
+<!---->
     <Button
         android:id="@+id/test2"
         android:layout_width="wrap_content"
@@ -46,22 +44,22 @@
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/test1"
         android:onClick="test2"
-        android:text="test2" />
+        android:text="dissolve" />
+<!---->
+    <!--<Button-->
+        <!--android:id="@+id/test3"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_toRightOf="@+id/test2"-->
+        <!--android:onClick="test3"-->
+        <!--android:text="test3" />-->
 
-    <Button
-        android:id="@+id/test3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@+id/test2"
-        android:onClick="test3"
-        android:text="test3" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@+id/test3"
-        android:onClick="test4"
-        android:text="test4" />
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_toRightOf="@+id/test3"-->
+        <!--android:onClick="test4"-->
+        <!--android:text="test4" />-->
 </RelativeLayout>

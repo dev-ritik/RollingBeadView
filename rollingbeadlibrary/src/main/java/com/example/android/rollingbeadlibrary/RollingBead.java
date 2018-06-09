@@ -22,9 +22,14 @@ public class RollingBead {
 
     private boolean orientationHorizontal, directionPositive;
 
-    public RollingBead(Bitmap changedBitmap, Bitmap immutableBitmap) {
-        this.changedBitmap = changedBitmap;
-        this.immutableBitmap = immutableBitmap;
+    public RollingBead(Bitmap imageBitmap) {
+        if (imageBitmap.isMutable()) {
+            changedBitmap = imageBitmap;
+            immutableBitmap = imageBitmap.copy(imageBitmap.getConfig(), false);
+        } else {
+            immutableBitmap = imageBitmap;
+            changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        }
     }
 
     //returns new moving coordinate for changing its position
@@ -243,7 +248,7 @@ public class RollingBead {
     }
 
     // method to paste flavouringBitmap over toChangeBitmap at give centerCircle_X & centerCircle_Y with radius (to remove bead)
-    public Bitmap mixCircleBitmap(int centerCircle_X, int centerCircle_Y, int radius, boolean roundX, boolean roundY) {
+    public Bitmap dissolveBead(int centerCircle_X, int centerCircle_Y, int radius, boolean roundX, boolean roundY) {
 
         int width = changedBitmap.getWidth();
         int height = changedBitmap.getHeight();

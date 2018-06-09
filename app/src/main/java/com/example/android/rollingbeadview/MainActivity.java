@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     Bitmap immutableBitmap, changedBitmap;
     RollingBeadImageView mimage;
     Bitmap im, cb;
+    RollingBead rb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,49 +26,33 @@ public class MainActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.imageView);
 //        text = (TextView) findViewById(R.id.text);
 
-        immutableBitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),
-                R.drawable.five);
-//        Log.i("point ma39", "immutableBitmap  " + immutableBitmap.isMutable());
-        changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
+//        immutableBitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),
+//                R.drawable.hope);
+//        changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
 //        mimage = (RollingBeadImageView) findViewById(R.id.mimage);
 
-
         im = BitmapFactory.decodeResource(getApplicationContext().getResources(),
-                R.drawable.three);
+                R.drawable.colors);
         cb = im.copy(Bitmap.Config.ARGB_8888, true);
-//        Log.i("point ma41", "changedBitmap  " + changedBitmap.isMutable());
-//        Drawable d = new BitmapDrawable(getResources(), changedBitmap);
-//
-//        Log.i("point ma42", "((BitmapDrawable) drawable).getBitmap()  " + ((BitmapDrawable) d).getBitmap().isMutable());
-
-//
-//        ColorDrawable cd = new ColorDrawable(0xFFFF6666);
-//        Bitmap bitmap = Bitmap.createBitmap(2, 2, Bitmap.Config.ARGB_8888);
-//        Log.i("point ma41", "ColorDrawable  " + bitmap.isMutable());
-//        Log.i("point ma54", bitmap.getWidth() + "  " + bitmap.getHeight());
-//        Log.i("point ma54", ((BitmapDrawable) d).getBitmap().getWidth() + "  " + ((BitmapDrawable) d).getBitmap().getHeight());
-//        Log.i("point ma56", changedBitmap.getWidth() + "  " + changedBitmap.getHeight());
-
-
+        //TODO: removing these
+        //TODO: making fractions
+        rb = new RollingBead(im);
     }
 
 
     public void test1(View v) {
-        RollingBead rb = new RollingBead(cb, im);
-        rb.generateBead(20, 20, 200, 2.0, false, false);
-        imageView.setImageBitmap(cb);
+        imageView.setImageBitmap(rb.generateBead(10, 10, 300, 2.0, true, true));
 //        mimage.setOrientationHorizontal(true);
     }
 
     public void test2(View v) {
-        RollingBead rb = new RollingBead(cb, im);
-        rb.mixCircleBitmap(20, 20, 200, true, true);
-        imageView.setImageBitmap(cb);
+//        rb.mixCircleBitmap(20, 20, 200, true, true);
+        imageView.setImageBitmap(rb.dissolveBead(10, 10, 300, true, true));
 //        mimage.stopRender();
     }
 
     public void test3(View v) {
-//        mimage.setCenterCircle_Y(500);
+        imageView.setImageBitmap(im);
     }
 
     public void test4(View v) {

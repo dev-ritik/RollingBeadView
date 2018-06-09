@@ -218,7 +218,7 @@ public class RollingBeadImageView extends ImageView {
     }
 
     // get bitmap from drawable given by user
-    private void getBitmapFromDrawable(Drawable drawable) {
+    void getBitmapFromDrawable(Drawable drawable) {
         if (drawable == null) {
             invalidate();
             return;
@@ -228,14 +228,13 @@ public class RollingBeadImageView extends ImageView {
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
             if (bitmap.isMutable()) {
                 changedBitmap = bitmap;
-//                Log.i("point rbi168", "bitmap  ");
+                immutableBitmap = bitmap.copy(bitmap.getConfig(), false);
 
             } else {
                 immutableBitmap = bitmap;
                 changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
-//                Log.i("point rbi173", "bitmap  ");
-                return;
             }
+            return;
         }
 
         try {
@@ -248,6 +247,7 @@ public class RollingBeadImageView extends ImageView {
                 if (bitmap.isMutable()) {
 //                    Log.i("point rbi186", "bitmap  ");
                     changedBitmap = bitmap;
+                    immutableBitmap = bitmap.copy(bitmap.getConfig(), false);
                 } else {
 //                    Log.i("point rbi189", "bitmap  ");
                     immutableBitmap = bitmap;
@@ -423,6 +423,7 @@ public class RollingBeadImageView extends ImageView {
 //        Log.i("point rbi500", "changeBead method");
         stopRender();
 //        Log.i("point rbi502", "inside changeBead method" + " stop " + time.getStopValue() + " async " + time.getAsyncValue());
+
         if (!time.getStopValue() && !time.getAsyncValue()) {
 //            Log.i("point rbi504", "if changeBead method");
             bead = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
