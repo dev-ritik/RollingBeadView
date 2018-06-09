@@ -6,30 +6,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
 
-    <!--<ImageView-->
-    <!--android:id="@+id/imageView"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:scaleType="fitEnd"-->
-    <!--android:src="@drawable/three" />-->
+    <ImageView
+    android:id="@+id/imageView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:scaleType="fitEnd"
+    android:src="@drawable/three" />
 
 
-    <com.example.android.rollingbeadlibrary.RollingBeadImageView
-        android:id="@+id/mimage"
-        app:center_X="400"
-        app:center_Y="350"
-        app:direction="positive"
-        app:movement="30"
-        app:number_Of_Times="1"
-        app:orientation="vertical"
-        app:radius="60"
-        app:repetition_Times="150"
-        android:layout_width="wrap_content"
-        android:scaleType="fitEnd"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:src="@drawable/four" />
+    <!--<com.example.android.rollingbeadlibrary.RollingBeadImageView-->
+        <!--android:id="@+id/mimage"-->
+        <!--app:center_X="400"-->
+        <!--app:center_Y="350"-->
+        <!--app:direction="positive"-->
+        <!--app:movement="30"-->
+        <!--app:number_Of_Times="1"-->
+        <!--app:orientation="vertical"-->
+        <!--app:radius="60"-->
+        <!--app:repetition_Times="150"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:scaleType="fitEnd"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:src="@drawable/four" />-->
 
     <Button
         android:id="@+id/test1"

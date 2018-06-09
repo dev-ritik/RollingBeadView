@@ -376,14 +376,11 @@ public class RollingBeadImageView extends ImageView {
         @Override
         protected String doInBackground(String... urls) {
             //alternative generate and dissolve cycles
-            if (generateCycle) {
-                bead.generateMovingBead(changedBitmap, immutableBitmap);
-                generateCycle = false;
-            } else {
-//                Log.i("point rbi467","here");
-                bead.dissolveMovingBead(changedBitmap, immutableBitmap);
-                generateCycle = true;
-            }
+            if (generateCycle)
+                bead.generateMovingBead();
+            else bead.dissolveMovingBead();
+
+            generateCycle = !generateCycle;
             return null;
         }
 
@@ -462,10 +459,8 @@ public class RollingBeadImageView extends ImageView {
         pauseRenderer();
 
         time.setStopValue(true);
-//        Log.i("point rbi442", time.getAsyncValue() + "async value");
         if (!time.getAsyncValue()) {
-//            Log.i("point rbi444", "if above method");
-            bead.dissolveAll(changedBitmap, immutableBitmap);
+            bead.dissolveAll();
             invalidate();
             time.setStopValue(false);
         } else {
@@ -473,8 +468,7 @@ public class RollingBeadImageView extends ImageView {
                 @Override
                 public void onAsyncValueChanged(boolean newValue) {
                     if (!newValue) {
-//                        Log.i("point rbi453", "if stop method");
-                        bead.dissolveAll(changedBitmap, immutableBitmap);
+                        bead.dissolveAll();
                         invalidate();
                         time.setStopValue(false);
                         time.setmAsyncListener(null);

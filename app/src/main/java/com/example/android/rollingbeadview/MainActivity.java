@@ -4,10 +4,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.android.rollingbeadlibrary.RollingBead;
 import com.example.android.rollingbeadlibrary.RollingBeadImageView;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,14 +22,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView = (ImageView) findViewById(R.id.imageView);
 //        text = (TextView) findViewById(R.id.text);
 
         immutableBitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),
                 R.drawable.five);
 //        Log.i("point ma39", "immutableBitmap  " + immutableBitmap.isMutable());
         changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
-        mimage = (RollingBeadImageView) findViewById(R.id.mimage);
+//        mimage = (RollingBeadImageView) findViewById(R.id.mimage);
 
 
         im = BitmapFactory.decodeResource(getApplicationContext().getResources(),
@@ -53,27 +53,26 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void test1(View v) {
-//        RollingBead rb = new RollingBead();
-//
-//        imageView.setImageBitmap(rb.generateBead(cb, im, 0, 0, 200, 2.0, true, true));
-        mimage.setOrientationHorizontal(true);
-        //TODO:  test all feature
+        RollingBead rb = new RollingBead(cb, im);
+        rb.generateBead(20, 20, 200, 2.0, false, false);
+        imageView.setImageBitmap(cb);
+//        mimage.setOrientationHorizontal(true);
     }
 
     public void test2(View v) {
-//        RollingBead rb = new RollingBead();
-//
-//        imageView.setImageBitmap(rb.generateBead(cb, im, 0, 0, 200, 2.0, true, false));
-        mimage.stopRender();
+        RollingBead rb = new RollingBead(cb, im);
+        rb.mixCircleBitmap(20, 20, 200, true, true);
+        imageView.setImageBitmap(cb);
+//        mimage.stopRender();
     }
 
     public void test3(View v) {
-        Log.i("point ma71", mimage.getOriginalCenterCircle_Y() + "");
+//        mimage.setCenterCircle_Y(500);
     }
 
     public void test4(View v) {
 
-        Log.i("point ma79", mimage.getCurrentCenterCircle_Y() + "");
+        mimage.resumeRender();
     }
 
 }
