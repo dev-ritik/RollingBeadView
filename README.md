@@ -12,12 +12,15 @@ RollingBead is an android library that can make bead (lens) moving effect in vie
 Currently the library supports two types of usage:
 
 ## static Bead:
-<img src="/sample/hope_static.gif" align="right" width="350">
-<img src="/sample/colors.gif" align="left" width="350">
+<img src="/sample/hope_static.gif" align="right" height="450" width="470">
+<img src="/sample/colors.gif" align="left" height="450" width="350">
+<br>
 
-## moving bead
-<img src="/sample/life_1.gif" align="right" width="350">
-<img src="/sample/hope.gif" align="left" width="350">
+## moving bead:
+
+<img src="/sample/life_1.gif" align="right" width="430" height="450">
+<img src="/sample/hope.gif" align="left" width="400" height="450">
+<br>
 
 # Documentation
 
