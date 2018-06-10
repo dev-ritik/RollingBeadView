@@ -13,20 +13,19 @@
         android:layout_centerVertical="true"
         android:src="@drawable/colors" />
     <!---->
-    <!---->
     <com.example.android.rollingbeadlibrary.RollingBeadImageView
         android:id="@+id/mimage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:src="@drawable/four"
-        app:center_X="400"
-        app:center_Y="603"
+        app:center_X="0%"
+        app:center_Y="80%"
         app:direction="positive"
-        app:movement="80"
+        app:movement="10%"
         app:number_Of_Times="1"
-        app:orientation="horizontal"
-        app:radius="99"
+        app:orientation="vertical"
+        app:radius="10%"
         app:repetition_Times="100" />
 
     <Button

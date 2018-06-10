@@ -1,6 +1,7 @@
 package com.example.android.rollingbeadlibrary;
 
 import android.graphics.Bitmap;
+import android.widget.ImageView;
 
 // This class handles the all the background calculations involved
 
@@ -21,6 +22,12 @@ public class RollingBead {
     //   private int numberOfTimes = radius / movementInX;
 
     private boolean orientationHorizontal, directionPositive;
+
+    private ImageView userImage;
+
+    public RollingBead(ImageView userImage) {
+        this.userImage = userImage;
+    }
 
     public RollingBead(Bitmap imageBitmap) {
         if (imageBitmap.isMutable()) {
@@ -90,8 +97,6 @@ public class RollingBead {
         this.immutableBitmap = immutableBitmap;
         this.movement = movement;
         this.radius = radius;
-        if (radius > 150)
-            throw new IllegalArgumentException(String.format("radius %s not supported.", radius));
         if (direction_Positive)
             this.numberOfTimes = numberOfTimes;
         else

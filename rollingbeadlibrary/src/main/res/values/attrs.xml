@@ -2,17 +2,17 @@
 <resources>
 
     <declare-styleable name="RollingBeadImageView">
-        <attr name="center_X" format="integer" />
-        <attr name="center_Y" format="integer" />
-        <attr name="movement" format="integer" />
-        <attr name="radius" format="integer" />
+        <attr name="center_X" format="dimension|fraction" />
+        <attr name="center_Y" format="dimension|fraction" />
+        <attr name="movement" format="dimension|fraction" />
+        <attr name="radius" format="dimension|fraction" />
         <attr name="number_Of_Times" format="integer" />
         <attr name="repetition_Times" format="integer" />
         <attr name="orientation">
             <enum name="horizontal" value="1" />
             <enum name="vertical" value="-1" />
         </attr>
-        <attr name="direction">
+        <attr name="direction" format="enum|integer">
             <enum name="positive" value="1" />
             <enum name="negative" value="-1" />
         </attr>

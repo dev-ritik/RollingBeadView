@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 //        immutableBitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),
 //                R.drawable.hope);
 //        changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
-//        mimage = (RollingBeadImageView) findViewById(R.id.mimage);
+        mimage = (RollingBeadImageView) findViewById(R.id.mimage);
 
         im = BitmapFactory.decodeResource(getApplicationContext().getResources(),
                 R.drawable.colors);
@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void test1(View v) {
-        imageView.setImageBitmap(rb.generateBead(10, 10, 300, 2.0, true, true));
-//        mimage.setOrientationHorizontal(true);
+//        imageView.setImageBitmap(rb.generateBead(10, 10, 300, 2.0, true, true));
+        mimage.setOrientationHorizontal(true);
     }
 
     public void test2(View v) {
