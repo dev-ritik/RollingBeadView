@@ -18,16 +18,16 @@
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:layout_centerVertical="true"-->
-        <!--android:src="@drawable/ic_launcher_background"-->
+        <!--android:src="@drawable/four"-->
         <!--app:center_X="25%"-->
         <!--app:center_Y="50%"-->
         <!--app:direction="positive"-->
-        <!--app:movement="7%"-->
+        <!--app:movement="2%"-->
         <!--app:number_Of_Times="1"-->
         <!--app:orientation="vertical"-->
-        <!--app:radius="10%"-->
-        <!--app:repetition_Times="290" />-->
-
+        <!--app:radius="14%"-->
+        <!--app:repetition_Times="100" />-->
+<!---->
     <Button
         android:id="@+id/test1"
         android:layout_width="wrap_content"

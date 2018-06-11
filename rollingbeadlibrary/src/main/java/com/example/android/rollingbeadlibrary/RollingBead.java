@@ -5,7 +5,10 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.ImageView;
+
+import java.util.Arrays;
 
 // This class handles the all the background calculations involved
 
@@ -27,7 +30,7 @@ public class RollingBead {
 
     private boolean orientationHorizontal, directionPositive;
 
-    private ImageView userImage;
+//    private ImageView userImage;
 
     public RollingBead(ImageView userImage) {
 //        this.userImage = userImage;
@@ -188,29 +191,29 @@ public class RollingBead {
 
         //calculated pixel to be copied to the present one
         int sx, sy;
+        int[] intArray = new int[(2 * radius * width) + (2 * radius) + 1];
+//        Log.i("point rbi 253", centerCircle_X + "  " + height);
+        changedBitmap.getPixels(intArray, 0, changedBitmap.getWidth(), centerCircle_X - radius, centerCircle_Y - radius, 2 * radius + 1, (2 * radius) + 1);
+        int[] outArray = Arrays.copyOf(intArray, intArray.length);
 
-        for (int dx = radius; dx >= -radius; --dx) {
+        for (int dx = -radius; dx <= radius; ++dx) {
+            //L.H.S
             if (roundX) {
-                // rounding calculation
                 if (centerCircle_X + dx >= width) {
                     centerCircle_X -= width;
                     if (centerCircle_X + dx >= width) break;
                 } else if (dx + centerCircle_X < 0) {
                     centerCircle_X += width;
                 }
-
             } else {
-                if (centerCircle_X + dx > width) {
-                    dx = changedBitmap.getWidth() - centerCircle_X;
+                if (centerCircle_X + dx < 0) {
+                    dx = -centerCircle_X;
                     continue;
                 }
             }
-
             terminalY = (int) Math.sqrt((radius * radius) - (dx * dx));
-
             for (int dy = -terminalY; dy <= terminalY; ++dy) {
                 if (roundY) {
-                    // rounding calculation
                     if (centerCircle_Y + dy >= height) {
                         centerCircle_Y -= height;
                         if (centerCircle_Y + dy >= height) break;
@@ -228,23 +231,33 @@ public class RollingBead {
                 }
 
                 distance = Math.sqrt((dx * dx) + (dy * dy));
-                distortion = Math.pow((distance / radius), lens_factor);//radius^lens_factor  *  distance
+                distortion = Math.pow((distance / radius), lens_factor);
 
-                sx = (int) (distortion * dx + centerCircle_X);
-                sy = (int) (distortion * dy + centerCircle_Y);
+                sx = (int) (distortion * dx);
+                sy = (int) (distortion * dy);
+//                Log.i("point rb304", sx + "  sx  " + sy + "  sy  ");
 
-                if (sx >= width) sx -= width;
-                else if (sx < 0) sx += width;
+                if (sx + centerCircle_X >= width) sx -= width;
+                else if (sx + centerCircle_X < 0) sx += width;
 
-                if (sy >= height) sy -= height;
-                else if (sy < 0) sy += height;
+                if (sy + centerCircle_Y >= height) sy -= height;
+                else if (sy + centerCircle_Y < 0) sy += height;
 
-                //TODO: OpenGLRenderer: Cannot generate texture from bitmap error removal
-                // pasting pixels
-                changedBitmap.setPixel(dx + centerCircle_X, dy + centerCircle_Y, immutableBitmap.getPixel(sx, sy));
+//                changedBitmap.setPixel(dx + centerCircle_X, dy + centerCircle_Y, immutableBitmap.getPixel(sx, sy));
 
+
+//                Log.i("point rb304", dx + "  dx  " + dy + "  dy  " + radius);
+//                Log.i("point rb304", sx + "  sx  " + sy + "  sy  " + width);
+                //get the color of each pixel
+
+                outArray[dx + radius + ((dy + radius) * width)] = intArray[(sx + radius) + (sy + radius) * width];
             }
+
+
         }
+        changedBitmap.setPixels(outArray, 0, changedBitmap.getWidth(), centerCircle_X - radius, centerCircle_Y - radius, 2 * radius + 1, (2 * radius) + 1);
+//        Log.i("point rb320", "  end loop  ");
+
         return changedBitmap;
     }
 
