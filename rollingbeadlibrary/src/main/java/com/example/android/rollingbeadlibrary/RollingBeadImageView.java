@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.util.Timer;
@@ -75,7 +76,7 @@ public class RollingBeadImageView extends ImageView {
     }
 
     public void setCenterCircle_X(float centerCircle_XInDecimal) {
-        setCenterCircle_X(centerCircle_XInDecimal * immutableBitmap.getWidth());
+        setCenterCircle_X((int) (centerCircle_XInDecimal * immutableBitmap.getWidth()));
     }
 
     public int getOriginalCenterCircle_Y() {
@@ -91,7 +92,7 @@ public class RollingBeadImageView extends ImageView {
     }
 
     public void setCenterCircle_Y(float centerCircle_YInDecimal) {
-        setCenterCircle_X(centerCircle_YInDecimal * immutableBitmap.getHeight());
+        setCenterCircle_Y((int) (centerCircle_YInDecimal * immutableBitmap.getHeight()));
     }
 
     public int getMovement() {
@@ -108,7 +109,7 @@ public class RollingBeadImageView extends ImageView {
 
     public void setMovement(float movementInDecimal) {
         if (movementInDecimal < 1.0 && movementInDecimal >= 0)
-            setRadius((int) movementInDecimal * immutableBitmap.getHeight());
+        setMovement((int) (movementInDecimal * immutableBitmap.getHeight()));
     }
 
     public int getRadius() {
@@ -125,7 +126,7 @@ public class RollingBeadImageView extends ImageView {
 
     public void setRadius(float radiusInDecimal) {
         if (radiusInDecimal < 1.0 && radiusInDecimal >= 0)
-            setRadius((int) radiusInDecimal * immutableBitmap.getHeight());
+            setRadius((int) (radiusInDecimal * immutableBitmap.getHeight()));
     }
 
     public int getNumberOfTimes() {
@@ -288,7 +289,6 @@ public class RollingBeadImageView extends ImageView {
 
     final void initBaseXMLAttrs(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RollingBeadImageView);
-        //TODO: fraction from attrs handelling , testing
         final int N = a.getIndexCount();
         for (int i = 0; i < N; ++i) {
             int attr = a.getIndex(i);

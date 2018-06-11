@@ -1,6 +1,7 @@
 package com.example.android.rollingbeadlibrary;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.widget.ImageView;
 
 // This class handles the all the background calculations involved
@@ -26,7 +27,9 @@ public class RollingBead {
     private ImageView userImage;
 
     public RollingBead(ImageView userImage) {
-        this.userImage = userImage;
+//        this.userImage = userImage;
+//        Bitmap asd = ((BitmapDrawable) userImage.getDrawable()).getBitmap();
+        this(((BitmapDrawable) userImage.getDrawable()).getBitmap());
     }
 
     public RollingBead(Bitmap imageBitmap) {
@@ -123,8 +126,17 @@ public class RollingBead {
 
     }
 
+    public Bitmap generateFixedBead(float centerCircle_XInDecimal, float centerCircle_YInDecimal, float radiusInDecimal, double lens_factor, boolean roundX, boolean roundY) {
+        return generateFixedBead((int) (centerCircle_XInDecimal * immutableBitmap.getHeight()),
+                (int) (centerCircle_YInDecimal * immutableBitmap.getWidth()),
+                (int) (radiusInDecimal * immutableBitmap.getHeight()),
+                lens_factor,
+                roundX,
+                roundY);
+    }
+
     // method to generate single bead at give centerCircle_X & centerCircle_Y, with provided lens_factor
-    public Bitmap generateBead(int centerCircle_X, int centerCircle_Y, int radius, double lens_factor, boolean roundX, boolean roundY) {
+    public Bitmap generateFixedBead(int centerCircle_X, int centerCircle_Y, int radius, double lens_factor, boolean roundX, boolean roundY) {
         //TODO: method to convert drawable to bitmap
         int width = changedBitmap.getWidth();
         int height = changedBitmap.getHeight();
@@ -193,6 +205,7 @@ public class RollingBead {
                 if (sy >= height) sy -= height;
                 else if (sy < 0) sy += height;
 
+                //TODO: OpenGLRenderer: Cannot generate texture from bitmap error removal
                 // pasting pixels
                 changedBitmap.setPixel(dx + centerCircle_X, dy + centerCircle_Y, immutableBitmap.getPixel(sx, sy));
 
@@ -252,8 +265,17 @@ public class RollingBead {
         return changedBitmap;
     }
 
+
+    public Bitmap dissolveFixedBead(float centerCircle_XInDecimal, float centerCircle_YInDecimal, float radiusInDecimal, boolean roundX, boolean roundY) {
+        return dissolveFixedBead((int) (centerCircle_XInDecimal * immutableBitmap.getHeight()),
+                (int) (centerCircle_YInDecimal * immutableBitmap.getWidth()),
+                (int) (radiusInDecimal * immutableBitmap.getHeight()),
+                roundX,
+                roundY);
+    }
+
     // method to paste flavouringBitmap over toChangeBitmap at give centerCircle_X & centerCircle_Y with radius (to remove bead)
-    public Bitmap dissolveBead(int centerCircle_X, int centerCircle_Y, int radius, boolean roundX, boolean roundY) {
+    public Bitmap dissolveFixedBead(int centerCircle_X, int centerCircle_Y, int radius, boolean roundX, boolean roundY) {
 
         int width = changedBitmap.getWidth();
         int height = changedBitmap.getHeight();
