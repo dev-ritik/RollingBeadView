@@ -13,7 +13,6 @@ import android.os.AsyncTask;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 
 import java.util.Timer;
@@ -109,7 +108,7 @@ public class RollingBeadImageView extends ImageView {
 
     public void setMovement(float movementInDecimal) {
         if (movementInDecimal < 1.0 && movementInDecimal >= 0)
-        setMovement((int) (movementInDecimal * immutableBitmap.getHeight()));
+            setMovement((int) (movementInDecimal * immutableBitmap.getHeight()));
     }
 
     public int getRadius() {
@@ -237,6 +236,12 @@ public class RollingBeadImageView extends ImageView {
         setup();
     }
 
+    private void initializeBitmap() {
+//        Log.i("point rbi210", "initializeBitmap");
+        getBitmapFromDrawable(getDrawable());
+        setup();
+    }
+
     // get bitmap from drawable given by user
     void getBitmapFromDrawable(Drawable drawable) {
         if (drawable == null) {
@@ -245,15 +250,7 @@ public class RollingBeadImageView extends ImageView {
         }
 
         if (drawable instanceof BitmapDrawable) {
-            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-            if (bitmap.isMutable()) {
-                changedBitmap = bitmap;
-                immutableBitmap = bitmap.copy(bitmap.getConfig(), false);
-
-            } else {
-                immutableBitmap = bitmap;
-                changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
-            }
+            classifyBitmap(((BitmapDrawable) drawable).getBitmap());
             return;
         }
 
@@ -264,15 +261,10 @@ public class RollingBeadImageView extends ImageView {
                 invalidate();
             } else {
                 bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-                if (bitmap.isMutable()) {
-//                    Log.i("point rbi186", "bitmap  ");
-                    changedBitmap = bitmap;
-                    immutableBitmap = bitmap.copy(bitmap.getConfig(), false);
-                } else {
-//                    Log.i("point rbi189", "bitmap  ");
-                    immutableBitmap = bitmap;
-                    changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
-                }
+                Canvas canvas = new Canvas(bitmap);
+                drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                drawable.draw(canvas);
+                classifyBitmap(bitmap);
             }
 
         } catch (Exception e) {
@@ -281,10 +273,15 @@ public class RollingBeadImageView extends ImageView {
         }
     }
 
-    private void initializeBitmap() {
-//        Log.i("point rbi210", "initializeBitmap");
-        getBitmapFromDrawable(getDrawable());
-        setup();
+    void classifyBitmap(Bitmap inputBitmap) {
+        if (inputBitmap.isMutable()) {
+            changedBitmap = inputBitmap;
+            immutableBitmap = inputBitmap.copy(inputBitmap.getConfig(), false);
+
+        } else {
+            immutableBitmap = inputBitmap;
+            changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        }
     }
 
     final void initBaseXMLAttrs(Context context, AttributeSet attrs) {

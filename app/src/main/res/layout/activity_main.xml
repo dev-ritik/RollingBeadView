@@ -12,21 +12,21 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:src="@drawable/colors" />
-    <!---->
+
     <!--<com.example.android.rollingbeadlibrary.RollingBeadImageView-->
         <!--android:id="@+id/mimage"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:layout_centerVertical="true"-->
-        <!--android:src="@drawable/three"-->
-        <!--app:center_X="5%"-->
-        <!--app:center_Y="80%"-->
+        <!--android:src="@drawable/ic_launcher_background"-->
+        <!--app:center_X="25%"-->
+        <!--app:center_Y="50%"-->
         <!--app:direction="positive"-->
-        <!--app:movement="1%"-->
+        <!--app:movement="7%"-->
         <!--app:number_Of_Times="1"-->
         <!--app:orientation="vertical"-->
         <!--app:radius="10%"-->
-        <!--app:repetition_Times="100" />-->
+        <!--app:repetition_Times="290" />-->
 
     <Button
         android:id="@+id/test1"

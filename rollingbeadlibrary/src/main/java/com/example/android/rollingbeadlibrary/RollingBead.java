@@ -1,7 +1,10 @@
 package com.example.android.rollingbeadlibrary;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 // This class handles the all the background calculations involved
@@ -29,15 +32,48 @@ public class RollingBead {
     public RollingBead(ImageView userImage) {
 //        this.userImage = userImage;
 //        Bitmap asd = ((BitmapDrawable) userImage.getDrawable()).getBitmap();
-        this(((BitmapDrawable) userImage.getDrawable()).getBitmap());
+//        this(((BitmapDrawable) userImage.getDrawable()).getBitmap());
+        getBitmapFromDrawable(userImage.getDrawable());
     }
 
     public RollingBead(Bitmap imageBitmap) {
-        if (imageBitmap.isMutable()) {
-            changedBitmap = imageBitmap;
-            immutableBitmap = imageBitmap.copy(imageBitmap.getConfig(), false);
+        classifyBitmap(imageBitmap);
+    }
+
+    void getBitmapFromDrawable(Drawable drawable) {
+        if (drawable == null) {
+            return;
+        }
+
+        if (drawable instanceof BitmapDrawable) {
+            classifyBitmap(((BitmapDrawable) drawable).getBitmap());
+            return;
+        }
+
+        try {
+            Bitmap bitmap;
+
+            if (drawable instanceof ColorDrawable) {
+            } else {
+                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap);
+                drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                drawable.draw(canvas);
+                classifyBitmap(bitmap);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void classifyBitmap(Bitmap inputBitmap) {
+        if (inputBitmap.isMutable()) {
+            changedBitmap = inputBitmap;
+            immutableBitmap = inputBitmap.copy(inputBitmap.getConfig(), false);
+
         } else {
-            immutableBitmap = imageBitmap;
+            immutableBitmap = inputBitmap;
             changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
         }
     }
@@ -137,7 +173,6 @@ public class RollingBead {
 
     // method to generate single bead at give centerCircle_X & centerCircle_Y, with provided lens_factor
     public Bitmap generateFixedBead(int centerCircle_X, int centerCircle_Y, int radius, double lens_factor, boolean roundX, boolean roundY) {
-        //TODO: method to convert drawable to bitmap
         int width = changedBitmap.getWidth();
         int height = changedBitmap.getHeight();
 
@@ -154,8 +189,7 @@ public class RollingBead {
         //calculated pixel to be copied to the present one
         int sx, sy;
 
-        for (int dx = radius; dx >= 0; --dx) {
-            //R.H.S
+        for (int dx = radius; dx >= -radius; --dx) {
             if (roundX) {
                 // rounding calculation
                 if (centerCircle_X + dx >= width) {
@@ -209,57 +243,6 @@ public class RollingBead {
                 // pasting pixels
                 changedBitmap.setPixel(dx + centerCircle_X, dy + centerCircle_Y, immutableBitmap.getPixel(sx, sy));
 
-            }
-        }
-
-        //TODO: the algorithm doesn't works when considering entire domain ...
-        for (int dx = -radius; dx <= 0; ++dx) {
-            //L.H.S
-            if (roundX) {
-                if (centerCircle_X + dx >= width) {
-                    centerCircle_X -= width;
-                    if (centerCircle_X + dx >= width) break;
-                } else if (dx + centerCircle_X < 0) {
-                    centerCircle_X += width;
-                }
-            } else {
-                if (centerCircle_X + dx < 0) {
-                    dx = -centerCircle_X;
-                    continue;
-                }
-            }
-            terminalY = (int) Math.sqrt((radius * radius) - (dx * dx));
-            for (int dy = -terminalY; dy <= terminalY; ++dy) {
-                if (roundY) {
-                    if (centerCircle_Y + dy >= height) {
-                        centerCircle_Y -= height;
-                        if (centerCircle_Y + dy >= height) break;
-                    } else if (dy + centerCircle_Y < 0) {
-                        centerCircle_Y += height;
-                    }
-
-                } else {
-                    if (centerCircle_Y + dy < 0) {
-                        dy = -centerCircle_Y;
-                        continue;
-                    } else if (centerCircle_Y + dy >= height) {
-                        break;
-                    }
-                }
-
-                distance = Math.sqrt((dx * dx) + (dy * dy));
-                distortion = Math.pow((distance / radius), lens_factor);
-
-                sx = (int) (distortion * dx + centerCircle_X);
-                sy = (int) (distortion * dy + centerCircle_Y);
-
-                if (sx >= width) sx -= width;
-                else if (sx < 0) sx += width;
-
-                if (sy >= height) sy -= height;
-                else if (sy < 0) sy += height;
-
-                changedBitmap.setPixel(dx + centerCircle_X, dy + centerCircle_Y, immutableBitmap.getPixel(sx, sy));
             }
         }
         return changedBitmap;
@@ -438,7 +421,7 @@ public class RollingBead {
 //        Log.i("point rb234", "centerCircle_X  " + centerCircle_X + "  constantCoordinate  " + constantCoordinate + "  movement  " + movement);
 //        double lens_factor = 1.0;
 
-        for (int dx = terminalRight; dx >= 0; --dx) {
+        for (int dx = terminalRight; dx >= terminalLeft; --dx) {
             //R.H.S
 
             // rounding effect
@@ -474,39 +457,6 @@ public class RollingBead {
             }
         }
 
-        for (int dx = terminalLeft; dx <= 0; ++dx) {
-            //L.H.S
-
-            // rounding effect
-            if (centerCircle_X + dx >= width) {
-                centerCircle_X -= width;
-                if (centerCircle_X + dx >= width) break;
-            } else if (dx + centerCircle_X < 0) {
-                centerCircle_X += width;
-            }
-
-            terminalY = (int) Math.sqrt((radius * radius) - (dx * dx));
-            for (int dy = -terminalY; dy <= terminalY; ++dy) {
-                if (constantCoordinate + dy < 0) {
-                    dy = -constantCoordinate;
-                    continue;
-                } else if (constantCoordinate + dy >= height) {
-                    break;
-                }
-                distance = Math.sqrt((dx * dx) + (dy * dy));
-
-                sx = (int) ((distance / radius) * dx + centerCircle_X);
-                sy = (int) ((distance / radius) * dy + constantCoordinate);
-
-                if ((sx >= 0) && (sy >= 0) && (sx < width) && (sy < height)) {
-
-                    if (orientationHorizontal)
-                        changedBitmap.setPixel(dx + centerCircle_X, dy + constantCoordinate, immutableBitmap.getPixel(sx, sy));
-                    else
-                        changedBitmap.setPixel(dy + constantCoordinate, dx + centerCircle_X, immutableBitmap.getPixel(sy, sx));
-                }
-            }
-        }
 //        Log.i("point rb356", "generateBitmap ends");
     }
 
