@@ -37,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void test1(View v) {
         Log.i("point ma39", "start");
-        imageView.setImageBitmap(rb.generateFixedBead(200, 200, 100, 1.0, true, true));
+//        imageView.setImageBitmap(rb.generateFixedBead(200, 200, 100, 1.0, true, true));
+        imageView.setImageBitmap(rb.generateFixedBead(320, 320, 250, 1.0, false, false));
         Log.i("point ma39", "end");
 //        imageView.setImageBitmap(rb.generateFixedBead(0.02f, 0.02f, 0.5f, 2.0, true, true));
 //        rb.generateFixedBead(540.02f, 0.02f, 0.4f, 2.0, true, true);
