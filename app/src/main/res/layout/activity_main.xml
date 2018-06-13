@@ -19,12 +19,12 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:src="@drawable/four"
-        app:center_X="5%"
-        app:center_Y="95%"
+        app:center_X="55%"
+        app:center_Y="55%"
         app:direction="positive"
-        app:movement="8%"
+        app:movement="7%"
         app:number_Of_Times="1"
-        app:orientation="horizontal"
+        app:orientation="vertical"
         app:radius="12%"
         app:repetition_Times="200" />
 

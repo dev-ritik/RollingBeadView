@@ -25,7 +25,7 @@ import static android.util.TypedValue.TYPE_DIMENSION;
 
 public class RollingBeadImageView extends ImageView {
     private final RectF mDrawableRect = new RectF();
-    private RollingBead bead;
+    public RollingBead bead;
     ExecuteAsync task;
     Timer moveBeadTimer;
     private Context context;
@@ -382,7 +382,7 @@ public class RollingBeadImageView extends ImageView {
 //        bead = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
 //        Log.i("point rbi206", "setup");
 
-        timer();
+//        timer();
     }
 
     //returns view bounds

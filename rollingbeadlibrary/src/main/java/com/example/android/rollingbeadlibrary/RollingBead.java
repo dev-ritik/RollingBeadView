@@ -456,7 +456,7 @@ public class RollingBead {
     }
 
     // dissolve trailing beads while moving
-    void dissolveMovingBead() {
+    public void dissolveMovingBead() {
 
         //the previous ( after calculating number of times) center coordinate
         int centerCircle_X = getPreviousMovingCoordinate();
@@ -512,7 +512,7 @@ public class RollingBead {
     }
 
     // method to generate bead while moving
-    void generateMovingBead() {
+    public void generateMovingBead() {
 
         // get next center to move bead to
         int centerCircle_X = getUpdatedMovingCoordinate();
