@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.util.Arrays;
@@ -15,7 +16,7 @@ public class RollingBead {
 
     // changedBitmap is the resultant mutable bitmap to apply changes on
     // immutableBitmap is the immutable bitmap to get pixels from
-    private Bitmap changedBitmap, immutableBitmap;
+    private Bitmap changedBitmap;
 
     // movingCoordinate, constantCoordinate represents the two coordinate systems
     private int movingCoordinate = 0;
@@ -159,10 +160,10 @@ public class RollingBead {
         this.constantCoordinate = constantCoordinate;
     }
 
-    RollingBead(Bitmap changedBitmap, Bitmap immutableBitmap, int centerCircle_X, int centerCircle_Y, int movement, int radius, int numberOfTimes, boolean orientationHorizontal, boolean direction_Positive) {
-//        Log.i("point rb65", "centerCircle_X  " + centerCircle_X + "  centerCircle_Y  " + centerCircle_Y);
+    RollingBead(Bitmap changedBitmap, int centerCircle_X, int centerCircle_Y, int movement, int radius, int numberOfTimes, boolean orientationHorizontal, boolean direction_Positive) {
+        Log.i("point rb65", "centerCircle_X  " + centerCircle_X + "  centerCircle_Y  " + centerCircle_Y);
         this.changedBitmap = changedBitmap;
-        this.immutableBitmap = immutableBitmap;
+//        this.immutableBitmap = immutableBitmap;
         this.movement = movement;
         this.radius = radius;
         if (direction_Positive)
@@ -175,26 +176,43 @@ public class RollingBead {
         this.orientationHorizontal = orientationHorizontal;
         this.directionPositive = direction_Positive;
         if (orientationHorizontal) {
-            height = immutableBitmap.getHeight();
-            width = immutableBitmap.getWidth();
+            height = changedBitmap.getHeight();
+            width = changedBitmap.getWidth();
             this.movingCoordinate = centerCircle_X;
             this.constantCoordinate = centerCircle_Y;
         } else {
-            width = immutableBitmap.getHeight();
-            height = immutableBitmap.getWidth();
+            width = changedBitmap.getHeight();
+            height = changedBitmap.getWidth();
             this.movingCoordinate = centerCircle_Y;
             this.constantCoordinate = centerCircle_X;
         }
 
+        originalArray = new int[width * ((2 * radius) + 1)];
+        if (centerCircle_Y + radius < height && centerCircle_Y - radius >= 0) {
+            changedBitmap.getPixels(originalArray, 0, changedBitmap.getWidth(), 0, centerCircle_Y - radius, width, (2 * radius) + 1);
+        } else {
+            changedBitmap.getPixels(originalArray, 0, changedBitmap.getWidth(), 0, (centerCircle_Y - radius + height) % height, width, (radius + height - centerCircle_Y) % height);
+            changedBitmap.getPixels(originalArray, width * ((radius + height - centerCircle_Y) % height), changedBitmap.getWidth(), 0, 0, width, (2 * radius + 1) - ((radius + height - centerCircle_Y) % height));
+
+        }
+        changedArray = Arrays.copyOf(originalArray, originalArray.length);
+
         if (width <= centerCircle_X || height <= centerCircle_Y || centerCircle_X < 0 || centerCircle_Y < 0)
             throw new IllegalArgumentException("Co-ordinates out of range");
+
+//        Log.i("point rb203",height+"  height");
+//        Log.i("point rb204",radius+"  radius");
+
+        if (2 * radius + 1 > height)
+            throw new IllegalArgumentException("can't change bits twice!");
+
 
     }
 
     public Bitmap generateFixedBead(float centerCircle_XInDecimal, float centerCircle_YInDecimal, float radiusInDecimal, double lens_factor, boolean roundX, boolean roundY) {
-        return generateFixedBead((int) (centerCircle_XInDecimal * immutableBitmap.getHeight()),
-                (int) (centerCircle_YInDecimal * immutableBitmap.getWidth()),
-                (int) (radiusInDecimal * immutableBitmap.getHeight()),
+        return generateFixedBead((int) (centerCircle_XInDecimal * changedBitmap.getHeight()),
+                (int) (centerCircle_YInDecimal * changedBitmap.getWidth()),
+                (int) (radiusInDecimal * changedBitmap.getHeight()),
                 lens_factor,
                 roundX,
                 roundY);
@@ -296,9 +314,9 @@ public class RollingBead {
 
 
     public Bitmap dissolveFixedBead(float centerCircle_XInDecimal, float centerCircle_YInDecimal, float radiusInDecimal, boolean roundX, boolean roundY) {
-        return dissolveFixedBead((int) (centerCircle_XInDecimal * immutableBitmap.getHeight()),
-                (int) (centerCircle_YInDecimal * immutableBitmap.getWidth()),
-                (int) (radiusInDecimal * immutableBitmap.getHeight()),
+        return dissolveFixedBead((int) (centerCircle_XInDecimal * changedBitmap.getHeight()),
+                (int) (centerCircle_YInDecimal * changedBitmap.getWidth()),
+                (int) (radiusInDecimal * changedBitmap.getHeight()),
                 roundX,
                 roundY);
     }
@@ -366,7 +384,7 @@ public class RollingBead {
         return changedBitmap;
     }
 
-    // method to remove (rather put original pixels) over the supposed disturbed rectangular area
+//     method to remove (rather put original pixels) over the supposed disturbed rectangular area
     void mixRectangleBitmap(int initialX,
                             int finalX, int constantCoordinate) {
 //        Log.i("point rb159", "  constantCoordinate  " + constantCoordinate + "  initialX  " + initialX + "  finalX  " + finalX + "  width  " + width);
@@ -391,21 +409,29 @@ public class RollingBead {
 
             for (int dy = -terminalY; dy <= terminalY; ++dy) {
 
-                // TODO: Rounding effect without effecting performance
+                // TODO: Rounding effect without losing performance
                 if (constantCoordinate + dy < 0) {
                     dy = -constantCoordinate;
                     continue;
                 } else if (constantCoordinate + dy >= height) {
                     break;
                 }
+                changedArray[dx + ((dy + radius) * width)] = originalArray[dx + ((dy + radius) * width)];
 
                 // removing disturbance
-                if (orientationHorizontal)
-                    changedBitmap.setPixel(dx, dy + constantCoordinate, immutableBitmap.getPixel(dx, dy + constantCoordinate));
-                else
-                    changedBitmap.setPixel(dy + constantCoordinate, dx, immutableBitmap.getPixel(dy + constantCoordinate, dx));
+//                if (orientationHorizontal)
+//                    changedBitmap.setPixel(dx, dy + constantCoordinate, immutableBitmap.getPixel(dx, dy + constantCoordinate));
+//                else
+//                    changedBitmap.setPixel(dy + constantCoordinate, dx, immutableBitmap.getPixel(dy + constantCoordinate, dx));
 
             }
+        }
+        if (constantCoordinate + radius < height && constantCoordinate - radius >= 0) {
+            changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), 0, constantCoordinate - radius, width, (2 * radius) + 1);
+        } else {
+            changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), 0, (constantCoordinate - radius + height) % height, width, (radius + height - constantCoordinate) % height);
+            changedBitmap.setPixels(changedArray, width * ((radius + height - constantCoordinate) % height), changedBitmap.getWidth(), 0, 0, width, (2 * radius + 1) - ((radius + height - constantCoordinate) % height));
+
         }
 //        Log.i("point rb214", "mixBitmap ends");
     }
@@ -436,13 +462,23 @@ public class RollingBead {
                     break;
                 }
 
+                changedArray[dx + centerCircle_X + ((dy + radius) * width)] = originalArray[dx + centerCircle_X + ((dy + radius) * width)];
+
                 // actually dissolving them
-                if (orientationHorizontal)
-                    changedBitmap.setPixel(dx + centerCircle_X, dy + constantCoordinate, immutableBitmap.getPixel(dx + centerCircle_X, dy + constantCoordinate));
-                else
-                    changedBitmap.setPixel(dy + constantCoordinate, dx + centerCircle_X, immutableBitmap.getPixel(dy + constantCoordinate, dx + centerCircle_X));
+//                if (orientationHorizontal)
+//                    changedBitmap.setPixel(dx + centerCircle_X, dy + constantCoordinate, immutableBitmap.getPixel(dx + centerCircle_X, dy + constantCoordinate));
+//                else
+//                    changedBitmap.setPixel(dy + constantCoordinate, dx + centerCircle_X, immutableBitmap.getPixel(dy + constantCoordinate, dx + centerCircle_X));
             }
         }
+        if (constantCoordinate + radius < height && constantCoordinate - radius >= 0) {
+            changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), 0, constantCoordinate - radius, width, (2 * radius) + 1);
+        } else {
+            changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), 0, (constantCoordinate - radius + height) % height, width, (radius + height - constantCoordinate) % height);
+            changedBitmap.setPixels(changedArray, width * ((radius + height - constantCoordinate) % height), changedBitmap.getWidth(), 0, 0, width, (2 * radius + 1) - ((radius + height - constantCoordinate) % height));
+
+        }
+
     }
 
     // method to generate bead while moving
@@ -476,7 +512,6 @@ public class RollingBead {
 //        double lens_factor = 1.0;
 
         for (int dx = terminalRight; dx >= terminalLeft; --dx) {
-            //R.H.S
 
             // rounding effect
             if (dx + centerCircle_X >= width) {
@@ -498,19 +533,28 @@ public class RollingBead {
                 }
                 distance = Math.sqrt((dx * dx) + (dy * dy));
 
-                sx = (int) ((distance / radius) * dx + centerCircle_X);
-                sy = (int) ((distance / radius) * dy + constantCoordinate);
+                sx = (int) ((distance / radius) * dx);
+                sy = (int) ((distance / radius) * dy);
+//                sx = (int) ((distance / radius) * dx + centerCircle_X);
+//                sy = (int) ((distance / radius) * dy + constantCoordinate);
 
-                if ((sx >= 0) && (sy >= 0) && (sx < width) && (sy < height)) {
-                    if (orientationHorizontal)
-                        changedBitmap.setPixel(dx + centerCircle_X, dy + constantCoordinate, immutableBitmap.getPixel(sx, sy));
-                    else
-                        changedBitmap.setPixel(dy + constantCoordinate, dx + centerCircle_X, immutableBitmap.getPixel(sy, sx));
+//                if ((sx >= 0) && (sy >= 0) && (sx < width) && (sy < height)) {
+//                    if (orientationHorizontal)
+//                        changedBitmap.setPixel(dx + centerCircle_X, dy + constantCoordinate, immutableBitmap.getPixel(sx, sy));
+//                    else
+//                        changedBitmap.setPixel(dy + constantCoordinate, dx + centerCircle_X, immutableBitmap.getPixel(sy, sx));
+                changedArray[dx + centerCircle_X + ((dy + radius) * width)] = originalArray[(sx + centerCircle_X) + ((sy + radius) * width)];
 
-                }
+//                }
             }
         }
+        if (constantCoordinate + radius < height && constantCoordinate - radius >= 0) {
+            changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), 0, constantCoordinate - radius, width, (2 * radius) + 1);
+        } else {
+            changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), 0, (constantCoordinate - radius + height) % height, width, (radius + height - constantCoordinate) % height);
+            changedBitmap.setPixels(changedArray, width * ((radius + height - constantCoordinate) % height), changedBitmap.getWidth(), 0, 0, width, (2 * radius + 1) - ((radius + height - constantCoordinate) % height));
 
+        }
 //        Log.i("point rb356", "generateBitmap ends");
     }
 

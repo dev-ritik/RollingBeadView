@@ -26,10 +26,16 @@ Currently the library supports two types of usage:
 
 Attributes for moving bead: `RollingBeadImageView`
 
-|XML attribute   |Java set methods*          |Description                                  |Default Value     |
-|----------------|--------------------------|----------------------------------------------|------------------|
-|center_X        |setCenterCircle_X         | set the new current absolute X coordinate    |0           |
-|center_Y        |setCenterCircle_Y         | set the new current absolute Y coordinate    |0|
+|XML attribute   |Java set methods*          |Description                                  |attribute & parameter|Default Value |
+|----------------|--------------------------|----------------------------------------------|-------------------|--------------|
+|center_X        |setCenterCircle_X         | set the new current absolute X coordinate    |dimension            |0                 |
+|                |                          |                                              |fraction                  |
+|                |                          |                                              |float                   |
+|                |                          |                                              |int                   |
+|center_Y        |setCenterCircle_Y         | set the new current absolute Y coordinate    |dimension|0|
+|                |                          |                                              |fraction                  |
+|                |                          |                                              |float                   |
+|                |                          |                                              |int                   |
 |direction       |setDirection_Positive     | set the new absolute direction of motion     |positive           |
 |movement        |setMovement               | set the new movement (in Pixels)             |15           |
 |number_Of_Times |setNumberOfTimes          | set the new number of bead tails visible     |1           |

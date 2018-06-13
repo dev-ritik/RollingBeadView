@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.util.Timer;
@@ -28,7 +29,7 @@ public class RollingBeadImageView extends ImageView {
     ExecuteAsync task;
     Timer moveBeadTimer;
     private Context context;
-    private Bitmap changedBitmap, immutableBitmap;
+    private Bitmap changedBitmap;
     private int centerCircle_X = 0;
     private int centerCircle_Y = 0;
     private int movement = 15;
@@ -37,6 +38,9 @@ public class RollingBeadImageView extends ImageView {
     private int repetitionTime = 70;
     private boolean mReady, mSetupPending;
     private boolean orientationHorizontal, direction_Positive;
+
+    private int[] originalArray, changedArray;
+
     private MyInterface time = new MyInterface(false);
 
     // toggles between generating and moving cycles in bead movement
@@ -68,14 +72,16 @@ public class RollingBeadImageView extends ImageView {
 
     public void setCenterCircle_X(int centerCircle_XInPx) {
 //        this.centerCircle_X = centerCircle_X;
-        if (orientationHorizontal)
-            changeBead(centerCircle_XInPx, bead.getConstantCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
-        else
-            changeBead(centerCircle_XInPx, bead.getMovingCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        if (!time.getStopValue()) {
+            if (orientationHorizontal)
+                changeBead(centerCircle_XInPx, bead.getConstantCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+            else
+                changeBead(centerCircle_XInPx, bead.getMovingCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        }
     }
 
     public void setCenterCircle_X(float centerCircle_XInDecimal) {
-        setCenterCircle_X((int) (centerCircle_XInDecimal * immutableBitmap.getWidth()));
+        setCenterCircle_X((int) (centerCircle_XInDecimal * changedBitmap.getWidth()));
     }
 
     public int getOriginalCenterCircle_Y() {
@@ -84,14 +90,18 @@ public class RollingBeadImageView extends ImageView {
 
     public void setCenterCircle_Y(int centerCircle_YInPx) {
 //        this.centerCircle_Y = centerCircle_Y;
-        if (orientationHorizontal)
-            changeBead(bead.getMovingCoordinate(), centerCircle_YInPx, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
-        else
-            changeBead(bead.getConstantCoordinate(), centerCircle_YInPx, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        if (!time.getStopValue()) {
+            if (orientationHorizontal)
+                changeBead(bead.getMovingCoordinate(), centerCircle_YInPx, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+            else
+                changeBead(bead.getConstantCoordinate(), centerCircle_YInPx, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+            Log.i("point rbi93","centery end");
+
+        }
     }
 
     public void setCenterCircle_Y(float centerCircle_YInDecimal) {
-        setCenterCircle_Y((int) (centerCircle_YInDecimal * immutableBitmap.getHeight()));
+        setCenterCircle_Y((int) (centerCircle_YInDecimal * changedBitmap.getHeight()));
     }
 
     public int getMovement() {
@@ -99,16 +109,18 @@ public class RollingBeadImageView extends ImageView {
     }
 
     public void setMovement(int movementInPx) {
-        this.movement = movementInPx;
-        if (orientationHorizontal)
-            changeBead(bead.getMovingCoordinate(), bead.getConstantCoordinate(), movementInPx, radius, numberOfTimes, orientationHorizontal, direction_Positive);
-        else
-            changeBead(bead.getConstantCoordinate(), bead.getMovingCoordinate(), movementInPx, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        if (!time.getStopValue()) {
+            this.movement = movementInPx;
+            if (orientationHorizontal)
+                changeBead(bead.getMovingCoordinate(), bead.getConstantCoordinate(), movementInPx, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+            else
+                changeBead(bead.getConstantCoordinate(), bead.getMovingCoordinate(), movementInPx, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        }
     }
 
     public void setMovement(float movementInDecimal) {
         if (movementInDecimal < 1.0 && movementInDecimal >= 0)
-            setMovement((int) (movementInDecimal * immutableBitmap.getHeight()));
+            setMovement((int) (movementInDecimal * changedBitmap.getHeight()));
     }
 
     public int getRadius() {
@@ -116,16 +128,18 @@ public class RollingBeadImageView extends ImageView {
     }
 
     public void setRadius(int radiusInPx) {
-        this.radius = radiusInPx;
-        if (orientationHorizontal)
-            changeBead(bead.getMovingCoordinate(), bead.getConstantCoordinate(), movement, radiusInPx, numberOfTimes, orientationHorizontal, direction_Positive);
-        else
-            changeBead(bead.getConstantCoordinate(), bead.getMovingCoordinate(), movement, radiusInPx, numberOfTimes, orientationHorizontal, direction_Positive);
+        if (!time.getStopValue()) {
+            this.radius = radiusInPx;
+            if (orientationHorizontal)
+                changeBead(bead.getMovingCoordinate(), bead.getConstantCoordinate(), movement, radiusInPx, numberOfTimes, orientationHorizontal, direction_Positive);
+            else
+                changeBead(bead.getConstantCoordinate(), bead.getMovingCoordinate(), movement, radiusInPx, numberOfTimes, orientationHorizontal, direction_Positive);
+        }
     }
 
     public void setRadius(float radiusInDecimal) {
         if (radiusInDecimal < 1.0 && radiusInDecimal >= 0)
-            setRadius((int) (radiusInDecimal * immutableBitmap.getHeight()));
+            setRadius((int) (radiusInDecimal * changedBitmap.getHeight()));
     }
 
     public int getNumberOfTimes() {
@@ -133,11 +147,13 @@ public class RollingBeadImageView extends ImageView {
     }
 
     public void setNumberOfTimes(int numberOfTimes) {
-        if (orientationHorizontal)
-            changeBead(bead.getMovingCoordinate(), bead.getConstantCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
-        else
-            changeBead(bead.getConstantCoordinate(), bead.getMovingCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
-        this.numberOfTimes = numberOfTimes;
+        if (!time.getStopValue()) {
+            if (orientationHorizontal)
+                changeBead(bead.getMovingCoordinate(), bead.getConstantCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+            else
+                changeBead(bead.getConstantCoordinate(), bead.getMovingCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+            this.numberOfTimes = numberOfTimes;
+        }
     }
 
     public int getRepetitionTime() {
@@ -146,11 +162,13 @@ public class RollingBeadImageView extends ImageView {
 
     // stops renderer and restarts it with new time period
     public void setRepetitionTime(int repetitionTime) {
-        if (repetitionTime < 70)
-            throw new IllegalArgumentException(String.format("repetition_Times %s may result in repetitive Garbage Collection.", repetitionTime));
-        this.repetitionTime = repetitionTime;
-        stopRender();
-        resumeRender();
+        if (!time.getStopValue()) {
+            if (repetitionTime < 70)
+                throw new IllegalArgumentException(String.format("repetition_Times %s may result in repetitive Garbage Collection.", repetitionTime));
+            this.repetitionTime = repetitionTime;
+            stopRender();
+            resumeRender();
+        }
     }
 
     public boolean isOrientationHorizontal() {
@@ -158,11 +176,13 @@ public class RollingBeadImageView extends ImageView {
     }
 
     public void setOrientationHorizontal(boolean orientationHorizontal) {
-        if (this.orientationHorizontal)
-            changeBead(bead.getMovingCoordinate(), bead.getConstantCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
-        else
-            changeBead(bead.getConstantCoordinate(), bead.getMovingCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
-        this.orientationHorizontal = orientationHorizontal;
+        if (!time.getStopValue()) {
+            if (this.orientationHorizontal)
+                changeBead(bead.getMovingCoordinate(), bead.getConstantCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+            else
+                changeBead(bead.getConstantCoordinate(), bead.getMovingCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+            this.orientationHorizontal = orientationHorizontal;
+        }
     }
 
     public boolean isDirection_Positive() {
@@ -170,11 +190,13 @@ public class RollingBeadImageView extends ImageView {
     }
 
     public void setDirection_Positive(boolean direction_Positive) {
-        this.direction_Positive = direction_Positive;
-        if (orientationHorizontal)
-            changeBead(bead.getMovingCoordinate(), bead.getConstantCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
-        else
-            changeBead(bead.getConstantCoordinate(), bead.getMovingCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        if (!time.getStopValue()) {
+            this.direction_Positive = direction_Positive;
+            if (orientationHorizontal)
+                changeBead(bead.getMovingCoordinate(), bead.getConstantCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+            else
+                changeBead(bead.getConstantCoordinate(), bead.getMovingCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        }
     }
 
     public int getCurrentCenterCircle_X() {
@@ -276,11 +298,11 @@ public class RollingBeadImageView extends ImageView {
     void classifyBitmap(Bitmap inputBitmap) {
         if (inputBitmap.isMutable()) {
             changedBitmap = inputBitmap;
-            immutableBitmap = inputBitmap.copy(inputBitmap.getConfig(), false);
+//            immutableBitmap = inputBitmap.copy(inputBitmap.getConfig(), false);
 
         } else {
-            immutableBitmap = inputBitmap;
-            changedBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
+//            immutableBitmap = inputBitmap;
+            changedBitmap = inputBitmap.copy(Bitmap.Config.ARGB_8888, true);
         }
     }
 
@@ -293,22 +315,22 @@ public class RollingBeadImageView extends ImageView {
                 if (a.peekValue(attr).type == TYPE_DIMENSION)
                     centerCircle_X = a.getDimensionPixelSize(attr, 0);
                 else
-                    centerCircle_X = (int) a.getFraction(attr, immutableBitmap.getWidth(), immutableBitmap.getWidth(), 0);
+                    centerCircle_X = (int) a.getFraction(attr, changedBitmap.getWidth(), changedBitmap.getWidth(), 0);
             } else if (attr == R.styleable.RollingBeadImageView_center_Y) {
                 if (a.peekValue(attr).type == TYPE_DIMENSION)
                     centerCircle_Y = a.getDimensionPixelSize(attr, 0);
                 else
-                    centerCircle_Y = (int) a.getFraction(attr, immutableBitmap.getHeight(), immutableBitmap.getHeight(), 0);
+                    centerCircle_Y = (int) a.getFraction(attr, changedBitmap.getHeight(), changedBitmap.getHeight(), 0);
             } else if (attr == R.styleable.RollingBeadImageView_movement) {
                 if (a.peekValue(attr).type == TYPE_DIMENSION)
                     movement = a.getDimensionPixelSize(attr, 30);
                 else
-                    movement = (int) a.getFraction(attr, immutableBitmap.getHeight(), immutableBitmap.getHeight(), 30);
+                    movement = (int) a.getFraction(attr, changedBitmap.getHeight(), changedBitmap.getHeight(), 30);
             } else if (attr == R.styleable.RollingBeadImageView_radius) {
                 if (a.peekValue(attr).type == TYPE_DIMENSION)
                     radius = a.getDimensionPixelSize(attr, 40);
                 else
-                    radius = (int) a.getFraction(attr, immutableBitmap.getHeight(), immutableBitmap.getHeight(), 40);
+                    radius = (int) a.getFraction(attr, changedBitmap.getHeight(), changedBitmap.getHeight(), 40);
             } else if (attr == R.styleable.RollingBeadImageView_number_Of_Times) {
                 numberOfTimes = a.getInt(attr, 1);
             } else if (attr == R.styleable.RollingBeadImageView_repetition_Times) {
@@ -342,10 +364,10 @@ public class RollingBeadImageView extends ImageView {
             mSetupPending = true;
             return;
         }
-        if (immutableBitmap == null) {
-            invalidate();
-            return;
-        }
+//        if (immutableBitmap == null) {
+//            invalidate();
+//            return;
+//        }
         if (changedBitmap == null) {
             invalidate();
             return;
@@ -356,7 +378,8 @@ public class RollingBeadImageView extends ImageView {
 
         mDrawableRect.set(calculateBounds());
 
-        bead = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+        bead = new RollingBead(changedBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+//        bead = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
 //        Log.i("point rbi206", "setup");
 
         timer();
@@ -438,10 +461,10 @@ public class RollingBeadImageView extends ImageView {
 //            Log.i("point rbi189", "ondraw problem");
             return;
         }
-        if (immutableBitmap == null) {
+//        if (immutableBitmap == null) {
 //            Log.i("point rbi193", "ondraw problem");
-            return;
-        }
+//            return;
+//        }
         canvas.drawBitmap(changedBitmap, null, mDrawableRect, null);
     }
 
@@ -449,21 +472,23 @@ public class RollingBeadImageView extends ImageView {
     // stops new bead at the right time based on interface callbacks
     void changeBead(final int centerCircle_X, final int centerCircle_Y, final int movement, final int radius, final int numberOfTimes, final boolean orientationHorizontal, final boolean direction_Positive) {
 
-//        Log.i("point rbi500", "changeBead method");
+        Log.i("point rbi500", "changeBead method");
         stopRender();
-//        Log.i("point rbi502", "inside changeBead method" + " stop " + time.getStopValue() + " async " + time.getAsyncValue());
+        Log.i("point rbi502", "inside changeBead method" + " stop " + time.getStopValue() + " async " + time.getAsyncValue());
 
         if (!time.getStopValue() && !time.getAsyncValue()) {
-//            Log.i("point rbi504", "if changeBead method");
-            bead = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+            Log.i("point rbi504", "if changeBead method");
+            bead = new RollingBead(changedBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+//            bead = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
             resumeRender();
 
         } else {
             time.setmStopListener(new MyInterface.StopListener() {
                 @Override
                 public void onStopValueChanged(boolean newValue) {
-//                    Log.i("point rbi490", "inside onvalue method");
-                    bead = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+                    Log.i("point rbi490", "inside onvalue method");
+//                    bead = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
+                    bead = new RollingBead(changedBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
                     resumeRender();
                     time.setmStopListener(null);
                 }
@@ -484,20 +509,23 @@ public class RollingBeadImageView extends ImageView {
 
     // completely stops renderer making dissolving all recent changes on bitmap
     public void stopRender() {
-//        Log.i("point rbi354", "stopRender" + " start");
+        Log.i("point rbi354", "stopRender" + " start");
 
         pauseRenderer();
 
         time.setStopValue(true);
         if (!time.getAsyncValue()) {
+            Log.i("point rbi521", "if stop renderer method"+time.getAsyncValue());
             bead.dissolveAll();
             invalidate();
             time.setStopValue(false);
         } else {
+            Log.i("point rbi526", "if stop renderer method"+time.getAsyncValue());
             time.setmAsyncListener(new MyInterface.AsyncListener() {
                 @Override
                 public void onAsyncValueChanged(boolean newValue) {
                     if (!newValue) {
+                        Log.i("point rbi531", "if stop renderer method"+newValue);
                         bead.dissolveAll();
                         invalidate();
                         time.setStopValue(false);
