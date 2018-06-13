@@ -12,8 +12,8 @@ RollingBead is an android library that can make bead (lens) moving effect in vie
 Currently the library supports two types of usage:
 
 ## static Bead:
-<img src="/sample/hope_static.gif" align="right" height="450" width="470">
-<img src="/sample/colors.gif" align="left" height="450" width="350">
+<img src="/sample/hope_static.gif" align="right" height="450" width="480">
+<img src="/sample/colors.gif" align="left" height="450" width="360">
 <br>
 
 ## moving bead:
@@ -26,10 +26,10 @@ Currently the library supports two types of usage:
 
 Attributes for moving bead: `RollingBeadImageView`
 
-|XML attribute   |Java set methods*          |Description                                  |Default Value     |
-|----------------|--------------------------|----------------------------------------------|------------------|
-|center_X        |setCenterCircle_X         | set the new current absolute X coordinate    |0           |
-|center_Y        |setCenterCircle_Y         | set the new current absolute Y coordinate    |0|
+|XML attribute   |Java set methods*          |Description                                  |attribute & parameter|Default Value |
+|----------------|--------------------------|----------------------------------------------|-------------------|--------------|
+|center_X        |setCenterCircle_X         | set the new current absolute X coordinate    |dimension            |0                 |
+|center_Y        |setCenterCircle_Y         | set the new current absolute Y coordinate    |dimension|0|
 |direction       |setDirection_Positive     | set the new absolute direction of motion     |positive           |
 |movement        |setMovement               | set the new movement (in Pixels)             |15           |
 |number_Of_Times |setNumberOfTimes          | set the new number of bead tails visible     |1           |
