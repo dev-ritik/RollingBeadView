@@ -19,14 +19,14 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:src="@drawable/four"
-        app:center_X="25%"
-        app:center_Y="50%"
-        app:direction="negative"
+        app:center_X="5%"
+        app:center_Y="5%"
+        app:direction="positive"
         app:movement="8%"
         app:number_Of_Times="1"
         app:orientation="horizontal"
         app:radius="12%"
-        app:repetition_Times="100" />
+        app:repetition_Times="200" />
 
     <Button
         android:id="@+id/test1"
