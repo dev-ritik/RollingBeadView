@@ -20,7 +20,7 @@
         android:layout_centerVertical="true"
         android:src="@drawable/four"
         app:center_X="5%"
-        app:center_Y="5%"
+        app:center_Y="95%"
         app:direction="positive"
         app:movement="8%"
         app:number_Of_Times="1"

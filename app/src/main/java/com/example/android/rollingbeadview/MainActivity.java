@@ -43,22 +43,22 @@ public class MainActivity extends AppCompatActivity {
 //        imageView.setImageBitmap(rb.generateFixedBead(0.02f, 0.02f, 0.5f, 2.0, true, true));
 //        rb.generateFixedBead(540.02f, 0.02f, 0.4f, 2.0, true, true);
 //        mimage.setCenterCircle_X(0.05f);
-//        mimage.setOrientationHorizontal(true);
+        mimage.setOrientationHorizontal(false);
     }
 
     public void test2(View v) {
-        Log.i("point ma50", "start");
-        rb.dissolveFixedBead(20, 20, true, true);
-        Log.i("point ma52", "end");
+//        Log.i("point ma50", "start");
+//        rb.dissolveFixedBead(20, 20, true, true);
+//        Log.i("point ma52", "end");
 //        rb.dissolveFixedBead(0.02f, 0.02f, 0.4f, true, true);
 //        imageView.setImageBitmap(rb.dissolveFixedBead(0.02f, 0.02f, 0.2f, true, true));
 //        imageView.setImageBitmap(rb.dissolveBead(10, 10, 300, true, true));
-//        mimage.setCenterCircle_X(0.8f);
+        mimage.setDirection_Positive(true);
     }
 
     public void test3(View v) {
         Log.i("point ma60","test3 start");
-        mimage.setCenterCircle_Y(0.1f);
+        mimage.setCenterCircle_Y(0.3f);
         Log.i("point ma62","test3 end");
     }
 
