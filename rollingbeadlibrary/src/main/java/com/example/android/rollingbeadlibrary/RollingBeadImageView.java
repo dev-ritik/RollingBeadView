@@ -28,7 +28,6 @@ public class RollingBeadImageView extends ImageView {
     RollingBead bead;
     ExecuteAsync task;
     Timer moveBeadTimer;
-    private Context context;
     private Bitmap changedBitmap;
     private int centerCircle_X = 0;
     private int centerCircle_Y = 0;
@@ -39,6 +38,7 @@ public class RollingBeadImageView extends ImageView {
     private boolean mReady, mSetupPending;
     private boolean orientationHorizontal, direction_Positive;
 
+    // interface to monitor value of toggles (when required)
     private MyInterface time = new MyInterface(false);
 
     // toggles between generating and moving cycles in bead movement
@@ -58,7 +58,6 @@ public class RollingBeadImageView extends ImageView {
 
     public RollingBeadImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.context = context;
 //        Log.i("point rbi59", "RollingBeadImageView  ");
         this.initBaseXMLAttrs(context, attrs);
         init();
@@ -69,7 +68,6 @@ public class RollingBeadImageView extends ImageView {
     }
 
     public void setCenterCircle_X(int centerCircle_XInPx) {
-//        this.centerCircle_X = centerCircle_X;
         if (!time.getStopValue()) {
             if (orientationHorizontal)
                 changeBead(centerCircle_XInPx, bead.getConstantCoordinate(), movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
@@ -87,14 +85,11 @@ public class RollingBeadImageView extends ImageView {
     }
 
     public void setCenterCircle_Y(int centerCircle_YInPx) {
-//        this.centerCircle_Y = centerCircle_Y;
         if (!time.getStopValue()) {
             if (orientationHorizontal)
                 changeBead(bead.getMovingCoordinate(), centerCircle_YInPx, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
             else
                 changeBead(bead.getConstantCoordinate(), centerCircle_YInPx, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
-            Log.i("point rbi93","centery end");
-
         }
     }
 
@@ -293,6 +288,7 @@ public class RollingBeadImageView extends ImageView {
         }
     }
 
+    // convert bitmap to mutable
     void classifyBitmap(Bitmap inputBitmap) {
         if (inputBitmap.isMutable()) {
             changedBitmap = inputBitmap;
@@ -301,6 +297,7 @@ public class RollingBeadImageView extends ImageView {
         }
     }
 
+    // getting attributes from users
     final void initBaseXMLAttrs(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RollingBeadImageView);
         final int N = a.getIndexCount();
@@ -451,6 +448,7 @@ public class RollingBeadImageView extends ImageView {
 //            Log.i("point rbi189", "ondraw problem");
             return;
         }
+        // draw the changed bitmap on the canvas
         canvas.drawBitmap(changedBitmap, null, mDrawableRect, null);
     }
 
@@ -458,12 +456,12 @@ public class RollingBeadImageView extends ImageView {
     // stops new bead at the right time based on interface callbacks
     void changeBead(final int centerCircle_X, final int centerCircle_Y, final int movement, final int radius, final int numberOfTimes, final boolean orientationHorizontal, final boolean direction_Positive) {
 
-        Log.i("point rbi500", "changeBead method");
+//        Log.i("point rbi500", "changeBead method");
         stopRender();
-        Log.i("point rbi502", "inside changeBead method" + " stop " + time.getStopValue() + " async " + time.getAsyncValue());
+//        Log.i("point rbi502", "inside changeBead method" + " stop " + time.getStopValue() + " async " + time.getAsyncValue());
 
         if (!time.getStopValue() && !time.getAsyncValue()) {
-            Log.i("point rbi504", "if changeBead method");
+//            Log.i("point rbi504", "if changeBead method");
             bead = new RollingBead(changedBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
             resumeRender();
 
@@ -471,7 +469,7 @@ public class RollingBeadImageView extends ImageView {
             time.setmStopListener(new MyInterface.StopListener() {
                 @Override
                 public void onStopValueChanged(boolean newValue) {
-                    Log.i("point rbi490", "inside onvalue method");
+//                    Log.i("point rbi490", "inside onvalue method");
                     bead = new RollingBead(changedBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
                     resumeRender();
                     time.setmStopListener(null);
@@ -493,23 +491,23 @@ public class RollingBeadImageView extends ImageView {
 
     // completely stops renderer making dissolving all recent changes on bitmap
     public void stopRender() {
-        Log.i("point rbi354", "stopRender" + " start");
+//        Log.i("point rbi354", "stopRender" + " start");
 
         pauseRenderer();
 
         time.setStopValue(true);
         if (!time.getAsyncValue()) {
-            Log.i("point rbi521", "if stop renderer method"+time.getAsyncValue());
+//            Log.i("point rbi521", "if stop renderer method" + time.getAsyncValue());
             bead.dissolveAll();
             invalidate();
             time.setStopValue(false);
         } else {
-            Log.i("point rbi526", "if stop renderer method"+time.getAsyncValue());
+//            Log.i("point rbi526", "if stop renderer method" + time.getAsyncValue());
             time.setmAsyncListener(new MyInterface.AsyncListener() {
                 @Override
                 public void onAsyncValueChanged(boolean newValue) {
                     if (!newValue) {
-                        Log.i("point rbi531", "if stop renderer method"+newValue);
+//                        Log.i("point rbi531", "if stop renderer method" + newValue);
                         bead.dissolveAll();
                         invalidate();
                         time.setStopValue(false);
