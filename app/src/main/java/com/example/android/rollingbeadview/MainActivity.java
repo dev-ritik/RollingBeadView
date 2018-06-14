@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
 
 //        text = (TextView) findViewById(R.id.text);
 //
-        mimage = (RollingBeadImageView) findViewById(R.id.mimage);
-//        imageView = (ImageView) findViewById(R.id.imageView);
-//        rb = new RollingBead(imageView,150,20);
+//        mimage = (RollingBeadImageView) findViewById(R.id.mimage);
+        imageView = (ImageView) findViewById(R.id.imageView);
+        rb = new RollingBead(imageView);
 
 //        im = BitmapFactory.decodeResource(getApplicationContext().getResources(),
 //                R.drawable.colors);
@@ -37,40 +37,30 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void test1(View v) {
-        Log.i("point ma39", "start");
-//        imageView.setImageBitmap(rb.generateFixedBead(200, 200, 100, 1.0, true, true));
-//        imageView.setImageBitmap(rb.generateFixedBead(20, 20, 1.4, true, true));
-        mimage.bead.generateMovingBead();
-        Log.i("point ma42", "end");
-        mimage.bead.dissolveMovingBead();
-        Log.i("point ma42", "end");
-//        imageView.setImageBitmap(rb.generateFixedBead(0.02f, 0.02f, 0.5f, 2.0, true, true));
-//        rb.generateFixedBead(540.02f, 0.02f, 0.4f, 2.0, true, true);
-//        mimage.setCenterCircle_X(0.05f);
+        imageView.setImageBitmap(rb.generateFixedBead(0.06f, 0.05f, 0.5f, 2.0, true, true));
+//        mimage.setCenterCircle_X(0);
 //        mimage.setOrientationHorizontal(false);
+//         mimage.bead.dissolveMovingBead();
     }
 
     public void test2(View v) {
-//        Log.i("point ma50", "start");
-//        rb.dissolveFixedBead(20, 20, true, true);
-//        Log.i("point ma52", "end");
-//        rb.dissolveFixedBead(0.02f, 0.02f, 0.4f, true, true);
-//        imageView.setImageBitmap(rb.dissolveFixedBead(0.02f, 0.02f, 0.2f, true, true));
+//        rb.dissolveFixedBead(10, 10, 100, true, true);
+        imageView.setImageBitmap(rb.dissolveFixedBead(0.02f, 0.02f, 0.5f, true, false));
 //        imageView.setImageBitmap(rb.dissolveBead(10, 10, 300, true, true));
-        mimage.setDirection_Positive(true);
+//        mimage.setMovement(200);
     }
 
     public void test3(View v) {
-        Log.i("point ma60","test3 start");
-        mimage.setCenterCircle_Y(0.3f);
-        Log.i("point ma62","test3 end");
+        imageView.setImageBitmap(rb.generateFixedBead(100, 100, 100, 3.0, true, true));
+//        mimage.setNumberOfTimes(3);
+//        Log.i("point ma62","test3 end");
     }
 
     public void test4(View v) {
-        Log.i("point ma65","test4 start");
+        imageView.setImageBitmap(rb.dissolveFixedBead(150, 100, 100, true, true));
 
-        mimage.setCenterCircle_Y(0.8f);
-        Log.i("point ma68","test4 end");
+//        mimage.setCenterCircle_Y(0.8f);
+//        Log.i("point ma68","test4 end");
 
     }
 

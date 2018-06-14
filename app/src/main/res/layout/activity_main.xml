@@ -6,27 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!--<ImageView-->
-        <!--android:id="@+id/imageView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:src="@drawable/colors" />-->
-<!---->
-    <com.example.android.rollingbeadlibrary.RollingBeadImageView
-        android:id="@+id/mimage"
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:src="@drawable/four"
-        app:center_X="55%"
-        app:center_Y="55%"
-        app:direction="positive"
-        app:movement="7%"
-        app:number_Of_Times="1"
-        app:orientation="vertical"
-        app:radius="12%"
-        app:repetition_Times="200" />
+        android:src="@drawable/colors" />
+
+    <!--<com.example.android.rollingbeadlibrary.RollingBeadImageView-->
+        <!--android:id="@+id/mimage"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:src="@drawable/four"-->
+        <!--app:center_X="95%"-->
+        <!--app:center_Y="5%"-->
+        <!--app:direction="positive"-->
+        <!--app:movement="7%"-->
+        <!--app:number_Of_Times="1"-->
+        <!--app:orientation="horizontal"-->
+        <!--app:radius="12%"-->
+        <!--app:repetition_Times="200" />-->
 
     <Button
         android:id="@+id/test1"

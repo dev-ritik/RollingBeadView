@@ -25,7 +25,7 @@ import static android.util.TypedValue.TYPE_DIMENSION;
 
 public class RollingBeadImageView extends ImageView {
     private final RectF mDrawableRect = new RectF();
-    public RollingBead bead;
+    RollingBead bead;
     ExecuteAsync task;
     Timer moveBeadTimer;
     private Context context;
@@ -38,8 +38,6 @@ public class RollingBeadImageView extends ImageView {
     private int repetitionTime = 70;
     private boolean mReady, mSetupPending;
     private boolean orientationHorizontal, direction_Positive;
-
-    private int[] originalArray, changedArray;
 
     private MyInterface time = new MyInterface(false);
 
@@ -298,10 +296,7 @@ public class RollingBeadImageView extends ImageView {
     void classifyBitmap(Bitmap inputBitmap) {
         if (inputBitmap.isMutable()) {
             changedBitmap = inputBitmap;
-//            immutableBitmap = inputBitmap.copy(inputBitmap.getConfig(), false);
-
         } else {
-//            immutableBitmap = inputBitmap;
             changedBitmap = inputBitmap.copy(Bitmap.Config.ARGB_8888, true);
         }
     }
@@ -364,10 +359,6 @@ public class RollingBeadImageView extends ImageView {
             mSetupPending = true;
             return;
         }
-//        if (immutableBitmap == null) {
-//            invalidate();
-//            return;
-//        }
         if (changedBitmap == null) {
             invalidate();
             return;
@@ -379,10 +370,9 @@ public class RollingBeadImageView extends ImageView {
         mDrawableRect.set(calculateBounds());
 
         bead = new RollingBead(changedBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
-//        bead = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
 //        Log.i("point rbi206", "setup");
 
-//        timer();
+        timer();
     }
 
     //returns view bounds
@@ -461,10 +451,6 @@ public class RollingBeadImageView extends ImageView {
 //            Log.i("point rbi189", "ondraw problem");
             return;
         }
-//        if (immutableBitmap == null) {
-//            Log.i("point rbi193", "ondraw problem");
-//            return;
-//        }
         canvas.drawBitmap(changedBitmap, null, mDrawableRect, null);
     }
 
@@ -479,7 +465,6 @@ public class RollingBeadImageView extends ImageView {
         if (!time.getStopValue() && !time.getAsyncValue()) {
             Log.i("point rbi504", "if changeBead method");
             bead = new RollingBead(changedBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
-//            bead = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
             resumeRender();
 
         } else {
@@ -487,7 +472,6 @@ public class RollingBeadImageView extends ImageView {
                 @Override
                 public void onStopValueChanged(boolean newValue) {
                     Log.i("point rbi490", "inside onvalue method");
-//                    bead = new RollingBead(changedBitmap, immutableBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
                     bead = new RollingBead(changedBitmap, centerCircle_X, centerCircle_Y, movement, radius, numberOfTimes, orientationHorizontal, direction_Positive);
                     resumeRender();
                     time.setmStopListener(null);
