@@ -5,7 +5,8 @@ RollingBead is an android library that can make bead (lens) moving effect in vie
 - <b>Bead movement</b> : The library provides enough methods to control movement of moving bead.
 - <b>single bead</b> : Method to form and dissolve single bead has been provided.
 - <b>Reduction in calculation</b> : Effort has been made to reduce large amount of calculations involved.
-- <b>Unharmed image</b> : Care has been taken not to harm the original image provided
+- <b>Unharmed image</b> : Care has been taken not to harm the original image provided.
+- <b>Consistency</b> : It provide required attributes and parameters to make it consistent accross screen densities.
 - <b>Async Calculations</b> : The library does all operations asynchronously to avoid blocking the UI thread.
 
 # Usage
@@ -23,31 +24,31 @@ Currently the library supports two types of usage:
 
 * use the `dissolveFixedBead` method to dissolve a static bead
 
-** Example 1**
-<img src="/sample/colors.gif" align="right" height="350" width="300"><br>
+**Example 1**
+<img src="/sample/colors.gif" align="right" height="220" width="250"><br>
 
 ```java
-        imageView.setImageBitmap(rb.generateFixedBead(0.025f, 0.025f, 0.45f, 2.0, true, true));
+imageView.setImageBitmap(rb.generateFixedBead(0.025f, 0.025f, 0.45f, 2.0, true, true));
 ```
 ```java
-        imageView.setImageBitmap(rb.dissolveFixedBead(0.025f, 0.025f, 0.45f, true, true));
+imageView.setImageBitmap(rb.dissolveFixedBead(0.025f, 0.025f, 0.45f, true, true));
 ```
 
-** Example 2**
+**Example 2**
 
-<img src="/sample/hope_static.gif" align="right" height="350" width="400">
+<img src="/sample/hope_static.gif" align="right" height="220" width="250">
 <br>
 
 ```java
-        imageView.setImageBitmap(rb.generateFixedBead(0.93f, 0.46f, 0.2f, 2.0, true, true));
+imageView.setImageBitmap(rb.generateFixedBead(0.93f, 0.46f, 0.2f, 2.0, true, true));
 ```
 ```java
-        imageView.setImageBitmap(rb.dissolveFixedBead(0.93f, 0.46f, 0.2f, true, true));
+imageView.setImageBitmap(rb.dissolveFixedBead(0.93f, 0.46f, 0.2f, true, true));
 ```
 
 ## moving bead:
-** Example 1**
-<img src="/sample/life_1.gif" align="right" width="350" height="400">
+**Example 1**
+<img src="/sample/life_1.gif" align="right" width="320" height="330">
 
 ```xml
  <com.example.android.rollingbeadlibrary.RollingBeadImageView
@@ -66,7 +67,7 @@ Currently the library supports two types of usage:
         app:repetition_Times="220" />
 ```
 
-** Example 2**
+**Example 2**
 
 <img src="/sample/hope.gif" align="right" width="350" height="400">
 
