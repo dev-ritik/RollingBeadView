@@ -6,28 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!--<ImageView-->
-        <!--android:id="@+id/imageView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:src="@drawable/colors" />-->
-<!---->
-    <com.example.android.rollingbeadlibrary.RollingBeadImageView
-        android:id="@+id/mimage"
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:src="@drawable/hope_1"
-        app:center_X="39%"
-        app:center_Y="43%"
-        app:direction="positive"
-        app:movement="5%"
-        app:number_Of_Times="1"
-        app:radius="7.5%"
-        app:orientation="horizontal"
-        app:repetition_Times="92" />
-<!---->
+        android:src="@drawable/hope" />
+
+    <!--<com.example.android.rollingbeadlibrary.RollingBeadImageView-->
+        <!--android:id="@+id/mimage"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:src="@drawable/hope_1"-->
+        <!--app:center_X="39%"-->
+        <!--app:center_Y="43%"-->
+        <!--app:direction="positive"-->
+        <!--app:movement="5%"-->
+        <!--app:number_Of_Times="1"-->
+        <!--app:radius="7.5%"-->
+        <!--app:orientation="horizontal"-->
+        <!--app:repetition_Times="92" />-->
+
     <Button
         android:id="@+id/test1"
         android:layout_width="wrap_content"

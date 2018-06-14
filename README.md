@@ -12,12 +12,42 @@ RollingBead is an android library that can make bead (lens) moving effect in vie
 Currently the library supports two types of usage:
 
 ## static Bead:
-<img src="/sample/hope_static.gif" align="right" height="450" width="480">
-<img src="/sample/colors.gif" align="left" height="450" width="360">
+* Get the ImageView object and pass in to RollingBead as parameter
+```java
+        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        RollingBead rb = new RollingBead(imageView);
+        // or directly pass the bitmap
+```
+
+* use the `generateFixedBead` method to generate a static bead
+
+* use the `dissolveFixedBead` method to dissolve a static bead
+
+** Example 1**
+<img src="/sample/colors.gif" align="right" height="350" width="300"><br>
+
+```java
+        imageView.setImageBitmap(rb.generateFixedBead(0.025f, 0.025f, 0.45f, 2.0, true, true));
+```
+```java
+        imageView.setImageBitmap(rb.dissolveFixedBead(0.025f, 0.025f, 0.45f, true, true));
+```
+
+** Example 2**
+
+<img src="/sample/hope_static.gif" align="right" height="350" width="400">
 <br>
 
+```java
+        imageView.setImageBitmap(rb.generateFixedBead(0.93f, 0.46f, 0.2f, 2.0, true, true));
+```
+```java
+        imageView.setImageBitmap(rb.dissolveFixedBead(0.93f, 0.46f, 0.2f, true, true));
+```
+
 ## moving bead:
-<img src="/sample/life_1.gif" align="right" width="350" height="450">
+** Example 1**
+<img src="/sample/life_1.gif" align="right" width="350" height="400">
 
 ```xml
  <com.example.android.rollingbeadlibrary.RollingBeadImageView
@@ -35,7 +65,10 @@ Currently the library supports two types of usage:
         app:orientation="vertical"
         app:repetition_Times="220" />
 ```
-<img src="/sample/hope.gif" align="left" width="400" height="450">
+
+** Example 2**
+
+<img src="/sample/hope.gif" align="right" width="350" height="400">
 
 ```xml
 <com.example.android.rollingbeadlibrary.RollingBeadImageView

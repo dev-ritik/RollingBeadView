@@ -20,9 +20,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //
-        mimage = (RollingBeadImageView) findViewById(R.id.mimage);
-//        imageView = (ImageView) findViewById(R.id.imageView);
-//        rb = new RollingBead(imageView);
+//        mimage = (RollingBeadImageView) findViewById(R.id.mimage);
+        imageView = (ImageView) findViewById(R.id.imageView);
+        rb = new RollingBead(imageView);
 //
 //        im = BitmapFactory.decodeResource(getApplicationContext().getResources(),
 //                R.drawable.colors);
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void test1(View v) {
-        imageView.setImageBitmap(rb.generateFixedBead(0.06f, 0.05f, 0.5f, 2.0, true, true));
+        imageView.setImageBitmap(rb.generateFixedBead(0.93f, 0.46f, 0.2f, 2.0, true, true));
 //        mimage.setCenterCircle_X(0);
 //        mimage.setOrientationHorizontal(false);
 //         mimage.bead.dissolveMovingBead();
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void test2(View v) {
 //        rb.dissolveFixedBead(10, 10, 100, true, true);
-        imageView.setImageBitmap(rb.dissolveFixedBead(0.02f, 0.02f, 0.5f, true, false));
+        imageView.setImageBitmap(rb.dissolveFixedBead(0.93f, 0.46f, 0.2f, true, true));
 //        imageView.setImageBitmap(rb.dissolveBead(10, 10, 300, true, true));
 //        mimage.setMovement(200);
     }
