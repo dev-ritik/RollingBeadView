@@ -4,15 +4,15 @@
     <declare-styleable name="RollingBeadImageView">
         <attr name="center_X" format="dimension|fraction" />
         <attr name="center_Y" format="dimension|fraction" />
-        <attr name="movement" format="dimension|fraction" />
         <attr name="radius" format="dimension|fraction" />
-        <attr name="number_Of_Times" format="integer" />
+        <attr name="movement" format="dimension|fraction" />
         <attr name="repetition_Times" format="integer" />
+        <attr name="number_Of_Times" format="integer" />
         <attr name="orientation">
             <enum name="horizontal" value="1" />
             <enum name="vertical" value="-1" />
         </attr>
-        <attr name="direction" format="enum|integer">
+        <attr name="direction" >
             <enum name="positive" value="1" />
             <enum name="negative" value="-1" />
         </attr>

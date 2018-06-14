@@ -32,11 +32,11 @@ public class RollingBeadImageView extends ImageView {
     private int centerCircle_X = 0;
     private int centerCircle_Y = 0;
     private int movement = 15;
-    private int radius = 35;
+    private int radius = 30;
     private int numberOfTimes = 1;
-    private int repetitionTime = 70;
+    private int repetitionTime = 50;
     private boolean mReady, mSetupPending;
-    private boolean orientationHorizontal, direction_Positive;
+    private boolean orientationHorizontal = true, direction_Positive = true;
 
     // interface to monitor value of toggles (when required)
     private MyInterface time = new MyInterface(false);
@@ -156,7 +156,7 @@ public class RollingBeadImageView extends ImageView {
     // stops renderer and restarts it with new time period
     public void setRepetitionTime(int repetitionTime) {
         if (!time.getStopValue()) {
-            if (repetitionTime < 70)
+            if (repetitionTime < 50)
                 throw new IllegalArgumentException(String.format("repetition_Times %s may result in repetitive Garbage Collection.", repetitionTime));
             this.repetitionTime = repetitionTime;
             stopRender();
@@ -315,20 +315,20 @@ public class RollingBeadImageView extends ImageView {
                     centerCircle_Y = (int) a.getFraction(attr, changedBitmap.getHeight(), changedBitmap.getHeight(), 0);
             } else if (attr == R.styleable.RollingBeadImageView_movement) {
                 if (a.peekValue(attr).type == TYPE_DIMENSION)
-                    movement = a.getDimensionPixelSize(attr, 30);
+                    movement = a.getDimensionPixelSize(attr, 15);
                 else
-                    movement = (int) a.getFraction(attr, changedBitmap.getHeight(), changedBitmap.getHeight(), 30);
+                    movement = (int) a.getFraction(attr, changedBitmap.getHeight(), changedBitmap.getHeight(), 15);
             } else if (attr == R.styleable.RollingBeadImageView_radius) {
                 if (a.peekValue(attr).type == TYPE_DIMENSION)
-                    radius = a.getDimensionPixelSize(attr, 40);
+                    radius = a.getDimensionPixelSize(attr, 30);
                 else
-                    radius = (int) a.getFraction(attr, changedBitmap.getHeight(), changedBitmap.getHeight(), 40);
+                    radius = (int) a.getFraction(attr, changedBitmap.getHeight(), changedBitmap.getHeight(), 30);
             } else if (attr == R.styleable.RollingBeadImageView_number_Of_Times) {
                 numberOfTimes = a.getInt(attr, 1);
             } else if (attr == R.styleable.RollingBeadImageView_repetition_Times) {
-                repetitionTime = a.getInt(attr, 200);
+                repetitionTime = a.getInt(attr, 50);
                 // can't do such fast calculations
-                if (repetitionTime < 70)
+                if (repetitionTime < 50)
                     throw new IllegalArgumentException(String.format("repetition_Times %s may result in repetitive Garbage Collection.", repetitionTime));
             } else if (attr == R.styleable.RollingBeadImageView_orientation) {
                 orientationHorizontal = (a.getInt(attr, 1) == 1);

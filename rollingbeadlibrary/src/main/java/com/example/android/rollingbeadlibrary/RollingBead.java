@@ -175,7 +175,7 @@ public class RollingBead {
             this.constantCoordinate = centerCircle_X;
 
             // taking almost the entire area of height * width - (width - ((2 * radius) + 1)) pixels using only a vertical strip as above
-            originalArray = new int[height * width - (width - ((2 * radius) + 1))];
+            originalArray = new int[height * width - (height - ((2 * radius) + 1))];
             if (centerCircle_X + radius < height && centerCircle_X - radius >= 0) {
                 changedBitmap.getPixels(originalArray, 0, changedBitmap.getWidth(), centerCircle_X - radius, 0, (2 * radius) + 1, width);
             } else {
@@ -341,119 +341,6 @@ public class RollingBead {
         return changedBitmap;// required changes incorporated
     }
 
-    //     method to remove (rather put original pixels) over the supposed disturbed rectangular area
-    private void mixRectangleBitmap(int initialX,
-                            int finalX, int constantCoordinate) {
-
-        //taking finalX > initialX
-        for (int dx = initialX; dx <= finalX; ++dx) {
-
-            // rounding effect
-            if (dx >= width) {
-                finalX -= width;
-                dx -= width;
-
-                if (dx >= width) break;
-
-            } else if (dx < 0) {
-                finalX += width;
-                dx += width;
-            }
-
-            //breadth == 2 * radius
-            int terminalY = radius;
-
-            for (int dy = -terminalY; dy <= terminalY; ++dy) {
-
-                // TODO: Rounding effect without losing performance
-                if (constantCoordinate + dy < 0) {
-                    dy = -constantCoordinate;
-                    continue;
-                } else if (constantCoordinate + dy >= height) {
-                    break;
-                }
-
-                // removing disturbance in array
-                if (orientationHorizontal)
-                    changedArray[dx + ((dy + radius) * width)] = originalArray[dx + ((dy + radius) * width)];
-                else
-                    changedArray[dy + radius + (dx * height)] = originalArray[dy + radius + (dx * height)];
-            }
-        }
-
-        // providing changed array to bitmap
-        if (orientationHorizontal) {
-            if (constantCoordinate + radius < height && constantCoordinate - radius >= 0) {
-                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), 0, constantCoordinate - radius, width, (2 * radius) + 1);
-            } else {
-                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), 0, (constantCoordinate - radius + height) % height, width, (radius + height - constantCoordinate) % height);
-                changedBitmap.setPixels(changedArray, width * ((radius + height - constantCoordinate) % height), changedBitmap.getWidth(), 0, 0, width, (2 * radius + 1) - ((radius + height - constantCoordinate) % height));
-
-            }
-        } else {
-            if (constantCoordinate + radius < height && constantCoordinate - radius >= 0) {
-                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), constantCoordinate - radius, 0, (2 * radius) + 1, width);
-            } else {
-                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), (constantCoordinate - radius + height) % height, 0, (radius + height - constantCoordinate) % height, width);
-                changedBitmap.setPixels(changedArray, ((radius + height - constantCoordinate) % height), changedBitmap.getWidth(), 0, 0, (2 * radius + 1) - ((radius + height - constantCoordinate) % height), width);
-
-            }
-        }
-//        Log.i("point rb214", "mixBitmap ends");
-    }
-
-    // dissolve trailing beads while moving
-    void dissolveMovingBead() {
-
-        //the previous (after calculating number of times) center coordinate
-        int centerCircle_X = getPreviousMovingCoordinate();
-
-        // only from - movement to 0 to reduce calculations
-        for (int dx = -movement; dx < 0; ++dx) {
-
-            // rounding effect
-            if (dx + centerCircle_X >= width) {
-                centerCircle_X -= width;
-                if (centerCircle_X + dx >= width) break;
-
-            } else if (dx + centerCircle_X < 0) {
-                centerCircle_X += width;
-            }
-            for (int dy = -radius; dy <= radius; ++dy) {
-                if (constantCoordinate + dy < 0) {
-                    dy = -constantCoordinate;
-                    continue;
-                } else if (constantCoordinate + dy >= height) {
-                    break;
-                }
-
-                // actually dissolving them
-                if (orientationHorizontal)
-                    changedArray[dx + centerCircle_X + ((dy + radius) * width)] = originalArray[dx + centerCircle_X + ((dy + radius) * width)];
-                else
-                    changedArray[dy + radius + ((dx + centerCircle_X) * height)] = originalArray[dy + radius + ((dx + centerCircle_X) * height)];
-                }
-        }
-        // providing changed array to bitmap
-        if (orientationHorizontal)
-            if (constantCoordinate + radius < height && constantCoordinate - radius >= 0) {
-                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), 0, constantCoordinate - radius, width, (2 * radius) + 1);
-            } else {
-                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), 0, (constantCoordinate - radius + height) % height, width, (radius + height - constantCoordinate) % height);
-                changedBitmap.setPixels(changedArray, width * ((radius + height - constantCoordinate) % height), changedBitmap.getWidth(), 0, 0, width, (2 * radius + 1) - ((radius + height - constantCoordinate) % height));
-
-            }
-        else {
-            if (constantCoordinate + radius < height && constantCoordinate - radius >= 0) {
-                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), constantCoordinate - radius, 0, (2 * radius) + 1, width);
-            } else {
-                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), (constantCoordinate - radius + height) % height, 0, (radius + height - constantCoordinate) % height, width);
-                changedBitmap.setPixels(changedArray, ((radius + height - constantCoordinate) % height), changedBitmap.getWidth(), 0, 0, (2 * radius + 1) - ((radius + height - constantCoordinate) % height), width);
-
-            }
-        }
-    }
-
     // method to generate bead while moving
     void generateMovingBead() {
 
@@ -539,12 +426,125 @@ public class RollingBead {
 //        Log.i("point rb356", "generateBitmap ends");
     }
 
+    // dissolve trailing beads while moving
+    void dissolveMovingBead() {
+
+        //the previous (after calculating number of times) center coordinate
+        int centerCircle_X = getPreviousMovingCoordinate();
+
+        // only from - movement to 0 to reduce calculations
+        for (int dx = -movement; dx < 0; ++dx) {
+
+            // rounding effect
+            if (dx + centerCircle_X >= width) {
+                centerCircle_X -= width;
+                if (centerCircle_X + dx >= width) break;
+
+            } else if (dx + centerCircle_X < 0) {
+                centerCircle_X += width;
+            }
+            for (int dy = -radius; dy <= radius; ++dy) {
+                if (constantCoordinate + dy < 0) {
+                    dy = -constantCoordinate;
+                    continue;
+                } else if (constantCoordinate + dy >= height) {
+                    break;
+                }
+
+                // actually dissolving them
+                if (orientationHorizontal)
+                    changedArray[dx + centerCircle_X + ((dy + radius) * width)] = originalArray[dx + centerCircle_X + ((dy + radius) * width)];
+                else
+                    changedArray[dy + radius + ((dx + centerCircle_X) * height)] = originalArray[dy + radius + ((dx + centerCircle_X) * height)];
+                }
+        }
+        // providing changed array to bitmap
+        if (orientationHorizontal)
+            if (constantCoordinate + radius < height && constantCoordinate - radius >= 0) {
+                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), 0, constantCoordinate - radius, width, (2 * radius) + 1);
+            } else {
+                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), 0, (constantCoordinate - radius + height) % height, width, (radius + height - constantCoordinate) % height);
+                changedBitmap.setPixels(changedArray, width * ((radius + height - constantCoordinate) % height), changedBitmap.getWidth(), 0, 0, width, (2 * radius + 1) - ((radius + height - constantCoordinate) % height));
+
+            }
+        else {
+            if (constantCoordinate + radius < height && constantCoordinate - radius >= 0) {
+                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), constantCoordinate - radius, 0, (2 * radius) + 1, width);
+            } else {
+                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), (constantCoordinate - radius + height) % height, 0, (radius + height - constantCoordinate) % height, width);
+                changedBitmap.setPixels(changedArray, ((radius + height - constantCoordinate) % height), changedBitmap.getWidth(), 0, 0, (2 * radius + 1) - ((radius + height - constantCoordinate) % height), width);
+
+            }
+        }
+    }
+
     // calling mixRectangleBitmap to dissolve supposed maximal effected rectangular area
     void dissolveAll() {
         if (directionPositive)
             mixRectangleBitmap(getPreviousMovingCoordinate() - movement, getPreviousMovingCoordinate() + (numberOfTimes) * movement + radius, constantCoordinate);
         else
             mixRectangleBitmap(getPreviousMovingCoordinate() - (numberOfTimes) * movement - radius, getPreviousMovingCoordinate(), constantCoordinate);
+    }
+
+    //     method to remove (rather put original pixels) over the supposed disturbed rectangular area
+    private void mixRectangleBitmap(int initialX,
+                                    int finalX, int constantCoordinate) {
+
+        //taking finalX > initialX
+        for (int dx = initialX; dx <= finalX; ++dx) {
+
+            // rounding effect
+            if (dx >= width) {
+                finalX -= width;
+                dx -= width;
+
+                if (dx >= width) break;
+
+            } else if (dx < 0) {
+                finalX += width;
+                dx += width;
+            }
+
+            //breadth == 2 * radius
+            int terminalY = radius;
+
+            for (int dy = -terminalY; dy <= terminalY; ++dy) {
+
+                // TODO: Rounding effect without losing performance
+                if (constantCoordinate + dy < 0) {
+                    dy = -constantCoordinate;
+                    continue;
+                } else if (constantCoordinate + dy >= height) {
+                    break;
+                }
+
+                // removing disturbance in array
+                if (orientationHorizontal)
+                    changedArray[dx + ((dy + radius) * width)] = originalArray[dx + ((dy + radius) * width)];
+                else
+                    changedArray[dy + radius + (dx * height)] = originalArray[dy + radius + (dx * height)];
+            }
+        }
+
+        // providing changed array to bitmap
+        if (orientationHorizontal) {
+            if (constantCoordinate + radius < height && constantCoordinate - radius >= 0) {
+                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), 0, constantCoordinate - radius, width, (2 * radius) + 1);
+            } else {
+                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), 0, (constantCoordinate - radius + height) % height, width, (radius + height - constantCoordinate) % height);
+                changedBitmap.setPixels(changedArray, width * ((radius + height - constantCoordinate) % height), changedBitmap.getWidth(), 0, 0, width, (2 * radius + 1) - ((radius + height - constantCoordinate) % height));
+
+            }
+        } else {
+            if (constantCoordinate + radius < height && constantCoordinate - radius >= 0) {
+                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), constantCoordinate - radius, 0, (2 * radius) + 1, width);
+            } else {
+                changedBitmap.setPixels(changedArray, 0, changedBitmap.getWidth(), (constantCoordinate - radius + height) % height, 0, (radius + height - constantCoordinate) % height, width);
+                changedBitmap.setPixels(changedArray, ((radius + height - constantCoordinate) % height), changedBitmap.getWidth(), 0, 0, (2 * radius + 1) - ((radius + height - constantCoordinate) % height), width);
+
+            }
+        }
+//        Log.i("point rb214", "mixBitmap ends");
     }
 
 }
