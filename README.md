@@ -1,5 +1,6 @@
 # RollingBeadView
-RollingBead is an android library that can make bead (lens) moving effect in Views like ImageViews(as of now).
+RollingBead is an android library that can make bead (lens) moving effect in Views like ImageViews(as of now). This is available in two 
+flavours, i.e, MovingBead and StaticBead. Both can be used as and when required to produce circular bead(lens) effect.
 
 # Features
 - <b>Moving Bead</b> : The library provides enough methods to control movement of moving bead.
@@ -91,6 +92,28 @@ imageView.setImageBitmap(rb.dissolveFixedBead(0.93f, 0.46f, 0.2f, true, true));
 
 # Documentation
 
+## static Bead:
+* Parameters for moving bead: `RollingBead`
+
+|Java set methods   |Parameters      | Description                                       |Range                 |
+|-------------------|----------------|---------------------------------------------------|----------------------|
+|generateFixedBead  | centerCircle_X | X coordinate of the bead                          |int(Px) or Float[0,1) |
+|                   | centerCircle_Y | Y coordinate of the bead                          |int(Px) or Float[0,1) |
+|                   | radius         | radius of the bead                                |int(Px) or Float[0,1) |
+|                   | lens_factor    | intensity of deviation of the bead                |double[0,∞) and -ve(may cause error)|
+|                   | roundX         | should the effect be pronounced round X axis edges|boolean               |
+|                   | roundY         | should the effect be pronounced round Y axis edges|boolean               |
+|dissolveFixedBead* | centerCircle_X | X coordinate of the bead                          |int(Px) or Float[0,1) |
+|                   | centerCircle_Y | Y coordinate of the bead                          |int(Px) or Float[0,1) |
+|                   | radius         | radius of the bead                                |int(Px) or Float[0,1) |
+|                   | roundX         | should the effect be pronounced round X axis edges|boolean               |
+|                   | roundY         | should the effect be pronounced round Y axis edges|boolean               |
+
+*Or use generateFixedBead with `0.0` as `lens_factor`
+
+----
+
+## moving bead:
 * Attributes for moving bead: `RollingBeadImageView`
 
 |XML attribute       |Java set methods           |Description                                   |Default Value   |
@@ -123,21 +146,33 @@ imageView.setImageBitmap(rb.dissolveFixedBead(0.93f, 0.46f, 0.2f, true, true));
 
 ----
 
-* Attributes for moving bead: `RollingBead`
+# Limitations:
 
-|Java set methods   |Parameters        | Description                                       |Range                 |
-|-------------------|------------------|---------------------------------------------------|----------------------|
-|generateFixedBead  | centerCircle_X@$ | X coordinate of the bead                          |int(Px) or Float[0,1) |
-|                   | centerCircle_Y@$ | Y coordinate of the bead                          |int(Px) or Float[0,1) |
-|                   | radius@$         | radius of the bead                                |int(Px) or Float[0,1) |
-|                   | lens_factor@     | intensity of deviation of the bead                |double[0,∞) and -ve(may cause error)|
-|                   | roundX           | should the effect be pronounced round X axis edges|boolean               |
-|                   | roundY           | should the effect be pronounced round Y axis edges|boolean               |
-|dissolveFixedBead  | centerCircle_X@$ | X coordinate of the bead                          |int(Px) or Float[0,1) |
-|                   | centerCircle_Y@$ | Y coordinate of the bead                          |int(Px) or Float[0,1) |
-|                   | radius@$         | radius of the bead                                |int(Px) or Float[0,1) |
-|                   | roundX           | should the effect be pronounced round X axis edges|boolean               |
-|                   | roundY           | should the effect be pronounced round Y axis edges|boolean               |
+The methods used in the library intensively uses system's resources. Thus encountering some of the vital limitations!!. Do
+go through these before using the library:
+
+## static Bead:
+* Static bead function is currently handled on the **UI** thread. It will be improved in the future. Currently you
+  can make separate thread yourself or make a PR for the same.
+  
+* making `lens_factor` negative squeezes the image, (instead of bulging it), but this might produce error!!.
+
+## moving bead:
+* The entire movingBeadImageView is highly vulnerable to frequent GC event, thus affectingly reducing performance and
+ disturbing the UI thread notoriously. To counter this, **reduce the radius, movement and increase repetition_Times**.
+ At the same time smaller image and horizontal orientation will be quiet helpful.
+ 
+* When moving forward, moving bead creates a major segment instead of complete circle to reduce calculation.
+
+* Though moving bead does't disturbs a single pixel after passing, please use `stopRender` when switching the current activity.
+
+* Following the point above, don't put `set` request consecutively within `repetition_Times` interval. This might severely
+  damage the input image.
+
+# Contributions!
+
+All contributions are welcome and appreciated. Please make a Pull Request or open an issue, if necessary.
+This may also include any form of feature enhancement. Every constructive criticism is welcome.
 
 # Source:
 The initial algorithm for generating bead effect was taken from [this repo](https://github.com/ArashPartow/bitmap#simple-example-5---magnifying-lens-distortion)

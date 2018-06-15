@@ -51,9 +51,7 @@ public class RollingBeadImageView extends ImageView {
     }
 
     public RollingBeadImageView(Context context, @Nullable AttributeSet attrs) {
-//        super(context, attrs);
         this(context, attrs, 0);
-//        Log.i("point rbi54", "RollingBeadImageView  ");
     }
 
     public RollingBeadImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -374,18 +372,6 @@ public class RollingBeadImageView extends ImageView {
 
     //returns view bounds
     private RectF calculateBounds() {
-//        Log.i("point rbi224", "getPaddingBottom()" + getPaddingBottom());
-//        Log.i("point rbi225", "end" + getPaddingEnd());
-//        Log.i("point rbi226", "left" + getPaddingLeft());
-//        Log.i("point rbi227", "right  " + getPaddingRight());
-//        Log.i("point rbi228", "start" + getPaddingStart());
-//        Log.i("point rbi229", "top" + getPaddingTop());
-//        Log.i("point rbi230", "bottom" + getBottom());
-//        Log.i("point rbi231", "width" + getWidth());
-//        Log.i("point rbi232", "height" + getHeight());
-//        Log.i("point rbi233", "getTop" + getTop());
-//        Log.i("point rbi234", "getLeft" + getLeft());
-//        Log.i("point rbi235", "getRight" + getRight());
         return new RectF(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
     }
 
@@ -445,7 +431,6 @@ public class RollingBeadImageView extends ImageView {
     protected void onDraw(Canvas canvas) {
 //        Log.i("point rbi183", "ondraw");
         if (changedBitmap == null) {
-//            Log.i("point rbi189", "ondraw problem");
             return;
         }
         // draw the changed bitmap on the canvas

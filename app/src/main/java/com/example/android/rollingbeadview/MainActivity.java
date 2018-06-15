@@ -1,6 +1,5 @@
 package com.example.android.rollingbeadview;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,7 +11,6 @@ import com.example.android.rollingbeadlibrary.RollingBeadImageView;
 public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     RollingBeadImageView mimage;
-    Bitmap im, cb;
     RollingBead rb;
 
     @Override
@@ -23,19 +21,14 @@ public class MainActivity extends AppCompatActivity {
 //        mimage = (RollingBeadImageView) findViewById(R.id.mimage);
         imageView = (ImageView) findViewById(R.id.imageView);
         rb = new RollingBead(imageView);
-
-//        im = BitmapFactory.decodeResource(getApplicationContext().getResources(),
-//                R.drawable.colors);
-//        cb = im.copy(Bitmap.Config.ARGB_8888, true);
     }
 
 
 
     public void test1(View v) {
-        imageView.setImageBitmap(rb.generateFixedBead(0.93f, 0.46f, 0.2f, 0.0, true, true));
+        imageView.setImageBitmap(rb.generateFixedBead(0.93f, 0.46f, 0.2f, 1.0, true, true));
 //        mimage.setCenterCircle_X(0);
 //        mimage.setOrientationHorizontal(false);
-//         mimage.bead.dissolveMovingBead();
     }
 
     public void test2(View v) {
@@ -46,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test3(View v) {
-        imageView.setImageBitmap(rb.generateFixedBead(100, 100, 100, 3.0, true, true));
+        imageView.setImageBitmap(rb.generateFixedBead(0.93f, 0.46f, 0.2f, 0.0, true, true));
 //        mimage.setNumberOfTimes(3);
     }
 
