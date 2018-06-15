@@ -1,4 +1,6 @@
 # RollingBeadView
+**version 1.0**
+
 RollingBead is an android library that can make bead (lens) moving effect in Views like ImageViews(as of now). This is available in two 
 flavours, i.e, MovingBead and StaticBead. Both can be used as and when required to produce circular bead(lens) effect.
 
@@ -11,6 +13,21 @@ flavours, i.e, MovingBead and StaticBead. Both can be used as and when required 
 - <b>Async Calculations</b> : The library does all operations(Moving Bead) asynchronously to avoid blocking the UI thread.
 
 # Usage
+Add the following dependency to your app's build.gradle file:
+
+```groovy
+allprojects {
+	repositories {
+		maven { url 'https://www.jitpack.io' }
+	}
+}
+```
+```groovy
+dependencies {
+	        implementation 'com.github.ritik1991998:RollingBeadView:v1.0'
+	}
+```
+
 Currently the library supports two types of usage:
 
 ## static Bead:
@@ -95,7 +112,7 @@ imageView.setImageBitmap(rb.dissolveFixedBead(0.93f, 0.46f, 0.2f, true, true));
 ## static Bead:
 * Parameters for moving bead: `RollingBead`
 
-|Java set methods   |Parameters      | Description                                       |Range                 |
+|Java methods**       |Parameters      | Description                                       |Range                 |
 |-------------------|----------------|---------------------------------------------------|----------------------|
 |generateFixedBead  | centerCircle_X | X coordinate of the bead                          |int(Px) or Float[0,1) |
 |                   | centerCircle_Y | Y coordinate of the bead                          |int(Px) or Float[0,1) |
@@ -109,14 +126,15 @@ imageView.setImageBitmap(rb.dissolveFixedBead(0.93f, 0.46f, 0.2f, true, true));
 |                   | roundX         | should the effect be pronounced round X axis edges|boolean               |
 |                   | roundY         | should the effect be pronounced round Y axis edges|boolean               |
 
-*Or use generateFixedBead with `0.0` as `lens_factor`
+*Or use generateFixedBead with `0.0` as `lens_factor`<br>
+**returns Bitmap object
 
 ----
 
 ## moving bead:
 * Attributes for moving bead: `RollingBeadImageView`
 
-|XML attribute       |Java set methods           |Description                                   |Default Value   |
+|XML attribute       |Java methods               |Description                                   |Default Value   |
 |--------------------|---------------------------|----------------------------------------------|----------------|
 |center_X*#          |setCenterCircle_X##        | set the new current absolute X coordinate    |0               |
 |                    |getOriginalCenterCircle_X  | get originally set absolute X coordinate     |0               |
