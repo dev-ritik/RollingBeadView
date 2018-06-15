@@ -1,13 +1,13 @@
 # RollingBeadView
-RollingBead is an android library that can make bead (lens) moving effect in views like imageviews.
+RollingBead is an android library that can make bead (lens) moving effect in Views like ImageViews(as of now).
 
 # Features
-- <b>Bead movement</b> : The library provides enough methods to control movement of moving bead.
-- <b>single bead</b> : Method to form and dissolve single bead has been provided.
+- <b>Moving Bead</b> : The library provides enough methods to control movement of moving bead.
+- <b>single(Static) Bead</b> : Method to form and dissolve single bead has been provided.
 - <b>Reduction in calculation</b> : Effort has been made to reduce large amount of calculations involved.
 - <b>Unharmed image</b> : Care has been taken not to harm the original image provided.
-- <b>Consistency</b> : It provide required attributes and parameters to make it consistent accross screen densities.
-- <b>Async Calculations</b> : The library does all operations asynchronously to avoid blocking the UI thread.
+- <b>Consistency</b> : It provides required attributes and parameters to make it consistent accross screen densities.
+- <b>Async Calculations</b> : The library does all operations(Moving Bead) asynchronously to avoid blocking the UI thread.
 
 # Usage
 Currently the library supports two types of usage:
@@ -72,18 +72,18 @@ imageView.setImageBitmap(rb.dissolveFixedBead(0.93f, 0.46f, 0.2f, true, true));
 <img src="/sample/hope.gif" align="right" width="350" height="400">
 
 ```xml
-<com.example.android.rollingbeadlibrary.RollingBeadImageView
+    <com.example.android.rollingbeadlibrary.RollingBeadImageView
         android:id="@+id/mimage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:src="@drawable/hope_1"
-        app:center_X="39%"
-        app:center_Y="43%"
+        app:center_X="245dp"
+        app:center_Y="203dp"
         app:direction="positive"
-        app:movement="5%"
+        app:movement="23dp"
         app:number_Of_Times="1"
-        app:radius="7.5%"
+        app:radius="35dp"
         app:orientation="horizontal"
         app:repetition_Times="92" />
 ```
@@ -91,34 +91,53 @@ imageView.setImageBitmap(rb.dissolveFixedBead(0.93f, 0.46f, 0.2f, true, true));
 
 # Documentation
 
-Attributes for moving bead: `RollingBeadImageView`
+* Attributes for moving bead: `RollingBeadImageView`
 
-|XML attribute       |Java set methods*          |Description                                   |Default Value |
-|--------------------|---------------------------|----------------------------------------------|--------------|
-|center_X*           |setCenterCircle_X##        | set the new current absolute X coordinate    |0                 |
-|                    |getOriginalCenterCircle_X  | get originally set absolute X coordinate     |0|
-|                    |getCurrentCenterCircle_X   | get the current absolute X coordinate        |0|
-|center_Y*           |setCenterCircle_Y#         | set the new current absolute Y coordinate    |0|
-|                    |getOriginalCenterCircle_Y  | get originally set absolute Y coordinate     |0|
-|                    |getCurrentCenterCircle_Y   | get the current absolute Y coordinate        |0|
-|radius*             |setRadius#                 | set the new radius                           |30           |
-|                    |getRadius                  | get the current radius (in Px)               |30           |
-|movement*           |setMovement#               | set the new movement                         |15           |
-|                    |getMovement#               | set the current movement (in Px)             |15           |
-|repetition_Times**  |setRepetitionTime          | set the new half-period for bead movement    |50           |
-|                    |getRepetitionTime          | get the current half-period for bead movement|50           |
-|number_Of_Times**   |setNumberOfTimes           | set the new number of bead tails visible     |1           |
-|                    |getNumberOfTimes           | get the number of bead tails visible         |1           |
-|orientation***      |setOrientationHorizontal   | set the new absolute orientation             |true(horizontal)           |
-|                    |isOrientationHorizontal    | get the absolute orientation                 |true(horizontal)           |
-|direction***        |setDirection_Positive      | set the new absolute direction of motion     |true(positive)          |
-|                    |isDirection_Positive       | get the new absolute direction of motion     |true(positive)           |
+|XML attribute       |Java set methods           |Description                                   |Default Value   |
+|--------------------|---------------------------|----------------------------------------------|----------------|
+|center_X*#          |setCenterCircle_X##        | set the new current absolute X coordinate    |0               |
+|                    |getOriginalCenterCircle_X  | get originally set absolute X coordinate     |0               |
+|                    |getCurrentCenterCircle_X   | get the current absolute X coordinate        |0               |
+|center_Y*           |setCenterCircle_Y#         | set the new current absolute Y coordinate    |0               | 
+|                    |getOriginalCenterCircle_Y  | get originally set absolute Y coordinate     |0               |
+|                    |getCurrentCenterCircle_Y   | get the current absolute Y coordinate        |0               | 
+|radius*             |setRadius#                 | set the new radius                           |30              |
+|                    |getRadius                  | get the current radius (in Px)               |30              |
+|movement*           |setMovement#               | set the new movement                         |15              |
+|                    |getMovement#               | set the current movement (in Px)             |15              |
+|repetition_Times**  |setRepetitionTime          | set the new half-period for bead movement    |50              |
+|                    |getRepetitionTime          | get the current half-period for bead movement|50              |
+|number_Of_Times**   |setNumberOfTimes           | set the new number of bead tails visible     |1               |
+|                    |getNumberOfTimes           | get the number of bead tails visible         |1               |
+|orientation***      |setOrientationHorizontal   | set the new absolute orientation             |true(horizontal)|
+|                    |isOrientationHorizontal    | get the absolute orientation                 |true(horizontal)|
+|direction***        |setDirection_Positive      | set the new absolute direction of motion     |true(positive)  |
+|                    |isDirection_Positive       | get the new absolute direction of motion     |true(positive)  |
 
-
-*attribute: `dimension` or `fraction` <br>
+*attribute: `dimension` or `fraction` [0%,100%)(w.r.t height) <br>
+*#attribute: `dimension` or `fraction` [0%,100%)(w.r.t width)<br>
 **attribute: `integer` <br>
 ***attribute: `enum` <br>
 *#* parameters: `int`(Pixels) or `float` [0,1)(w.r.t height) <br>
 *##* parameters: `int`(Pixels) or `float` [0,1)(w.r.t width)
+
+----
+
+* Attributes for moving bead: `RollingBead`
+
+|Java set methods   |Parameters        | Description                                       |Range                 |
+|-------------------|------------------|---------------------------------------------------|----------------------|
+|generateFixedBead  | centerCircle_X@$ | X coordinate of the bead                          |int(Px) or Float[0,1) |
+|                   | centerCircle_Y@$ | Y coordinate of the bead                          |int(Px) or Float[0,1) |
+|                   | radius@$         | radius of the bead                                |int(Px) or Float[0,1) |
+|                   | lens_factor@     | intensity of deviation of the bead                |double[0,∞) and -ve(may cause error)|
+|                   | roundX           | should the effect be pronounced round X axis edges|boolean               |
+|                   | roundY           | should the effect be pronounced round Y axis edges|boolean               |
+|dissolveFixedBead  | centerCircle_X@$ | X coordinate of the bead                          |int(Px) or Float[0,1) |
+|                   | centerCircle_Y@$ | Y coordinate of the bead                          |int(Px) or Float[0,1) |
+|                   | radius@$         | radius of the bead                                |int(Px) or Float[0,1) |
+|                   | roundX           | should the effect be pronounced round X axis edges|boolean               |
+|                   | roundY           | should the effect be pronounced round Y axis edges|boolean               |
+
 # Source:
 The initial algorithm for generating bead effect was taken from [this repo](https://github.com/ArashPartow/bitmap#simple-example-5---magnifying-lens-distortion)

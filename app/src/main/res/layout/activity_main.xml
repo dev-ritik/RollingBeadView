@@ -19,12 +19,12 @@
         <!--android:layout_height="wrap_content"-->
         <!--android:layout_centerVertical="true"-->
         <!--android:src="@drawable/hope_1"-->
-        <!--app:center_X="39%"-->
-        <!--app:center_Y="43%"-->
+        <!--app:center_X="245dp"-->
+        <!--app:center_Y="203dp"-->
         <!--app:direction="positive"-->
-        <!--app:movement="5%"-->
+        <!--app:movement="23dp"-->
         <!--app:number_Of_Times="1"-->
-        <!--app:radius="7.5%"-->
+        <!--app:radius="35dp"-->
         <!--app:orientation="horizontal"-->
         <!--app:repetition_Times="92" />-->
 
