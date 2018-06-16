@@ -18,9 +18,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        mimage = (RollingBeadImageView) findViewById(R.id.mimage);
-        imageView = (ImageView) findViewById(R.id.imageView);
-        rb = new RollingBead(imageView);
+        mimage = (RollingBeadImageView) findViewById(R.id.mimage);
+//        imageView = (ImageView) findViewById(R.id.imageView);
+//        rb = new RollingBead(imageView);
     }
 
 

@@ -1,4 +1,7 @@
 # RollingBeadView
+
+<div align="center"><img src="/sample/dp_bead.gif"/></div>
+
 **version 1.0**
 
 RollingBead is an android library that can make bead (lens) moving effect in Views like ImageViews(as of now). This is available in two 
@@ -191,6 +194,10 @@ go through these before using the library:
 
 All contributions are welcome and appreciated. Please make a Pull Request or open an issue, if necessary.
 This may also include any form of feature enhancement. Every constructive criticism is welcome.
+
+# Future Plans:
+* Static bead handling in non UI thread 
+* Extending to other views particularly TextView
 
 # Source:
 The initial algorithm for generating bead effect was taken from [this repo](https://github.com/ArashPartow/bitmap#simple-example-5---magnifying-lens-distortion)
